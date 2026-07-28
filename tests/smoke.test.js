@@ -49,7 +49,9 @@ async function runTests() {
   const { toFraktur } = require('../src/utils/textFormatter');
   test('toFraktur("Bloods") returns Fraktur', () => {
     const result = toFraktur('Bloods');
-    assert(result === '𝔅𝔩𝔬𝔬𝔡𝔰', `Expected "𝔅𝔩𝔬𝔬𝔡𝔰", got "${result}"`);
+    // Function uses Mathematical Sans-Serif (U+1D5A0+ for upper, U+1D5BA+ for lower)
+    const expected = '\u{1D5A1}\u{1D5C5}\u{1D5C8}\u{1D5C8}\u{1D5BD}\u{1D5CC}';
+    assert(result === expected, `Expected "${expected}", got "${result}"`);
   });
   test('toFraktur preserves digits and symbols', () => {
     const result = toFraktur('Test123!');
