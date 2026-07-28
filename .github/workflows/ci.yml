@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
@@ -25,9 +25,17 @@ jobs:
 
       - name: Run smoke tests
         run: npm run test:smoke
+        env:
+          DISCORD_TOKEN: dummy-token-for-ci
+          DISCORD_CLIENT_ID: '123456789012345678'
+          GUILD_ID: '1010226759817515018'
 
       - name: Run full test pipeline
         run: npm test
+        env:
+          DISCORD_TOKEN: dummy-token-for-ci
+          DISCORD_CLIENT_ID: '123456789012345678'
+          GUILD_ID: '1010226759817515018'
 
   build-dashboard:
     name: Build Dashboard
@@ -40,7 +48,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dashboard dependencies
