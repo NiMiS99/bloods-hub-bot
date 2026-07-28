@@ -29,6 +29,7 @@ jobs:
           DISCORD_TOKEN: dummy-token-for-ci
           DISCORD_CLIENT_ID: '123456789012345678'
           GUILD_ID: '1010226759817515018'
+          ADMIN_ROLE_ID: '1529875116039606274'
 
       - name: Run full test pipeline
         run: npm test
@@ -36,6 +37,7 @@ jobs:
           DISCORD_TOKEN: dummy-token-for-ci
           DISCORD_CLIENT_ID: '123456789012345678'
           GUILD_ID: '1010226759817515018'
+          ADMIN_ROLE_ID: '1529875116039606274'
 
   build-dashboard:
     name: Build Dashboard
