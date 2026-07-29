@@ -318,29 +318,14 @@ async function main() {
     });
   }
 
-  // === 6. NITRO BOOSTER → Add "Membro della community" role ===
-  console.log('\n--- NITRO BOOSTER → Membro della community ---');
-  const nitroRole = guild.roles.cache.get(ROLES.nitroBooster);
-  const communityRole = guild.roles.cache.get(ROLES.membroCommunity);
-  if (nitroRole && communityRole) {
-    // Add community role to all current nitro boosters
-    for (const member of nitroRole.members.values()) {
-      if (!member.roles.cache.has(ROLES.membroCommunity) && !member.roles.cache.has(ROLES.bloods)) {
-        if (DRY_RUN) {
-          console.log(`  [DRY RUN] Would add community role to ${member.user.username}`);
-        } else {
-          try {
-            await member.roles.add(ROLES.membroCommunity, 'Nitro Booster → Membro della community');
-            console.log(`  ✓ Added community role to ${member.user.username}`);
-          } catch (err) {
-            console.error(`  ✗ Failed to add role to ${member.user.username}: ${err.message}`);
-          }
-        }
-      } else {
-        console.log(`  = ${member.user.username} already has community/bloods role`);
-      }
-    }
-  }
+  // === 6. NITRO BOOSTER ===
+  // Note: Nitro Booster role is managed by Discord automatically.
+  // "Membro della community" is given to ALL new users via verification (onboardingService).
+  // Nitro Boost only gives XP bonus + thank you message (guildMemberUpdate event).
+  // No role assignment needed here.
+  console.log('\n--- NITRO BOOSTER (no role changes needed) ---');
+  console.log('  Nitro Booster role is managed by Discord.');
+  console.log('  Membro della community is given to all new users via verification.');
 
   // === 7. Set up guild settings: auto-role for Nitro Booster ===
   // Discord doesn't support "if nitro then role" natively, but we can use
@@ -352,7 +337,7 @@ async function main() {
   console.log(`  - Gilda (${GILDA_CATEGORIES.length} categories): Bloods + Staff`);
   console.log(`  - Community (${COMMUNITY_CATEGORIES.length} categories): Membro community + Bloods + Nitro + Staff`);
   console.log(`  - Games (${GAME_CATEGORIES.length} categories): Game role + Bloods + Nitro + Staff`);
-  console.log(`  - Nitro Boosters: Added community role`);
+  console.log(`  - Nitro Boosters: XP bonus only (community role via verification)`);
 
   process.exit(0);
 }

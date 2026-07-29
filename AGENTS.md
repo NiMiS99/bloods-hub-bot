@@ -117,7 +117,7 @@
 - **GILDA** (7 categorie): solo Bloods + Staff
 - **COMMUNITY** (4 categorie): Membro della community + Bloods + Nitro Booster + Staff
 - **GAME** (18 categorie): ruolo gioco + Bloods + Nitro Booster + Staff
-- **Nitro Booster**: riceve automaticamente "Membro della community" (evento guildMemberUpdate)
+- **Nitro Booster**: ruolo gestito da Discord automaticamente. Dà solo +500 XP bonus + messaggio ringraziamento. NON dà "Membro della community" (che è dato a tutti tramite verifica).
 - **Muted**: deny SendMessages/Connect/Speak ovunque
 - **Non Verificato**: deny ViewChannel su tutto tranne Area Iniziale
 - Script setup: `node src/scripts/setupPermissions.js` (usa `--dry-run` per anteprima)

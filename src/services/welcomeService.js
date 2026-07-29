@@ -125,8 +125,7 @@ async function sendWelcome(member, guildRow) {
           `1. Clicca **Verifica** qui sotto per ottenere **Membro della community**\n` +
           `2. Leggi il regolamento in #regolamento\n` +
           `3. Seleziona i tuoi giochi in #selezione-giochi\n` +
-          `4. Esplora i canali della community!\n` +
-          `5. Boosta il server per ottenere automaticamente Membro della community 💜\n\n` +
+          `4. Esplora i canali della community!\n\n` +
           `Buon divertimento! 🎮`
         )
         .setImage('attachment://welcome.png')
@@ -181,8 +180,7 @@ async function sendOnboardingDM(member, _guildRow) {
         '**Come accedere ai canali:**\n' +
         '1. Clicca **Verifica** in #benvenuto → ottieni **Membro della community**\n' +
         '2. Vai in #selezione-giochi → scegli i tuoi giochi per i canali dedicati\n' +
-        '3. Per la **Gilda Bloods** → chiedi a un Officer/Admin\n' +
-        '4. **Nitro Booster** → ottieni automaticamente Membro della community!\n\n' +
+        '3. Per la **Gilda Bloods** → chiedi a un Officer/Admin\n\n' +
         'Buon divertimento! 🎮'
       )
       .setThumbnail(member.guild.iconURL({ size: 256 }))

@@ -198,7 +198,8 @@ Il bot gestisce i permessi del server in modo coerente:
 | **COMMUNITY** (4 cat.) | Membro community + Bloods + Nitro + Staff | Full community perms |
 | **GAME** (18 cat.) | Ruolo gioco + Bloods + Nitro + Staff | Full community perms |
 
-**Nitro Booster** → riceve automaticamente "Membro della community" (guildMemberUpdate event)
+**Nitro Booster** → +500 XP bonus + messaggio ringraziamento (ruolo gestito da Discord)
+**Membro della community** → dato a tutti i nuovi utenti tramite verifica (captcha anti-bot)
 **Non Verificato** → vede solo Area Iniziale
 **Muted** → deny SendMessages/Connect/Speak ovunque
 
