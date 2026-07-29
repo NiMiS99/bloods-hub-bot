@@ -45,18 +45,21 @@ cd dashboard && npm install && npm run build
 docker compose --env-file .env up -d --build
 ```
 
-## Comandi (38)
+## Comandi (60)
 
-### Utente (21)
+### Utente (25)
 | Comando | Descrizione |
 |---------|-------------|
 | `/ping` | Verifica latenza bot |
-| `/help` | Lista tutti i comandi |
+| `/help` | Lista tutti i comandi (60) |
 | `/mystats [user]` | Profilo community (XP, badge, stat, link) |
 | `/mygames` | I tuoi giochi + statistiche |
 | `/rank [user]` | Livello, XP, badge, posizione classifica |
+| `/rankcard [user]` | Genera immagine carta rank |
 | `/stats` | Statistiche community |
+| `/serverstats` | Statistiche server con grafici |
 | `/serverinfo` | Info server Discord |
+| `/members [ruolo]` | Lista membri per ruolo |
 | `/leaderboard [game] [metric] [top]` | Classifiche |
 | `/gamemeta <game> [kind]` | Patch notes / meta |
 | `/link <provider> <id> [region]` | Collega account esterno |
@@ -71,8 +74,14 @@ docker compose --env-file .env up -d --build
 | `/raidstatus` | Stato idoneità raid |
 | `/spedizione` | Gestione spedizioni WoW |
 | `/dashboard` | Link dashboard web |
+| `/music play/skip/stop/queue/pause/resume` | Player musicale (YouTube + Spotify) |
+| `/remind <quando> <cosa>` | Promemoria personale |
+| `/birthday set/list` | Compleanni |
+| `/tag` | Guide salvate |
+| `/thank <user>` | Ringrazia un membro |
+| `/search <query>` | Cerca nella documentazione |
 
-### Moderazione (7)
+### Moderazione (9)
 | Comando | Descrizione |
 |---------|-------------|
 | `/userinfo <user>` | Info dettagliate membro |
@@ -82,40 +91,49 @@ docker compose --env-file .env up -d --build
 | `/warnings <user>` | Storico warning |
 | `/mute <user> <durata> [motivo]` | Timeout membro |
 | `/unmute <user>` | Rimuovi timeout |
+| `/slowmode <canale> <secondi>` | Imposta slowmode |
+| `/lockdown [stato]` | Lockdown server |
 
-### Admin (10)
+### Admin (17)
 | Comando | Descrizione |
 |---------|-------------|
 | `/game add/list/remove/update` | Gestione catalogo giochi |
 | `/gamemode add/edit/remove/list/post` | Gestione server privati community |
 | `/rolepanel` | Pannello selezione giochi |
+| `/reactionrole add/post/remove/list` | Pannelli reaction role |
+| `/hobbies` | Pannello self-role hobby (10 preset) |
+| `/autothread enable/disable/list` | Auto-thread nei canali |
+| `/config view/levelup/welcome/announcements` | Configurazione bot |
 | `/setup run/status` | Configurazione server |
 | `/guida` | Gestione guide |
 | `/gametest` | Test funzionalità giochi |
+| `/gametest` | Test funzionalità giochi |
 | `/giveaway create/end/list` | Gestione giveaway |
+| `/gamenight` | Game night ricorrenti |
 | `/tempvc setup/disable/status` | Canali vocali temporanei |
 | `/cmd add/remove/list` | Comandi personalizzati (!nome) |
 | `/schedule add/remove/list/toggle` | Messaggi programmati (cron) |
+| `/xpevent start/stop/status` | Eventi XP moltiplicatore |
 
 ## Struttura
 
 ```
 src/
-├── commands/          # Slash commands (auto-loaded, 38)
-│   ├── admin/         # /game, /giveaway, /tempvc, /cmd, /schedule, ecc.
-│   ├── mod/           # /warn, /mute, /purge, /userinfo, ecc.
-│   └── *.js           # /rank, /mystats, /poll, /lfg, /bp, /loot, ecc.
-├── events/            # Discord event listeners (11)
+├── commands/          # Slash commands (auto-loaded, 60)
+│   ├── admin/         # /game, /giveaway, /tempvc, /cmd, /schedule, /config, /hobbies, /autothread, ecc.
+│   ├── mod/           # /warn, /mute, /purge, /userinfo, /slowmode, /lockdown, ecc.
+│   └── *.js           # /rank, /mystats, /poll, /lfg, /bp, /loot, /music, ecc.
+├── events/            # Discord event listeners (13)
 ├── handlers/          # Command/event loaders
-├── services/          # 32 servizi (cron, API, business logic)
+├── services/          # 51 servizi (cron, API, business logic, engagement)
 │   ├── api/           # Steam, Battle.net, Riot
 │   └── *Scheduler.js  # Cron jobs
 ├── ui/                # Interactive UI components
 ├── utils/             # Helpers (embed, format, permissions, discordFetch, ecc.)
 ├── modules/games/     # Per-game meta fetchers
-├── db/                # Sequelize models (33) + migrations
-└── server/            # Health check + Dashboard API (15 route)
-dashboard/             # Next.js 14 frontend (15 pagine)
+├── db/                # Sequelize models (46) + migrations
+└── server/            # Health check + Dashboard API (22 route)
+dashboard/             # Next.js 14 frontend (22 pagine)
 .github/workflows/     # CI/CD (ci.yml + deploy.yml)
 deploy/                # Dockerfile + docker-compose
 ```
@@ -136,28 +154,60 @@ deploy/                # Dockerfile + docker-compose
 | GiveawayService | 30s | Auto-end giveaway scaduti |
 | ScheduledMessageService | cron | Messaggi programmati |
 | AlertService | 60s | Monitoraggio memory/errori |
+| MilestoneService | 5min | Announce milestone membri (50, 100, 150...) |
+| WeeklyStatsService | Sunday 6PM | Statistiche settimanali automatiche |
+| GuildChallengeService | 10min | Challenge community (1000 msg, 10h vocale, ecc.) |
+| BackupScheduler | Daily 4AM | Backup DB gzip con retention 30gg |
+| AntiRaidService | Real-time | Anti-raid per-guild |
 
 ## Dashboard Web
 
-Dashboard admin su **Next.js 14** con 15 pagine:
+Dashboard admin su **Next.js 14** con 22 pagine:
 - Overview, Analytics, Audit Log, Automod, Badges
 - Discord Logs, Events, Games, Leaderboard, Level Rewards
-- Members, Moderation, Raid, Settings
+- Members, Moderation, Raid, Settings, Health, Search
+- Scheduled Messages, Custom Commands, Giveaways, Starboard
+- XP Events, Birthdays, Tags
 
 **Auth**: Discord OAuth2 (JWT)
-**Security**: Helmet, rate limiting, input validation
+**Security**: Helmet, rate limiting (per-endpoint), input validation
+**Features**: Search bar (Ctrl+K), dark mode, error boundaries
 
 ## Test
 
 ```bash
-npm test              # Full pipeline (128 test)
-npm run test:smoke    # Smoke tests (59 test)
+npm test              # Full pipeline (176 test)
+npm run test:smoke    # Smoke tests (86 test)
 ```
 
 ## Backup DB
 
 ```bash
-npm run backup    # mysqldump → backups/backup_YYYY-MM-DD.sql (mantiene 7)
+npm run backup    # mysqldump → backups/backup_YYYY-MM-DD.sql.gz (mantiene 30gg)
+```
+
+## Permessi Server Discord
+
+Il bot gestisce i permessi del server in modo coerente:
+
+| Area | Chi vede | Permessi |
+|------|----------|----------|
+| **Area Iniziale** | @everyone | View, Send (limitato), Voice |
+| **Forum** | Staff (Officer+) | Full access |
+| **GILDA** (7 cat.) | Bloods + Staff | Full community perms |
+| **COMMUNITY** (4 cat.) | Membro community + Bloods + Nitro + Staff | Full community perms |
+| **GAME** (18 cat.) | Ruolo gioco + Bloods + Nitro + Staff | Full community perms |
+
+**Nitro Booster** → riceve automaticamente "Membro della community" (guildMemberUpdate event)
+**Non Verificato** → vede solo Area Iniziale
+**Muted** → deny SendMessages/Connect/Speak ovunque
+
+```bash
+# Setup permessi (applica a tutte le 31 categorie)
+node src/scripts/setupPermissions.js
+
+# Anteprima senza modifiche
+node src/scripts/setupPermissions.js --dry-run
 ```
 
 ## Health Check & Monitoring

@@ -105,10 +105,22 @@
 - Servizio: `src/services/autoRoleService.js` (chiamato da `xpService.js`).
 
 ### Visibilità canali giochi
-- Categorie giochi (Apex, CS2, Dota, LoL, Minecraft, FFXIV, Valorant, WoW) nascoste a @everyone.
+- Categorie giochi (Apex, CS2, Dota, LoL, Minecraft, FFXIV, Valorant, WoW, +11 altri) nascoste a @everyone.
 - Visibili solo con il ruolo del gioco corrispondente.
-- Script: `src/scripts/setupGameChannelVisibility.js` (eseguire dopo creazione nuove categorie).
+- Script: `src/scripts/setupPermissions.js` (setup completo permessi, eseguire dopo modifiche).
 - Staff (Bloods, Admin, Officer, ecc.) vede tutte le categorie.
+
+### Permessi server Discord
+- **Gerarchia ruoli**: Owner > Founder > Consigliere > Bloods Admin > Bot > Officer > Officer Reclutatore > Officer in Prova > Guida Incursioni/Spedizioni > Nitro Booster > Capo Fazione > Streamer > Progress > Giocatore Attivo > Veterano > Leggenda > **Bloods** > **Membro della community** > game roles > Non Verificato > @everyone
+- **Area Iniziale**: visibile a tutti (@everyone), permessi limitati
+- **Forum**: solo Staff (Officer+)
+- **GILDA** (7 categorie): solo Bloods + Staff
+- **COMMUNITY** (4 categorie): Membro della community + Bloods + Nitro Booster + Staff
+- **GAME** (18 categorie): ruolo gioco + Bloods + Nitro Booster + Staff
+- **Nitro Booster**: riceve automaticamente "Membro della community" (evento guildMemberUpdate)
+- **Muted**: deny SendMessages/Connect/Speak ovunque
+- **Non Verificato**: deny ViewChannel su tutto tranne Area Iniziale
+- Script setup: `node src/scripts/setupPermissions.js` (usa `--dry-run` per anteprima)
 
 ### Sistema raid (DKP / Progress)
 - Comandi: `/bp`, `/loot`, `/spedizione`, `/raidreq`, `/raidstatus`.
@@ -117,6 +129,39 @@
 - Blizzard API: `src/services/api/battleNetApi.js` (richiede `BATTLE_NET_CLIENT_ID` + `BATTLE_NET_CLIENT_SECRET` in `.env`).
 - Formato link WoW: `/link battlenet NomePersonaggio-Reame` (es: `Bäba-Pozzo dellEternità`).
 - Ruolo "Progress" assegnato/rimosso automaticamente in base ai requisiti.
+
+### Musica
+- Comando: `/music play/skip/stop/queue/pause/resume`
+- Supporta YouTube e Spotify (URL o ricerca per titolo)
+- Librerie: `@discordjs/voice`, `play-dl`, `libsodium-wrappers`
+- Servizio: `src/services/musicService.js`
+- Coda per guild, auto-disconnect quando vuota
+
+### Engagement community
+- **DM onboarding**: nuovi membri ricevono DM con lista comandi e canali importanti (welcomeService)
+- **Statistiche settimanali**: post automatico ogni domenica 18:00 (weeklyStatsService)
+- **Challenge guild**: obiettivi community (1000 messaggi, 10h vocale, 30 attivi) con annuncio
+- **Milestone membri**: annuncio a 50, 100, 150, 200... membri (milestoneService)
+- **Level-up configurabile**: canale dedicato + template messaggio (`{user}`, `{level}`)
+
+### Auto-thread
+- Comando: `/autothread enable/disable/list`
+- Crea thread automatico per ogni messaggio in canali configurati
+- Configurazione salvata in `guild.settings.autoThreadChannels` (JSON)
+- Servizio: `src/services/autoThreadService.js`
+
+### Self-role hobby
+- Comando: `/hobbies` (admin)
+- Crea pannello reaction role per hobby/interessi (10 preset o custom)
+- Crea ruoli automaticamente se non esistono
+- Preset: Gamer, Cinefilo, Anime, Lettore, Musicista, Tech, Artista, Sport, Foodie, Viaggiatore
+
+### Configurazione bot
+- Comando: `/config view/levelup/welcome/announcements`
+- View: mostra tutte le impostazioni
+- Levelup: imposta canale + template messaggio level-up
+- Welcome: imposta template messaggio benvenuto
+- Announcements: imposta canale annunci (milestone, statistiche)
 
 ### Giveaway system
 - Comandi: `/giveaway create/end/list`.

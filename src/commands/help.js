@@ -21,6 +21,8 @@ const COMMAND_GROUPS = [
       { name: '/members [ruolo]', desc: 'Lista membri per ruolo.' },
       { name: '/gamemeta <game>', desc: 'Patch notes, meta o stato server di un gioco.' },
       { name: '/gameroles', desc: 'Mostra i ruoli di gioco disponibili e i loro membri.' },
+      { name: '/music play <titolo>', desc: 'Riproduci musica da YouTube/Spotify in vocale.' },
+      { name: '/music skip/stop/queue', desc: 'Controlla la riproduzione musicale.' },
     ],
   },
   {
@@ -54,6 +56,8 @@ const COMMAND_GROUPS = [
       { name: '/birthday list', desc: 'Lista compleanni del mese.' },
       { name: '/starboard setup', desc: 'Configura la starboard (admin).' },
       { name: '/reactionrole create', desc: 'Crea un pannello reaction roles (admin).' },
+      { name: '/hobbies', desc: 'Crea un pannello self-role per hobby/interessi (admin).' },
+      { name: '/autothread enable', desc: 'Abilita auto-thread in un canale (admin).' },
     ],
   },
   {
@@ -109,6 +113,10 @@ const COMMAND_GROUPS = [
       { name: '/xpevent start <mult> <ore>', desc: 'Avvia un evento XP moltiplicatore.' },
       { name: '/xpevent status', desc: 'Stato evento XP attivo.' },
       { name: '/xpevent stop', desc: 'Ferma evento XP attivo.' },
+      { name: '/config view', desc: 'Mostra la configurazione del bot.' },
+      { name: '/config levelup', desc: 'Imposta canale e messaggio level-up.' },
+      { name: '/config welcome', desc: 'Imposta il messaggio di benvenuto.' },
+      { name: '/config announcements', desc: 'Imposta il canale annunci.' },
     ],
   },
 ];
