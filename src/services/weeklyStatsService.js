@@ -36,7 +36,7 @@ async function postWeeklyStats() {
         ActivityLog.sum('amount', {
           where: {
             guild_id: guild.id,
-            event_type: 'voice_join',
+            event_type: 'voice_seconds',
             occurred_at: { [Op.gte]: weekAgo },
           },
         }) || 0,
@@ -70,6 +70,7 @@ async function postWeeklyStats() {
           `**Periodo:** ${weekAgo.toLocaleDateString('it-IT')} - ${now.toLocaleDateString('it-IT')}\n\n` +
           `**📈 Attività:**\n` +
           `• Messaggi: **${totalMessages.toLocaleString('it-IT')}**\n` +
+          `• Tempo vocale: **${Math.floor(totalVoice / 3600)}h ${Math.floor((totalVoice % 3600) / 60)}m**\n` +
           `• Utenti attivi: **${activeUsers}**\n` +
           `• Nuovi membri: **${newMembers}**\n` +
           `• Membri totali: **${totalMembers}**\n\n` +

@@ -8,20 +8,39 @@ const { EmbedBuilder } = require('discord.js');
 
 const GUILD_CHALLENGES = [
   { type: 'messages', desc: 'Raggiungiamo 1000 messaggi questa settimana!', target: 1000, metric: 'message' },
-  { type: 'voice', desc: 'Trascorriamo 10 ore in vocale questa settimana!', target: 600, metric: 'voice_join' },
+  { type: 'voice', desc: 'Trascorriamo 10 ore in vocale questa settimana!', target: 36000, metric: 'voice_seconds' },
   { type: 'active', desc: 'Abbiamo 30 membri attivi questa settimana!', target: 30, metric: 'active_users' },
 ];
 
 let _interval = null;
 let _client = null;
-let _lastProgress = new Map(); // guildId -> { challengeIdx, lastValue }
+let _lastProgress = new Map(); // key: `${guildId}:${type}` -> lastValue
+let _lastWeekNum = -1; // track week changes for reset
+
+// ISO week number — deterministic per calendar week
+function getISOWeekNumber(date) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+}
 
 async function checkGuildChallenges() {
   if (!_client) return;
 
+  const now = new Date();
+  const weekNum = getISOWeekNumber(now);
+
+  // Reset progress when a new week starts
+  if (_lastWeekNum !== -1 && _lastWeekNum !== weekNum) {
+    _lastProgress.clear();
+    logger.info('GuildChallenge: new week — progress reset.');
+  }
+  _lastWeekNum = weekNum;
+
   for (const guild of _client.guilds.cache.values()) {
     try {
-      const now = new Date();
       const dayOfWeek = now.getDay();
       // Only run checks Monday-Saturday (reset on Sunday)
       if (dayOfWeek === 0) continue;
@@ -30,8 +49,7 @@ async function checkGuildChallenges() {
       weekStart.setDate(now.getDate() - dayOfWeek);
       weekStart.setHours(0, 0, 0, 0);
 
-      // Pick challenge based on week number (deterministic)
-      const weekNum = Math.floor(now.getTime() / (7 * 86400000));
+      // Pick challenge based on ISO week number (deterministic per calendar week)
       const challenge = GUILD_CHALLENGES[weekNum % GUILD_CHALLENGES.length];
 
       // Get current progress

@@ -67,20 +67,21 @@ async function awardXp(user, amount, client, channel) {
     try {
       const guild = client.guilds.cache.get(user.guild_id);
       if (guild) {
-        // Determine which channel to announce in
-        let announceChannel = channel;
-        if (!announceChannel) {
-          const guildRow = await Guild.findByPk(user.guild_id);
-          const levelUpChannelId = guildRow?.level_up_channel_id;
-          if (levelUpChannelId) {
-            announceChannel = guild.channels.cache.get(levelUpChannelId);
-          }
+        // Fetch guild settings once
+        const guildRow = await Guild.findByPk(user.guild_id);
+        // Determine which channel to announce in:
+        // Priority: configured level_up_channel_id > message channel > none
+        let announceChannel = null;
+        const levelUpChannelId = guildRow?.level_up_channel_id;
+        if (levelUpChannelId) {
+          announceChannel = guild.channels.cache.get(levelUpChannelId);
+        }
+        if (!announceChannel && channel) {
+          announceChannel = channel; // fallback to message channel
         }
         if (announceChannel) {
           const member = await guild.members.fetch(user.user_id, { force: false }).catch(() => null);
           const name = member ? member.displayName : user.username;
-          // Get custom message template or use default
-          const guildRow = await Guild.findByPk(user.guild_id);
           const template = guildRow?.level_up_message || '🎉 **{user}** ha raggiunto il livello **{level}**!';
           const msg = template.replace('{user}', name).replace('{level}', newLevel);
           await announceChannel.send({ content: msg });
@@ -128,9 +129,10 @@ async function awardMessageXp(user, client, channel) {
 /**
  * Award XP for voice activity (called per minute from activityTracker).
  * @param {object} user - User row
+ * @param {object} [client] - Discord client (for level-up announcement)
  */
-async function awardVoiceXp(user) {
-  await awardXp(user, VOICE_XP_PER_MIN);
+async function awardVoiceXp(user, client) {
+  await awardXp(user, VOICE_XP_PER_MIN, client);
 }
 
 /**

@@ -54,7 +54,7 @@ class ActivityTracker {
           });
           // Award voice XP (5 XP per minute, proportional to elapsed seconds).
           const xpAmount = Math.floor((seconds / 60) * 5);
-          if (xpAmount > 0) await awardVoiceXp(user).catch(() => {});
+          if (xpAmount > 0) await awardVoiceXp(user, this.client).catch(() => {});
           // Check badges every ~5 minutes of voice time.
           if (user.total_voice_seconds % 300 < 60) {
             await checkBadges(user, guild).catch(() => {});

@@ -43,6 +43,7 @@ const LfgService = require('./services/lfgService');
 const ChallengeService = require('./services/challengeService');
 const _ReputationService = require('./services/reputationService');
 const GameNightService = require('./services/gameNightService');
+const MusicService = require('./services/musicService');
 const HealthServer = require('./server/healthServer');
 const DashboardServer = require('./server/dashboardServer');
 
@@ -200,6 +201,8 @@ async function main() {
       MilestoneService.stop();
       WeeklyStatsService.stop();
       GuildChallengeService.stop();
+      GameNightService.stop();
+      MusicService.stopAll();
       client.healthServer?.stop();
       client.dashboardServer?.stop();
       client.destroy();
