@@ -1,6 +1,6 @@
 // src/commands/admin/config.js
 // /config — View and update bot configuration interactively.
-const { SlashCommandBuilder, PermissionFlagsBits, ChannelType, StringSelectMenuBuilder, ActionRowBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require('discord.js');
 const { Guild } = require('../../db');
 const { baseEmbed, successEmbed, errorEmbed } = require('../../utils/embed');
 const { isAdmin } = require('../../utils/permissions');

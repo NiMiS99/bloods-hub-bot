@@ -53,6 +53,11 @@ module.exports = function (client, jwtSecret) {
             categories: req.guild.channels.cache.filter((c) => c.type === 4).size,
             text: req.guild.channels.cache.filter((c) => c.type === 0).size,
             voice: req.guild.channels.cache.filter((c) => c.type === 2).size,
+            textChannels: req.guild.channels.cache
+              .filter((c) => c.type === 0)
+              .sort((a, b) => a.position - b.position)
+              .map((c) => ({ id: c.id, name: c.name }))
+              .slice(0, 100),
           },
         },
       });

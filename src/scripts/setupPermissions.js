@@ -10,7 +10,7 @@
 //   Nitro Booster: Gets "Membro della community" automatically
 //
 // USAGE: node src/scripts/setupPermissions.js [--dry-run]
-const { Client, GatewayIntentBits, ChannelType, PermissionFlagsBits, PermissionsBitField } = require('discord.js');
+const { Client, GatewayIntentBits, PermissionFlagsBits } = require('discord.js');
 const config = require('../config');
 const logger = require('../utils/logger');
 
@@ -146,7 +146,7 @@ const PERMS = {
 
 // Staff role IDs (for admin areas)
 const STAFF_ROLES = [ROLES.owner, ROLES.founder, ROLES.consigliere, ROLES.bloodsAdmin, ROLES.officer, ROLES.officerReclutatore, ROLES.officerInProva];
-const ADMIN_ROLES = [ROLES.owner, ROLES.founder, ROLES.consigliere, ROLES.bloodsAdmin];
+const _ADMIN_ROLES = [ROLES.owner, ROLES.founder, ROLES.consigliere, ROLES.bloodsAdmin];
 
 // Game role IDs (for game categories)
 const GAME_CATEGORIES = [
@@ -208,22 +208,6 @@ async function setupCategory(guild, categoryId, config) {
     console.log(`    ✓ Applied ${config.overwrites.length} overwrites`);
   } catch (err) {
     console.error(`    ✗ Failed: ${err.message}`);
-  }
-}
-
-async function setupAllChannels(guild, categoryId, overwrites) {
-  const channels = [...guild.channels.cache.values()]
-    .filter((c) => c.parentId === categoryId);
-
-  for (const ch of channels) {
-    // Skip channels that have specific overrides (like log-staff, dashboard-admin)
-    // We only auto-set channels that don't have custom overwrites
-    if (DRY_RUN) {
-      console.log(`    [DRY RUN] ${ch.name}: would inherit from category`);
-      continue;
-    }
-    // Channels inherit from category by default — no need to set per-channel
-    // unless they have specific overrides
   }
 }
 

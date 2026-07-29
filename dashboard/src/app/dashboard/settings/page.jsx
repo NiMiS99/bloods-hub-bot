@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
-import { Settings, Save, Server, Zap, UserPlus, Bot, Mic } from 'lucide-react';
+import { Settings, Save, Server, Zap, UserPlus, Bot, Mic, TrendingUp } from 'lucide-react';
 
 export default function SettingsPage() {
   const { guild } = useGuild();
@@ -103,6 +103,26 @@ export default function SettingsPage() {
               <label className="text-sm text-dark-300 mb-1 block">Cooldown (secondi)</label>
               <input type="number" className="input" value={form.xpCooldownSeconds ?? 60} onChange={(e) => setForm({ ...form, xpCooldownSeconds: parseInt(e.target.value) })} />
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Level-Up Settings */}
+      <div className="card p-6">
+        <div className="flex items-center gap-2 mb-4"><TrendingUp size={18} className="text-blue-500" /><h3 className="font-semibold text-white">Annunci Level-Up</h3></div>
+        <div className="space-y-4">
+          <div>
+            <label className="text-sm text-dark-300 mb-1 block">Canale annunci level-up</label>
+            <select className="input" value={form.levelUpChannelId ?? ''} onChange={(e) => setForm({ ...form, levelUpChannelId: e.target.value })}>
+              <option value="">Disabilitato (nessun annuncio)</option>
+              {data?.discord?.channels?.textChannels?.map((c) => <option key={c.id} value={c.id}>#{c.name}</option>)}
+            </select>
+            <p className="text-xs text-dark-500 mt-1">Canale dove annunciare quando un utente sale di livello. Lascia vuoto per disabilitare.</p>
+          </div>
+          <div>
+            <label className="text-sm text-dark-300 mb-1 block">Messaggio level-up</label>
+            <input className="input" value={form.levelUpMessage ?? ''} onChange={(e) => setForm({ ...form, levelUpMessage: e.target.value })} placeholder="🎉 **{user}** ha raggiunto il livello **{level}**!" />
+            <p className="text-xs text-dark-500 mt-1">Variabili: {'{user}'} = nome utente, {'{level}'} = livello raggiunto</p>
           </div>
         </div>
       </div>

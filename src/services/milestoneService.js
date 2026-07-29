@@ -10,7 +10,7 @@ const MILESTONES = [
 ];
 
 let _interval = null;
-let _lastCount = new Map(); // guildId -> last known count
+const _lastCount = new Map(); // guildId -> last known count
 let _client = null;
 
 function getMilestone(count) {

@@ -2,7 +2,7 @@
 // /hobbies — Create a self-role panel for generic hobbies/interests.
 // Creates roles automatically (if missing) and posts a reaction role panel.
 const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require('discord.js');
-const { baseEmbed, successEmbed, errorEmbed } = require('../../utils/embed');
+const { successEmbed, errorEmbed } = require('../../utils/embed');
 const { isAdmin } = require('../../utils/permissions');
 const { recordAudit } = require('../../utils/auditLog');
 const reactionRoleService = require('../../services/reactionRoleService');

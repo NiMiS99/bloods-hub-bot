@@ -14,7 +14,7 @@ const GUILD_CHALLENGES = [
 
 let _interval = null;
 let _client = null;
-let _lastProgress = new Map(); // key: `${guildId}:${type}` -> lastValue
+const _lastProgress = new Map(); // key: `${guildId}:${type}` -> lastValue
 let _lastWeekNum = -1; // track week changes for reset
 
 // ISO week number — deterministic per calendar week

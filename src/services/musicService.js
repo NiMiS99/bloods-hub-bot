@@ -6,7 +6,6 @@ const {
   createAudioPlayer,
   createAudioResource,
   AudioPlayerStatus,
-  getVoiceConnection,
   entersState,
   VoiceConnectionStatus,
 } = require('@discordjs/voice');
@@ -213,7 +212,7 @@ async function resumeCommand(interaction) {
 }
 
 function stopAll() {
-  for (const [guildId, queue] of _queues) {
+  for (const [, queue] of _queues) {
     try {
       queue.player.stop();
       queue.connection.destroy();
