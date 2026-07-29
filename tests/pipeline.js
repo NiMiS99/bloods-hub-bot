@@ -812,6 +812,128 @@ async function serviceTests() {
     const hasUserAssoc = Object.values(BpRaidRoster.associations).some(a => a.target === User);
     assert(hasUserAssoc, 'BpRaidRoster should be associated with User');
   });
+
+  // --- Phase 3 services: pure function tests ---
+  console.log('\nPhase 3 services (pure functions):');
+
+  // Captcha: generateCaptcha
+  const { generateCaptcha } = require('../src/services/captchaService');
+  test('generateCaptcha returns object with question and answer', () => {
+    const c = generateCaptcha();
+    assert.ok(c.question, 'Should have question');
+    assert.ok(typeof c.answer === 'number', 'Answer should be a number');
+  });
+  test('generateCaptcha question contains a math operator', () => {
+    const c = generateCaptcha();
+    assert.ok(c.question.includes('+') || c.question.includes('-') || c.question.includes('×'), 'Should have math operator');
+  });
+  test('generateCaptcha answer is correct for addition', () => {
+    // Run multiple times to hit addition
+    for (let i = 0; i < 20; i++) {
+      const c = generateCaptcha();
+      if (c.question.includes('+')) {
+        const nums = c.question.match(/\d+/g);
+        if (nums && nums.length >= 2) {
+          assert.strictEqual(c.answer, parseInt(nums[0]) + parseInt(nums[1]), 'Addition answer should be correct');
+          return;
+        }
+      }
+    }
+    // If we never hit addition, just pass (random)
+  });
+
+  // Tournament: buildBracketText
+  const { buildBracketText } = require('../src/services/tournamentService');
+  test('buildBracketText(null) returns placeholder', () => {
+    assert.strictEqual(buildBracketText(null), 'Bracket non generato.');
+  });
+  test('buildBracketText renders single round', () => {
+    const bracket = [[{ p1: { userId: 'u1' }, p2: { userId: 'u2' }, winner: null }]];
+    const text = buildBracketText(bracket);
+    assert.ok(text.includes('Round 1'), 'Should show Round 1');
+    assert.ok(text.includes('u1'), 'Should show player 1');
+    assert.ok(text.includes('u2'), 'Should show player 2');
+  });
+  test('buildBracketText renders multiple rounds', () => {
+    const bracket = [
+      [{ p1: { userId: 'a' }, p2: { userId: 'b' }, winner: null }],
+      [{ p1: { userId: 'c' }, p2: { userId: 'd' }, winner: null }],
+    ];
+    const text = buildBracketText(bracket);
+    assert.ok(text.includes('Round 1'), 'Should show Round 1');
+    assert.ok(text.includes('Round 2'), 'Should show Round 2');
+  });
+  test('buildBracketText shows winner checkmark', () => {
+    const bracket = [[{ p1: { userId: 'a' }, p2: { userId: 'b' }, winner: 'a' }]];
+    const text = buildBracketText(bracket);
+    assert.ok(text.includes('✅'), 'Should show winner checkmark');
+  });
+  test('buildBracketText shows TBD for missing players', () => {
+    const bracket = [[{ p1: null, p2: null, winner: null }]];
+    const text = buildBracketText(bracket);
+    assert.ok(text.includes('TBD'), 'Should show TBD for missing players');
+  });
+
+  // Challenge service: pure helpers
+  const challengeService = require('../src/services/challengeService');
+  test('ChallengeService exports assignDailyChallenges', () => {
+    assert.strictEqual(typeof challengeService.assignDailyChallenges, 'function');
+  });
+  test('ChallengeService exports updateStreak', () => {
+    assert.strictEqual(typeof challengeService.updateStreak, 'function');
+  });
+  test('ChallengeService exports getStreak', () => {
+    assert.strictEqual(typeof challengeService.getStreak, 'function');
+  });
+  test('ChallengeService exports expireOldChallenges', () => {
+    assert.strictEqual(typeof challengeService.expireOldChallenges, 'function');
+  });
+
+  // GameNight service: pure helpers
+  const gameNightService = require('../src/services/gameNightService');
+  test('GameNightService exports start', () => assert.strictEqual(typeof gameNightService.start, 'function'));
+  test('GameNightService exports stop', () => assert.strictEqual(typeof gameNightService.stop, 'function'));
+  test('GameNightService exports createNight', () => assert.strictEqual(typeof gameNightService.createNight, 'function'));
+  test('GameNightService exports listNights', () => assert.strictEqual(typeof gameNightService.listNights, 'function'));
+
+  // XP Event service: getMultiplier
+  const xpEventService = require('../src/services/xpEventService');
+  test('XpEventService getMultiplier returns number', () => {
+    const m = xpEventService.getMultiplier();
+    assert.strictEqual(typeof m, 'number');
+    assert.ok(m >= 1, 'Multiplier should be >= 1');
+  });
+  test('XpEventService getActiveEvent returns null or object', () => {
+    const e = xpEventService.getActiveEvent();
+    assert.ok(e === null || typeof e === 'object', 'Should return null or event object');
+  });
+
+  // Reputation service: constants
+  const reputationService = require('../src/services/reputationService');
+  test('ReputationService COOLDOWN_MS is 3600000 (1h)', () => {
+    assert.strictEqual(reputationService.COOLDOWN_MS, 3600000);
+  });
+  test('ReputationService DAILY_LIMIT is 5', () => {
+    assert.strictEqual(reputationService.DAILY_LIMIT, 5);
+  });
+
+  // Backup scheduler
+  const backupScheduler = require('../src/services/backupScheduler');
+  test('BackupScheduler exports start', () => assert.strictEqual(typeof backupScheduler.start, 'function'));
+  test('BackupScheduler exports stop', () => assert.strictEqual(typeof backupScheduler.stop, 'function'));
+  test('BackupScheduler exports runBackup', () => assert.strictEqual(typeof backupScheduler.runBackup, 'function'));
+
+  // Discord fetch: batch with concurrency
+  const { fetchMembersBatch } = require('../src/utils/discordFetch');
+  test('fetchMembersBatch with empty returns empty Map', async () => {
+    const result = await fetchMembersBatch(null, []);
+    assert.ok(result instanceof Map);
+    assert.strictEqual(result.size, 0);
+  });
+  test('fetchMembersBatch with null guild returns empty Map', async () => {
+    const result = await fetchMembersBatch(null, ['123']);
+    assert.strictEqual(result.size, 0);
+  });
 }
 
 // ============================================================================
