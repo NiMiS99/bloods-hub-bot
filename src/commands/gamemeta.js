@@ -9,13 +9,13 @@ module.exports = {
     .setName('gamemeta')
     .setDescription('Mostra patch notes, meta o stato server di un gioco.')
     .addStringOption((o) =>
-      o.setName('game').setDescription('Codice gioco.').setRequired(true).setAutocomplete(true)
+      o.setName('game').setDescription('Codice gioco.').setRequired(true).setAutocomplete(true).setMaxLength(200)
     )
     .addStringOption((o) =>
       o
         .setName('kind')
         .setDescription('Tipo di informazione.')
-        .setRequired(false)
+        .setRequired(false).setMaxLength(100)
         .addChoices(
           { name: 'Patch notes', value: 'patch' },
           { name: 'Meta', value: 'meta' },

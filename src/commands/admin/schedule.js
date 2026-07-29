@@ -17,10 +17,10 @@ module.exports = {
         .addChannelOption((o) =>
           o.setName('canale').setDescription('Canale dove inviare il messaggio.').setRequired(true)
             .addChannelTypes(ChannelType.GuildText))
-        .addStringOption((o) => o.setName('cron').setDescription('Espressione cron (es: 0 9 * * * = ogni giorno alle 9:00).').setRequired(true))
-        .addStringOption((o) => o.setName('contenuto').setDescription('Testo del messaggio.').setRequired(true))
-        .addStringOption((o) => o.setName('titolo').setDescription('Titolo embed (opzionale).').setRequired(false))
-        .addStringOption((o) => o.setName('immagine').setDescription('URL immagine embed (opzionale).').setRequired(false)))
+        .addStringOption((o) => o.setName('cron').setDescription('Espressione cron (es: 0 9 * * * = ogni giorno alle 9:00).').setRequired(true).setMaxLength(100))
+        .addStringOption((o) => o.setName('contenuto').setDescription('Testo del messaggio.').setRequired(true).setMaxLength(4000))
+        .addStringOption((o) => o.setName('titolo').setDescription('Titolo embed (opzionale).').setRequired(false).setMaxLength(200))
+        .addStringOption((o) => o.setName('immagine').setDescription('URL immagine embed (opzionale).').setRequired(false).setMaxLength(100)))
     .addSubcommand((sc) =>
       sc.setName('remove').setDescription('Rimuovi un messaggio programmato.')
         .addIntegerOption((o) => o.setName('id').setDescription('ID del messaggio programmato.').setRequired(true)))

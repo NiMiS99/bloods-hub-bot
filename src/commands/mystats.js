@@ -70,6 +70,42 @@ module.exports = {
     const { currentLevel, nextLevel, xpToNext } = xpToNextLevel(user.xp);
     const badges = await getUserBadges(target.id, interaction.guild.id);
 
+    // Per-game voice time tracking
+    const gameVoiceLogs = await ActivityLog.findAll({
+      where: {
+        user_id: target.id,
+        guild_id: interaction.guild.id,
+        event_type: 'voice_game',
+        occurred_at: { [Op.gte]: new Date(Date.now() - 30 * 86400000) },
+      },
+      attributes: ['metadata', 'amount'],
+      raw: true,
+    });
+    const gameVoiceMap = {};
+    for (const log of gameVoiceLogs) {
+      try {
+        const meta = typeof log.metadata === 'string' ? JSON.parse(log.metadata) : log.metadata;
+        const code = meta?.game_code || 'unknown';
+        gameVoiceMap[code] = (gameVoiceMap[code] || 0) + (log.amount || 0);
+      } catch {}
+    }
+
+    // Reputation
+    let reputation = 0;
+    try {
+      const { getReputation } = require('../services/reputationService');
+      const rep = await getReputation(target.id, interaction.guild.id);
+      reputation = rep.received;
+    } catch {}
+
+    // Streak
+    let streak = 0;
+    try {
+      const { getStreak } = require('../services/challengeService');
+      const s = await getStreak(target.id, interaction.guild.id);
+      streak = s.current_streak || 0;
+    } catch {}
+
     // --- Build embed ---
     const gamesList = userGames.length > 0
       ? userGames.map((ug) => ug.Game?.name || 'Sconosciuto').join(', ')
@@ -114,6 +150,16 @@ module.exports = {
     desc.push(``, `**Badge (${badges.length}):**`, badges.length > 0
       ? badges.map((b) => `${b.icon} ${b.name}`).join(' • ')
       : 'Nessun badge ancora. Continua a partecipare!');
+
+    // Per-game voice time
+    const gameVoiceEntries = Object.entries(gameVoiceMap).sort((a, b) => b[1] - a[1]);
+    if (gameVoiceEntries.length > 0) {
+      desc.push(``, `**Tempo vocale per gioco (30gg):**`,
+        gameVoiceEntries.slice(0, 5).map(([code, sec]) => `• ${code}: ${formatDuration(sec)}`).join('\n'));
+    }
+
+    // Reputation & streak
+    desc.push(``, `**Reputazione:** 🤝 ${reputation} | **Streak daily:** 🔥 ${streak} giorni`);
 
     const embed = baseEmbed({
       title: `Profilo — ${target.username}`,

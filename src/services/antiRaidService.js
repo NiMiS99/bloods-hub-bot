@@ -3,27 +3,29 @@
 // If more than N members join within M seconds, enables verification-only mode.
 const logger = require('../utils/logger');
 const { EmbedBuilder } = require('discord.js');
+const config = require('../config');
 
-const GUILD_ID = '1010226759817515018';
+const GUILD_ID = config.discord.guildId || '1010226759817515018';
 
 // Thresholds
 const JOIN_THRESHOLD = 5;       // Max joins allowed
 const JOIN_WINDOW_MS = 10000;   // Within 10 seconds
 const LOCKDOWN_DURATION_MS = 300000; // 5 minutes lockdown
 
-// In-memory tracking
-const _recentJoins = [];
-let _lockdownActive = false;
-let _lockdownTimer = null;
+// In-memory tracking — per guild
+const _recentJoinsByGuild = new Map(); // guildId -> [{ id, tag, ts }]
+const _lockdownByGuild = new Map(); // guildId -> { active, timer }
 
 /**
  * Track a new member join. If threshold exceeded, trigger lockdown.
  */
 async function trackJoin(member, client) {
-  if (member.guild.id !== GUILD_ID) return;
-  if (_lockdownActive) return; // Already in lockdown
+  const guildId = member.guild.id;
+  if (_lockdownByGuild.get(guildId)?.active) return; // Already in lockdown
 
   const now = Date.now();
+  if (!_recentJoinsByGuild.has(guildId)) _recentJoinsByGuild.set(guildId, []);
+  const _recentJoins = _recentJoinsByGuild.get(guildId);
   _recentJoins.push({ id: member.id, tag: member.user.tag, ts: now });
 
   // Clean old entries
@@ -41,8 +43,11 @@ async function trackJoin(member, client) {
  * Trigger server lockdown: enable "Non Verificato" verification gate strictly.
  */
 async function triggerLockdown(guild, client, joiners) {
-  _lockdownActive = true;
-  logger.warn(`Anti-raid: LOCKDOWN triggered! ${joiners.length} joins in ${JOIN_WINDOW_MS / 1000}s`);
+  const guildId = guild.id;
+  if (!_lockdownByGuild.has(guildId)) _lockdownByGuild.set(guildId, { active: false, timer: null });
+  const state = _lockdownByGuild.get(guildId);
+  state.active = true;
+  logger.warn(`Anti-raid: LOCKDOWN triggered for ${guild.name}! ${joiners.length} joins in ${JOIN_WINDOW_MS / 1000}s`);
 
   // Log to #log-staff
   const AdvancedLogger = require('./advancedLogger');
@@ -63,12 +68,12 @@ async function triggerLockdown(guild, client, joiners) {
   }
 
   // Auto-clear lockdown after duration
-  if (_lockdownTimer) clearTimeout(_lockdownTimer);
-  const savedChannel = logChannel; // capture in scope
-  _lockdownTimer = setTimeout(async () => {
-    _lockdownActive = false;
-    _recentJoins.length = 0;
-    logger.info('Anti-raid: lockdown ended automatically.');
+  if (state.timer) clearTimeout(state.timer);
+  const savedChannel = logChannel;
+  state.timer = setTimeout(async () => {
+    state.active = false;
+    _recentJoinsByGuild.get(guildId).length = 0;
+    logger.info(`Anti-raid: lockdown ended for ${guild.name}.`);
     if (savedChannel) {
       await savedChannel.send({ embeds: [new EmbedBuilder().setTitle('Lockdown terminato').setColor(0x57f287).setDescription('Il server è tornato alla normalità.').setTimestamp()] }).catch(() => {});
     }
@@ -76,20 +81,39 @@ async function triggerLockdown(guild, client, joiners) {
 }
 
 /**
- * Check if the server is currently in lockdown mode.
+ * Check if a guild is currently in lockdown mode.
  */
-function isLockdownActive() {
-  return _lockdownActive;
+function isLockdownActive(guildId) {
+  if (guildId) return _lockdownByGuild.get(guildId)?.active || false;
+  // Check any guild
+  for (const state of _lockdownByGuild.values()) {
+    if (state.active) return true;
+  }
+  return false;
 }
 
 /**
  * Manually end lockdown (admin command).
  */
-function endLockdown() {
-  if (_lockdownTimer) clearTimeout(_lockdownTimer);
-  _lockdownActive = false;
-  _recentJoins.length = 0;
+function endLockdown(guildId) {
+  if (guildId) {
+    const state = _lockdownByGuild.get(guildId);
+    if (state) {
+      if (state.timer) clearTimeout(state.timer);
+      state.active = false;
+      const joins = _recentJoinsByGuild.get(guildId);
+      if (joins) joins.length = 0;
+    }
+  } else {
+    // End all
+    for (const [gid, state] of _lockdownByGuild) {
+      if (state.timer) clearTimeout(state.timer);
+      state.active = false;
+      const joins = _recentJoinsByGuild.get(gid);
+      if (joins) joins.length = 0;
+    }
+  }
   logger.info('Anti-raid: lockdown ended manually.');
 }
 
-module.exports = { trackJoin, isLockdownActive, endLockdown };
+module.exports = { trackJoin, triggerLockdown, isLockdownActive, endLockdown };

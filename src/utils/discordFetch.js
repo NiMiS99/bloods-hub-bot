@@ -23,21 +23,31 @@ async function fetchMember(guild, userId, opts = {}) {
 }
 
 /**
- * Fetch multiple guild members in batch (cache-first).
+ * Fetch multiple guild members in batch (cache-first, parallel with concurrency limit).
+ * Uses Promise.all with chunking to respect Discord API rate limits.
  * @param {import('discord.js').Guild} guild
  * @param {string[]} userIds
+ * @param {object} opts - { concurrency: 10 }
  * @returns {Promise<Map<string, import('discord.js').GuildMember>>}
  */
-async function fetchMembersBatch(guild, userIds) {
+async function fetchMembersBatch(guild, userIds, opts = {}) {
   const result = new Map();
   if (!guild || !userIds || userIds.length === 0) return result;
 
-  // Deduplicate
+  const { concurrency = 10 } = opts;
   const uniqueIds = [...new Set(userIds.filter(Boolean))];
 
-  for (const uid of uniqueIds) {
-    const m = await guild.members.fetch(uid, { force: false }).catch(() => null);
-    if (m) result.set(uid, m);
+  // Process in chunks to avoid hitting rate limits
+  for (let i = 0; i < uniqueIds.length; i += concurrency) {
+    const chunk = uniqueIds.slice(i, i + concurrency);
+    const settled = await Promise.allSettled(
+      chunk.map((uid) => guild.members.fetch(uid, { force: false }))
+    );
+    for (let j = 0; j < settled.length; j++) {
+      if (settled[j].status === 'fulfilled' && settled[j].value) {
+        result.set(chunk[j], settled[j].value);
+      }
+    }
   }
 
   return result;

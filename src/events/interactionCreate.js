@@ -140,6 +140,29 @@ module.exports = {
           return;
         }
 
+        // Suggest vote buttons
+        if (interaction.customId === 'suggest:btn:up' || interaction.customId === 'suggest:btn:down') {
+          const suggestService = require('../services/suggestService');
+          const voteType = interaction.customId === 'suggest:btn:up' ? 'up' : 'down';
+          await suggestService.handleVote(interaction, voteType);
+          return;
+        }
+
+        // LFG buttons
+        if (interaction.customId.startsWith('lfg:btn:')) {
+          const lfgHandler = require('../ui/lfgInteractions');
+          const [, , action] = interaction.customId.split(':');
+          await lfgHandler.handleButton(interaction, client, action, []);
+          return;
+        }
+
+        // WoW profession buttons
+        if (interaction.customId === 'wowprof:clear') {
+          const wowProf = require('../ui/wowProfessionPanel');
+          await wowProf.handleClear(interaction, interaction.guild);
+          return;
+        }
+
         if (group === 'event') {
           const handler = require('../ui/eventInteractions');
           await handler.handleButton(interaction, client, payload[0], payload.slice(1));
@@ -156,6 +179,8 @@ module.exports = {
           return;
         }
         if (group === 'suggest') {
+          const SuggestService = require('../services/suggestService');
+          await SuggestService.handleVote(interaction, type);
           return;
         }
 
@@ -179,6 +204,27 @@ module.exports = {
       if (interaction.isStringSelectMenu()) {
         // CustomId format: "group:type:payload..."
         const [group, type, ...payload] = interaction.customId.split(':');
+
+        // Help category select
+        if (interaction.customId === 'help:select') {
+          const helpCmd = client.commands.get('help');
+          if (helpCmd?.COMMAND_GROUPS) {
+            const selected = interaction.values[0];
+            const targetGroup = helpCmd.COMMAND_GROUPS.find((g) => g.name === selected);
+            if (targetGroup) {
+              const { EmbedBuilder } = require('discord.js');
+              const embed = new EmbedBuilder()
+                .setTitle(`${targetGroup.emoji} ${targetGroup.name}`)
+                .setColor(0x8b0000)
+                .setDescription(targetGroup.commands.map((c) => `**${c.name}** — ${c.desc}`).join('\n'))
+                .setFooter({ text: 'Bloods Community • /help' });
+              await interaction.update({ embeds: [embed], components: [] });
+              return;
+            }
+          }
+          return;
+        }
+
         if (group === 'role') {
           const handler = require('../ui/roleSelectionInteractions');
           await handler.handleSelectMenu(interaction, client, payload[0], payload.slice(1));
@@ -189,6 +235,13 @@ module.exports = {
           await handler.handleSelectMenu(interaction, client, type, payload);
           return;
         }
+
+        // WoW profession select
+        if (interaction.customId === 'wowprof:select') {
+          const wowProf = require('../ui/wowProfessionPanel');
+          await wowProf.handleProfessionSelect(interaction, interaction.guild);
+          return;
+        }
       }
 
       if (interaction.isModalSubmit()) {
@@ -197,6 +250,13 @@ module.exports = {
           const TempVoiceService = require('../services/tempVoiceService');
           const handled = await TempVoiceService.handleModalSubmit(interaction, client);
           if (handled) return;
+        }
+
+        // Captcha modal
+        if (interaction.customId === 'captcha:modal') {
+          const OnboardingService = require('../services/onboardingService');
+          await OnboardingService.completeVerification(interaction, client);
+          return;
         }
       }
 

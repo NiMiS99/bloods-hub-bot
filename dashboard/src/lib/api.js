@@ -106,4 +106,35 @@ export const api = {
   getCustomCommands: (gid, page = 1) => fetchAPI(`/guilds/${gid}/custom-commands?page=${page}`),
   createCustomCommand: (gid, data) => fetchAPI(`/guilds/${gid}/custom-commands`, { method: 'POST', body: JSON.stringify(data) }),
   deleteCustomCommand: (gid, id) => fetchAPI(`/guilds/${gid}/custom-commands/${id}`, { method: 'DELETE' }),
+
+  // Suggestions
+  getSuggestions: (gid, status = 'all', page = 1) => fetchAPI(`/guilds/${gid}/suggestions?status=${status}&page=${page}`),
+  updateSuggestionStatus: (gid, id, status) => fetchAPI(`/guilds/${gid}/suggestions/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) }),
+
+  // Polls
+  getPolls: (gid, page = 1) => fetchAPI(`/guilds/${gid}/polls?page=${page}`),
+  closePoll: (gid, id) => fetchAPI(`/guilds/${gid}/polls/${id}/close`, { method: 'POST' }),
+
+  // LFG sessions
+  getLfgSessions: (gid) => fetchAPI(`/guilds/${gid}/lfg-sessions`),
+
+  // XP events
+  getXpEvents: (gid) => fetchAPI(`/guilds/${gid}/xp-events`),
+  startXpEvent: (gid, data) => fetchAPI(`/guilds/${gid}/xp-events`, { method: 'POST', body: JSON.stringify(data) }),
+  stopXpEvent: (gid) => fetchAPI(`/guilds/${gid}/xp-events/stop`, { method: 'POST' }),
+
+  // Tournaments
+  getTournaments: (gid) => fetchAPI(`/guilds/${gid}/tournaments`),
+
+  // Game nights
+  getGameNights: (gid) => fetchAPI(`/guilds/${gid}/game-nights`),
+
+  // Tags
+  getTags: (gid) => fetchAPI(`/guilds/${gid}/tags`),
+
+  // Resolve user IDs to names/avatars (for dashboard display)
+  resolveUsers: (gid, ids) => fetchAPI(`/guilds/${gid}/resolve-users?ids=${ids.join(',')}`),
+
+  // Health check
+  getHealth: () => fetchAPI('/health'),
 };

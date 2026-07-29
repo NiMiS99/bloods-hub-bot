@@ -5,8 +5,9 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, ChannelType, PermissionsBitField } = require('discord.js');
 const logger = require('../utils/logger');
 const { User, Guild, AuditLog, DiscordLog, BpUser, RaidEligibility, RaidConfig } = require('../db');
+const config = require('../config');
 
-const GUILD_ID = '1010226759817515018';
+const GUILD_ID = config.discord.guildId || '1010226759817515018';
 const DASHBOARD_URL = process.env.DASHBOARD_URL || 'http://185.229.236.155:4567';
 
 const CID = {

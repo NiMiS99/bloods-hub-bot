@@ -56,6 +56,20 @@ const GameModeModel = require('./models/GameMode');
 const GiveawayModel = require('./models/Giveaway');
 const CustomCommandModel = require('./models/CustomCommand');
 const ScheduledMessageModel = require('./models/ScheduledMessage');
+const ReactionRoleModel = require('./models/ReactionRole');
+const ReminderModel = require('./models/Reminder');
+const StarboardModel = require('./models/Starboard');
+const BirthdayModel = require('./models/Birthday');
+const SuggestionModel = require('./models/Suggestion');
+const PollModel = require('./models/Poll');
+const LfgSessionModel = require('./models/LfgSession');
+const DailyChallengeModel = require('./models/DailyChallenge');
+const UserStreakModel = require('./models/UserStreak');
+const ReputationModel = require('./models/Reputation');
+const TournamentModel = require('./models/Tournament');
+const TournamentParticipantModel = require('./models/TournamentParticipant');
+const GameNightModel = require('./models/GameNight');
+const TagModel = require('./models/Tag');
 
 // Initialize
 const Guild = GuildModel(sequelize, DataTypes);
@@ -90,6 +104,20 @@ const GameMode = GameModeModel(sequelize);
 const Giveaway = GiveawayModel(sequelize);
 const CustomCommand = CustomCommandModel(sequelize);
 const ScheduledMessage = ScheduledMessageModel(sequelize);
+const ReactionRole = ReactionRoleModel(sequelize, DataTypes);
+const Reminder = ReminderModel(sequelize, DataTypes);
+const Starboard = StarboardModel(sequelize, DataTypes);
+const Birthday = BirthdayModel(sequelize, DataTypes);
+const Suggestion = SuggestionModel(sequelize, DataTypes);
+const Poll = PollModel(sequelize, DataTypes);
+const LfgSession = LfgSessionModel(sequelize, DataTypes);
+const DailyChallenge = DailyChallengeModel(sequelize, DataTypes);
+const UserStreak = UserStreakModel(sequelize, DataTypes);
+const Reputation = ReputationModel(sequelize, DataTypes);
+const Tournament = TournamentModel(sequelize, DataTypes);
+const TournamentParticipant = TournamentParticipantModel(sequelize, DataTypes);
+const GameNight = GameNightModel(sequelize, DataTypes);
+const Tag = TagModel(sequelize, DataTypes);
 
 // Associations
 Guild.hasMany(User, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
@@ -135,12 +163,31 @@ AutomodRule.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
 Guild.hasMany(DiscordLog, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
 DiscordLog.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
 
+Guild.hasMany(GuideMessage, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+GuideMessage.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+
 // BP / DKP associations
 Guild.hasMany(BpUser, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
 BpUser.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+BpUser.belongsTo(User, { foreignKey: 'user_id', targetKey: 'user_id' });
 
 Guild.hasMany(BpLootHistory, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
 BpLootHistory.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+BpLootHistory.belongsTo(BpUser, { foreignKey: 'winner_id', targetKey: 'user_id', as: 'winner' });
+BpLootHistory.belongsTo(BpItem, { foreignKey: 'item_id', targetKey: 'id', as: 'item' });
+
+Guild.hasMany(BpActiveRoll, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+BpActiveRoll.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+BpActiveRoll.belongsTo(BpItem, { foreignKey: 'item_id', targetKey: 'id', as: 'item' });
+
+Guild.hasMany(BpRaidRoster, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+BpRaidRoster.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+BpRaidRoster.belongsTo(User, { foreignKey: 'user_id', targetKey: 'user_id' });
+
+Guild.hasMany(BpItem, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+BpItem.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+BpItem.hasMany(BpLootHistory, { foreignKey: 'item_id', sourceKey: 'id' });
+BpItem.hasMany(BpActiveRoll, { foreignKey: 'item_id', sourceKey: 'id' });
 
 // WoW events associations
 WowEvent.hasMany(WowEventSignup, { foreignKey: 'event_id' });
@@ -171,6 +218,70 @@ CustomCommand.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' }
 // ScheduledMessage associations
 Guild.hasMany(ScheduledMessage, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
 ScheduledMessage.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+
+// ReactionRole associations
+Guild.hasMany(ReactionRole, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+ReactionRole.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+
+// Reminder associations
+Guild.hasMany(Reminder, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+Reminder.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+User.hasMany(Reminder, { foreignKey: 'user_id', sourceKey: 'user_id' });
+Reminder.belongsTo(User, { foreignKey: 'user_id', targetKey: 'user_id' });
+
+// Starboard associations
+Guild.hasMany(Starboard, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+Starboard.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+
+// Birthday associations
+Guild.hasMany(Birthday, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+Birthday.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+User.hasOne(Birthday, { foreignKey: 'user_id', sourceKey: 'user_id' });
+Birthday.belongsTo(User, { foreignKey: 'user_id', targetKey: 'user_id' });
+
+// Suggestion associations
+Guild.hasMany(Suggestion, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+Suggestion.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+User.hasMany(Suggestion, { foreignKey: 'user_id', sourceKey: 'user_id' });
+Suggestion.belongsTo(User, { foreignKey: 'user_id', targetKey: 'user_id' });
+
+// Poll associations
+Guild.hasMany(Poll, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+Poll.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+
+// LfgSession associations
+Guild.hasMany(LfgSession, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+LfgSession.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+
+// DailyChallenge associations
+Guild.hasMany(DailyChallenge, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+DailyChallenge.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+User.hasMany(DailyChallenge, { foreignKey: 'user_id', sourceKey: 'user_id' });
+DailyChallenge.belongsTo(User, { foreignKey: 'user_id', targetKey: 'user_id' });
+
+// UserStreak associations
+Guild.hasMany(UserStreak, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+UserStreak.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+User.hasMany(UserStreak, { foreignKey: 'user_id', sourceKey: 'user_id' });
+UserStreak.belongsTo(User, { foreignKey: 'user_id', targetKey: 'user_id' });
+
+// Reputation associations
+Guild.hasMany(Reputation, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+Reputation.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+
+// Tournament associations
+Guild.hasMany(Tournament, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+Tournament.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+Tournament.hasMany(TournamentParticipant, { foreignKey: 'tournament_id' });
+TournamentParticipant.belongsTo(Tournament, { foreignKey: 'tournament_id' });
+
+// GameNight associations
+Guild.hasMany(GameNight, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+GameNight.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+
+// Tag associations
+Guild.hasMany(Tag, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+Tag.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
 
 async function connectDB() {
   try {
@@ -220,4 +331,18 @@ module.exports = {
   Giveaway,
   CustomCommand,
   ScheduledMessage,
+  ReactionRole,
+  Reminder,
+  Starboard,
+  Birthday,
+  Suggestion,
+  Poll,
+  LfgSession,
+  DailyChallenge,
+  UserStreak,
+  Reputation,
+  Tournament,
+  TournamentParticipant,
+  GameNight,
+  Tag,
 };

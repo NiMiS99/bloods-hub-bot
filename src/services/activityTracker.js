@@ -59,6 +59,30 @@ class ActivityTracker {
           if (user.total_voice_seconds % 300 < 60) {
             await checkBadges(user, guild).catch(() => {});
           }
+          // Update daily challenge progress (voice minutes)
+          const { updateProgress } = require('./challengeService');
+          const voiceMinutes = Math.floor(seconds / 60);
+          if (voiceMinutes > 0) {
+            await updateProgress(vs.id, guild.id, 'voice', voiceMinutes).catch(() => {});
+            // Check if in a game category
+            const channel = guild.channels.cache.get(vs.channelId);
+            if (channel?.parent) {
+              const { Game } = require('../db');
+              const game = await Game.findOne({ where: { category_id: channel.parentId, is_active: true } });
+              if (game) {
+                await updateProgress(vs.id, guild.id, 'voice_game', voiceMinutes).catch(() => {});
+                // Track per-game voice time
+                const { ActivityLog } = require('../db');
+                await ActivityLog.create({
+                  user_id: vs.id, guild_id: guild.id,
+                  event_type: 'voice_game',
+                  channel_id: vs.channelId,
+                  amount: seconds,
+                  metadata: { game_id: game.id, game_code: game.code },
+                }).catch(() => {});
+              }
+            }
+          }
         } catch (err) {
           logger.error('voice accrual error:', err.message);
         }

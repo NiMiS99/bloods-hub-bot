@@ -9,7 +9,6 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
 const fs = require('fs');
-const crypto = require('crypto');
 const axios = require('axios');
 const logger = require('../utils/logger');
 const config = require('../config');
@@ -34,6 +33,7 @@ const raidRoutes = require('./routes/raid');
 const giveawayRoutes = require('./routes/giveaway');
 const scheduledMessageRoutes = require('./routes/scheduledMessages');
 const customCommandRoutes = require('./routes/customCommands');
+const communityRoutes = require('./routes/community');
 
 class DashboardServer {
   constructor(client) {
@@ -104,13 +104,29 @@ class DashboardServer {
       this.app.use('/api/guilds', giveawayRoutes(this.client, this.jwtSecret));
       this.app.use('/api/guilds', scheduledMessageRoutes(this.client, this.jwtSecret));
       this.app.use('/api/guilds', customCommandRoutes(this.client, this.jwtSecret));
+      this.app.use('/api/guilds', communityRoutes(this.client, this.jwtSecret));
     } catch (err) {
       logger.error('Failed to register API routes:', err.message);
     }
 
     // Health check
     this.app.get('/api/health', (req, res) => {
-      res.json({ status: 'ok', uptime: process.uptime() });
+      const mem = process.memoryUsage();
+      res.json({
+        status: 'ok',
+        uptime: process.uptime(),
+        memory: {
+          rss: Math.round(mem.rss / 1024 / 1024),
+          heapUsed: Math.round(mem.heapUsed / 1024 / 1024),
+          heapTotal: Math.round(mem.heapTotal / 1024 / 1024),
+        },
+        guilds: this.client.guilds.cache.size,
+        users: this.client.users.cache.size,
+        ping: Math.round(this.client.ws.ping),
+        ready: this.client.isReady(),
+        nodeVersion: process.version,
+        timestamp: new Date().toISOString(),
+      });
     });
 
     // Serve static frontend (built Next.js / React app)

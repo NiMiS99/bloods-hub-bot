@@ -18,13 +18,13 @@ module.exports = {
       .addIntegerOption((o) => o.setName('bid').setDescription('Bid BP (>= minBid).').setRequired(false)))
     .addSubcommand((sc) => sc.setName('lootrecap')
       .setDescription('Riepilogo loot vinto (storico).')
-      .addStringOption((o) => o.setName('raid').setDescription('Nome raid (es: Manaforgia Omega).').setRequired(false))
+      .addStringOption((o) => o.setName('raid').setDescription('Nome raid (es: Manaforgia Omega).').setRequired(false).setMaxLength(200))
       .addIntegerOption((o) => o.setName('limit').setDescription('Quanti risultati (max 50).').setRequired(false)))
 
     // Guida only
     .addSubcommand((sc) => sc.setName('lootstart')
       .setDescription('Avvia un roll loot (seleziona item via autocomplete).')
-      .addStringOption((o) => o.setName('itemid').setDescription('Cerca e seleziona l\'oggetto.').setRequired(true).setAutocomplete(true)))
+      .addStringOption((o) => o.setName('itemid').setDescription('Cerca e seleziona l\'oggetto.').setRequired(true).setAutocomplete(true).setMaxLength(100)))
     .addSubcommand((sc) => sc.setName('lootstatus').setDescription('Stato del roll attivo (top e roster).'))
     .addSubcommand((sc) => sc.setName('lootclose').setDescription('Chiude il roll attivo e assegna l\'oggetto al vincitore.'))
     .addSubcommand((sc) => sc.setName('lootcancel').setDescription('Annulla il roll attivo (senza vincitore).')),

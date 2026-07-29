@@ -242,9 +242,63 @@ async function runTests() {
   test('CustomCommand model exists', () => assert(db.CustomCommand, 'CustomCommand model not found'));
   test('ScheduledMessage model exists', () => assert(db.ScheduledMessage, 'ScheduledMessage model not found'));
 
+  // 19. Phase 3 — New services and models.
+  console.log('\nPhase 3 services & models:');
+  test('Suggestion model exists', () => assert(db.Suggestion, 'Suggestion model not found'));
+  test('Poll model exists', () => assert(db.Poll, 'Poll model not found'));
+  test('LfgSession model exists', () => assert(db.LfgSession, 'LfgSession model not found'));
+  test('DailyChallenge model exists', () => assert(db.DailyChallenge, 'DailyChallenge model not found'));
+  test('UserStreak model exists', () => assert(db.UserStreak, 'UserStreak model not found'));
+  test('Reputation model exists', () => assert(db.Reputation, 'Reputation model not found'));
+  test('Tournament model exists', () => assert(db.Tournament, 'Tournament model not found'));
+  test('GameNight model exists', () => assert(db.GameNight, 'GameNight model not found'));
+  test('Tag model exists', () => assert(db.Tag, 'Tag model not found'));
+
+  const challengeService = require('../src/services/challengeService');
+  test('ChallengeService exports assignDailyChallenges', () => assert(typeof challengeService.assignDailyChallenges === 'function'));
+  test('ChallengeService exports getActiveChallenges', () => assert(typeof challengeService.getActiveChallenges === 'function'));
+
+  const reputationService = require('../src/services/reputationService');
+  test('ReputationService exports thankUser', () => assert(typeof reputationService.thankUser === 'function'));
+  test('ReputationService exports getTopReputation', () => assert(typeof reputationService.getTopReputation === 'function'));
+
+  const gameNightService = require('../src/services/gameNightService');
+  test('GameNightService exports start', () => assert(typeof gameNightService.start === 'function'));
+
+  const tournamentService = require('../src/services/tournamentService');
+  test('TournamentService exports createTournament', () => assert(typeof tournamentService.createTournament === 'function'));
+
+  const captchaService = require('../src/services/captchaService');
+  test('CaptchaService exports generateCaptcha', () => assert(typeof captchaService.generateCaptcha === 'function'));
+  test('CaptchaService exports verifyCaptcha', () => assert(typeof captchaService.verifyCaptcha === 'function'));
+
+  const xpEventService = require('../src/services/xpEventService');
+  test('XpEventService exports getActiveEvent', () => assert(typeof xpEventService.getActiveEvent === 'function'));
+  test('XpEventService exports getMultiplier', () => assert(typeof xpEventService.getMultiplier === 'function'));
+
+  // 20. Phase 3 — New commands load.
+  console.log('\nPhase 3 commands:');
+  const cmdDaily = require('../src/commands/daily');
+  test('Command daily loads and has data+execute', () => assert(cmdDaily.data && cmdDaily.execute));
+  const cmdThank = require('../src/commands/thank');
+  test('Command thank loads and has data+execute', () => assert(cmdThank.data && cmdThank.execute));
+  const cmdSearch = require('../src/commands/search');
+  test('Command search loads and has data+execute', () => assert(cmdSearch.data && cmdSearch.execute));
+  const cmdTag = require('../src/commands/tag');
+  test('Command tag loads and has data+execute', () => assert(cmdTag.data && cmdTag.execute));
+  const cmdTournament = require('../src/commands/tournament');
+  test('Command tournament loads and has data+execute', () => assert(cmdTournament.data && cmdTournament.execute));
+
+  // 21. Config multi-guild fallback.
+  console.log('\nConfig & multi-guild:');
+  const config = require('../src/config');
+  test('Config has discord.guildId', () => assert(config.discord.guildId !== undefined));
+  test('Config has channels.welcome', () => assert(config.channels.welcome !== undefined));
+
   // Summary.
   console.log(`\n=== Results: ${passed} passed, ${failed} failed ===\n`);
   if (failed > 0) process.exit(1);
+  process.exit(0);
 }
 
 runTests().catch((err) => { console.error('Test runner error:', err); process.exit(1); });

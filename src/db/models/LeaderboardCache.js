@@ -21,6 +21,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       generated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
     },
-    { tableName: 'leaderboard_cache', timestamps: false }
+    {
+      tableName: 'leaderboard_cache',
+      timestamps: false,
+      indexes: [
+        { fields: ['guild_id', 'metric'] },
+      ],
+    }
   );
 };

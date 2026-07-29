@@ -11,6 +11,14 @@ const { User } = require('../db');
 const logger = require('../utils/logger');
 const { checkLevelRewards } = require('./levelRewardService');
 
+let _xpEventService = null;
+function getXpMultiplier() {
+  try {
+    if (!_xpEventService) _xpEventService = require('./xpEventService');
+    return _xpEventService.getMultiplier();
+  } catch { return 1; }
+}
+
 const MSG_XP = 1;
 const MSG_XP_MAX_PER_MIN = 50;
 const VOICE_XP_PER_MIN = 5;
@@ -18,6 +26,14 @@ const ROLE_BONUS_XP = 10;
 
 // In-memory rate limit: userId -> { count, windowStart }
 const _msgRateLimit = new Map();
+
+// Cleanup stale rate limit entries every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, val] of _msgRateLimit) {
+    if (val && now - val.windowStart > 60000) _msgRateLimit.delete(key);
+  }
+}, 300000).unref();
 
 /**
  * Award XP to a user and handle level-up.
@@ -29,6 +45,9 @@ const _msgRateLimit = new Map();
  */
 async function awardXp(user, amount, client, channel) {
   if (amount <= 0) return { leveledUp: false, newLevel: user.level };
+  // Apply XP event multiplier
+  const mult = getXpMultiplier();
+  if (mult > 1) amount = Math.floor(amount * mult);
 
   const now = new Date();
   const oldLevel = user.level || 0;

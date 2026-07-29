@@ -12,6 +12,14 @@ module.exports = (sequelize, DataTypes) => {
       amount: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false, defaultValue: 0 },
       occurred_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
     },
-    { tableName: 'activity_log', timestamps: false }
+    {
+      tableName: 'activity_log',
+      timestamps: false,
+      indexes: [
+        { fields: ['guild_id', 'user_id'] },
+        { fields: ['guild_id', 'event_type'] },
+        { fields: ['occurred_at'] },
+      ],
+    }
   );
 };

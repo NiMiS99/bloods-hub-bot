@@ -21,6 +21,9 @@ module.exports = (sequelize) => {
     tableName: 'giveaways',
     underscored: true,
     timestamps: true,
+    indexes: [
+      { fields: ['guild_id', 'is_ended'] },
+    ],
   });
 
   return Giveaway;

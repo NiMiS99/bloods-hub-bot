@@ -12,7 +12,7 @@ module.exports = {
     .setName('clearwarn')
     .setDescription('Rimuove tutti i warning di un membro e il ruolo "Warned".')
     .addUserOption((o) => o.setName('user').setDescription('Membro da perdonare.').setRequired(true))
-    .addStringOption((o) => o.setName('motivo').setDescription('Motivo della rimozione.').setRequired(false)),
+    .addStringOption((o) => o.setName('motivo').setDescription('Motivo della rimozione.').setRequired(false).setMaxLength(200)),
 
   async execute(interaction) {
     if (!canModerate(interaction.member, [PermissionFlagsBits.ModerateMembers])) {

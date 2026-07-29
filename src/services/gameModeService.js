@@ -12,8 +12,9 @@ const {
 const { GameMode } = require('../db');
 const { baseEmbed } = require('../utils/embed');
 const logger = require('../utils/logger');
+const config = require('../config');
 
-const GUILD_ID = '1010226759817515018';
+const GUILD_ID = config.discord.guildId || '1010226759817515018';
 const CHANNEL_NAME = 'gamemode';
 
 const STATUS_ICONS = {

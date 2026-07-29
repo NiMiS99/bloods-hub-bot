@@ -48,5 +48,42 @@ module.exports = function (client, jwtSecret) {
     }
   });
 
+  // GET /api/guilds/:guildId/resolve-users?ids=123,456,789
+  // Resolves Discord user IDs to { id, username, avatar } for dashboard display.
+  router.get('/:guildId/resolve-users', requireAuth(jwtSecret), requireGuildMember(client), async (req, res) => {
+    try {
+      const ids = String(req.query.ids || '').split(',').map((s) => s.trim()).filter(Boolean).slice(0, 100);
+      if (ids.length === 0) return res.json({ users: [] });
+
+      const results = [];
+      for (const id of ids) {
+        try {
+          const member = await req.guild.members.fetch(id).catch(() => null);
+          if (member) {
+            results.push({
+              id,
+              username: member.user.username,
+              displayName: member.displayName,
+              avatar: member.user.displayAvatarURL({ size: 64 }),
+            });
+          } else {
+            // Try fetching as a user (not a member)
+            const user = await client.users.fetch(id).catch(() => null);
+            if (user) {
+              results.push({ id, username: user.username, displayName: user.username, avatar: user.displayAvatarURL({ size: 64 }) });
+            } else {
+              results.push({ id, username: null, displayName: null, avatar: null });
+            }
+          }
+        } catch {
+          results.push({ id, username: null, displayName: null, avatar: null });
+        }
+      }
+      res.json({ users: results });
+    } catch (err) {
+      res.status(500).json({ error: 'Errore risoluzione utenti' });
+    }
+  });
+
   return router;
 };

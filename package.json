@@ -14,7 +14,9 @@
     "backup": "node scripts/backup_db.js",
     "dev": "nodemon src/index.js",
     "dashboard:build": "cd dashboard && npm run build",
-    "dashboard:dev": "cd dashboard && npm run dev"
+    "dashboard:dev": "cd dashboard && npm run dev",
+    "lint": "eslint src/ --ext .js",
+    "lint:fix": "eslint src/ --ext .js --fix"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -38,6 +40,8 @@
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^9.1.2",
     "nodemon": "^3.1.4",
     "sequelize-cli": "^6.6.2"
   }

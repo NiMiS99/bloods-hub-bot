@@ -14,15 +14,15 @@ module.exports = {
     .setDescription('Gestisci i server privati della community.')
     .addSubcommand((sc) =>
       sc.setName('add').setDescription('Aggiungi un nuovo server privato.')
-        .addStringOption((o) => o.setName('nome').setDescription('Nome del server.').setRequired(true))
-        .addStringOption((o) => o.setName('gioco').setDescription('Nome del gioco (es. Minecraft, WoW, Ark).').setRequired(true))
-        .addStringOption((o) => o.setName('connessione').setDescription('IP/istruzioni di connessione.').setRequired(true))
-        .addStringOption((o) => o.setName('descrizione').setDescription('Descrizione del server.').setRequired(false))
-        .addStringOption((o) => o.setName('versione').setDescription('Versione/modpack del server.').setRequired(false))
-        .addStringOption((o) => o.setName('url').setDescription('URL per connettersi (opzionale).').setRequired(false))
+        .addStringOption((o) => o.setName('nome').setDescription('Nome del server.').setRequired(true).setMaxLength(200))
+        .addStringOption((o) => o.setName('gioco').setDescription('Nome del gioco (es. Minecraft, WoW, Ark).').setRequired(true).setMaxLength(200))
+        .addStringOption((o) => o.setName('connessione').setDescription('IP/istruzioni di connessione.').setRequired(true).setMaxLength(100))
+        .addStringOption((o) => o.setName('descrizione').setDescription('Descrizione del server.').setRequired(false).setMaxLength(4000))
+        .addStringOption((o) => o.setName('versione').setDescription('Versione/modpack del server.').setRequired(false).setMaxLength(100))
+        .addStringOption((o) => o.setName('url').setDescription('URL per connettersi (opzionale).').setRequired(false).setMaxLength(100))
         .addIntegerOption((o) => o.setName('slots').setDescription('Numero massimo di giocatori.').setRequired(false))
         .addStringOption((o) =>
-          o.setName('stato').setDescription('Stato del server.').setRequired(false)
+          o.setName('stato').setDescription('Stato del server.').setRequired(false).setMaxLength(100)
             .addChoices(
               { name: 'Online', value: 'online' },
               { name: 'Offline', value: 'offline' },
@@ -31,14 +31,14 @@ module.exports = {
     .addSubcommand((sc) =>
       sc.setName('edit').setDescription('Modifica un server esistente.')
         .addIntegerOption((o) => o.setName('id').setDescription('ID del server da modificare.').setRequired(true))
-        .addStringOption((o) => o.setName('nome').setDescription('Nuovo nome.').setRequired(false))
-        .addStringOption((o) => o.setName('descrizione').setDescription('Nuova descrizione.').setRequired(false))
-        .addStringOption((o) => o.setName('connessione').setDescription('Nuove istruzioni di connessione.').setRequired(false))
-        .addStringOption((o) => o.setName('versione').setDescription('Nuova versione.').setRequired(false))
-        .addStringOption((o) => o.setName('url').setDescription('Nuovo URL.').setRequired(false))
+        .addStringOption((o) => o.setName('nome').setDescription('Nuovo nome.').setRequired(false).setMaxLength(200))
+        .addStringOption((o) => o.setName('descrizione').setDescription('Nuova descrizione.').setRequired(false).setMaxLength(4000))
+        .addStringOption((o) => o.setName('connessione').setDescription('Nuove istruzioni di connessione.').setRequired(false).setMaxLength(100))
+        .addStringOption((o) => o.setName('versione').setDescription('Nuova versione.').setRequired(false).setMaxLength(100))
+        .addStringOption((o) => o.setName('url').setDescription('Nuovo URL.').setRequired(false).setMaxLength(100))
         .addIntegerOption((o) => o.setName('slots').setDescription('Nuovi slots massimi.').setRequired(false))
         .addStringOption((o) =>
-          o.setName('stato').setDescription('Nuovo stato.').setRequired(false)
+          o.setName('stato').setDescription('Nuovo stato.').setRequired(false).setMaxLength(100)
             .addChoices(
               { name: 'Online', value: 'online' },
               { name: 'Offline', value: 'offline' },

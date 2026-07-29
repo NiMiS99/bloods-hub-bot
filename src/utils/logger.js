@@ -8,6 +8,22 @@ const fs = require('fs');
 const logDir = path.join(process.cwd(), 'logs');
 if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
 
+const useJsonConsole = process.env.LOG_FORMAT === 'json';
+
+const consoleFormat = useJsonConsole
+  ? winston.format.combine(
+      winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+      winston.format.errors({ stack: true }),
+      winston.format.json()
+    )
+  : winston.format.combine(
+      winston.format.colorize(),
+      winston.format.printf(({ timestamp, level, message, ...meta }) => {
+        const metaStr = Object.keys(meta).length && meta.service ? '' : '';
+        return `[${timestamp}] ${level}: ${message}${metaStr}`;
+      })
+    );
+
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
   format: winston.format.combine(
@@ -17,15 +33,7 @@ const logger = winston.createLogger({
   ),
   defaultMeta: { service: 'bloods-hub-bot' },
   transports: [
-    new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.printf(({ timestamp, level, message, ...meta }) => {
-          const metaStr = Object.keys(meta).length && meta.service ? '' : '';
-          return `[${timestamp}] ${level}: ${message}${metaStr}`;
-        })
-      ),
-    }),
+    new winston.transports.Console({ format: consoleFormat }),
     new DailyRotateFile({
       filename: path.join(logDir, 'bot-%DATE%.log'),
       datePattern: 'YYYY-MM-DD',

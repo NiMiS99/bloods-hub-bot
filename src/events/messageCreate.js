@@ -63,6 +63,13 @@ module.exports = {
       if (user.total_messages % 10 === 0) {
         await checkBadges(user, message.guild).catch(() => {});
       }
+      // Update daily challenge progress
+      const { updateProgress } = require('../services/challengeService');
+      const isGameChannel = message.channel.parent && message.channel.parent.name;
+      await updateProgress(message.author.id, message.guild.id, 'message', 1).catch(() => {});
+      if (isGameChannel) {
+        await updateProgress(message.author.id, message.guild.id, 'message_game', 1).catch(() => {});
+      }
     } catch (err) {
       logger.error('messageCreate tracking error:', err);
     }

@@ -7,6 +7,7 @@ const { Op } = require('sequelize');
 const { Game, GameMeta, Guild } = require('../db');
 const logger = require('../utils/logger');
 const { toFraktur } = require('../utils/textFormatter');
+const config = require('../config');
 
 // In-memory set of posted GameMeta IDs (cleared on restart, dedup is also in DB)
 const postedMetaIds = new Set();
@@ -51,7 +52,7 @@ class NewsPoster {
         if (newEntries.length === 0) continue;
 
         // Find the news channel for this game
-        const guild = this.client.guilds.cache.get('1010226759817515018');
+        const guild = this.client.guilds.cache.get(config.discord.guildId || '1010226759817515018');
         if (!guild) continue;
 
         await guild.channels.fetch();
@@ -146,7 +147,7 @@ class NewsPoster {
 
     if (entries.length === 0) return { error: 'Nessuna news in cache per questo gioco' };
 
-    const guild = this.client.guilds.cache.get('1010226759817515018');
+    const guild = this.client.guilds.cache.get(config.discord.guildId || '1010226759817515018');
     if (!guild) return { error: 'Guild non trovata' };
 
     await guild.channels.fetch();

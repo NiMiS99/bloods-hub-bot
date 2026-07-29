@@ -2,8 +2,9 @@
 // Live member counter in a voice channel. Updates every 5 minutes.
 const { ChannelType } = require('discord.js');
 const logger = require('../utils/logger');
+const config = require('../config');
 
-const GUILD_ID = '1010226759817515018';
+const GUILD_ID = config.discord.guildId || '1010226759817515018';
 const COUNTER_CHANNEL_NAME = 'Membri Totali';
 const COUNTER_CATEGORY_ID = '1530567851839062077'; // Area Iniziale
 const UPDATE_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
@@ -37,18 +38,17 @@ async function getCounterChannel(guild) {
 }
 
 /**
- * Update the counter channel name with current member count.
+ * Update the counter channel name with current member count for ALL guilds.
  */
 async function updateCounter(client) {
-  try {
-    const guild = client.guilds.cache.get(GUILD_ID);
-    if (!guild) return;
-
-    const channel = await getCounterChannel(guild);
-    const count = guild.memberCount;
-    await channel.setName(`Membri Totali: ${count}`).catch(() => {});
-  } catch (err) {
-    logger.debug(`MemberCounter update failed: ${err.message}`);
+  for (const guild of client.guilds.cache.values()) {
+    try {
+      const channel = await getCounterChannel(guild);
+      const count = guild.memberCount;
+      await channel.setName(`Membri Totali: ${count}`).catch(() => {});
+    } catch (err) {
+      logger.debug(`MemberCounter update failed for ${guild.id}: ${err.message}`);
+    }
   }
 }
 

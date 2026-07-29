@@ -1,6 +1,6 @@
 // src/services/badgeService.js
 // Badge/achievement system. Checks conditions and awards badges.
-const { User, UserBadge, UserGame, Game } = require('../db');
+const { User, UserBadge, UserGame, Game, CommunityEvent, EventParticipant, LfgSession } = require('../db');
 const logger = require('../utils/logger');
 
 // Badge definitions with check functions.
@@ -76,6 +76,89 @@ const BADGES = {
     icon: '🌟',
     description: 'Raggiunto il livello 25',
     check: async (user) => (user.level || 0) >= 25,
+  },
+  event_organizer: {
+    code: 'event_organizer',
+    name: 'Organizzatore di Eventi',
+    icon: '📅',
+    description: 'Creato 3+ eventi community',
+    check: async (user) => {
+      const count = await CommunityEvent.count({ where: { created_by: user.user_id, guild_id: user.guild_id } });
+      return count >= 3;
+    },
+  },
+  helpful: {
+    code: 'helpful',
+    name: 'Utile',
+    icon: '🤲',
+    description: '500+ messaggi in canali di assistenza',
+    check: async (user, guild) => {
+      if (!guild) return false;
+      const { ActivityLog } = require('../db');
+      const assistChannels = guild.channels.cache.filter((c) => {
+        const n = c.name.toLowerCase();
+        return n.includes('assist') || n.includes('aiuto') || n.includes('support') || n.includes('ticket');
+      });
+      if (assistChannels.size === 0) return false;
+      const count = await ActivityLog.count({
+        where: {
+          user_id: user.user_id,
+          guild_id: user.guild_id,
+          event_type: 'message',
+          channel_id: assistChannels.map((c) => c.id),
+        },
+      });
+      return count >= 500;
+    },
+  },
+  streak_7: {
+    code: 'streak_7',
+    name: 'Costante',
+    icon: '🔥',
+    description: '7 giorni consecutivi di attività',
+    check: async (user) => {
+      if (!user.last_seen_at) return false;
+      const { ActivityLog, Op } = require('../db');
+      const sevenDaysAgo = new Date(Date.now() - 7 * 86400000);
+      const days = await ActivityLog.findAll({
+        attributes: ['created_at'],
+        where: {
+          user_id: user.user_id,
+          guild_id: user.guild_id,
+          created_at: { [Op.gte]: sevenDaysAgo },
+        },
+        group: ['date(created_at)'],
+        raw: true,
+      });
+      // Check 7 consecutive days
+      const dates = new Set(days.map((d) => new Date(d.created_at).toDateString()));
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(Date.now() - i * 86400000).toDateString();
+        if (!dates.has(d)) return false;
+      }
+      return true;
+    },
+  },
+  first_lfg: {
+    code: 'first_lfg',
+    name: 'Primo Gruppo',
+    icon: '🎯',
+    description: 'Hai creato la tua prima sessione LFG',
+    check: async (user) => {
+      const count = await LfgSession.count({ where: { captain_id: user.user_id, guild_id: user.guild_id } });
+      return count >= 1;
+    },
+  },
+  raid_veteran: {
+    code: 'raid_veteran',
+    name: 'Veterano di Incursioni',
+    icon: '⚔️',
+    description: 'Partecipato a 5+ incursioni WoW',
+    check: async (user) => {
+      const { RaidAttendance } = require('../db');
+      const count = await RaidAttendance.count({ where: { user_id: user.user_id, guild_id: user.guild_id } });
+      return count >= 5;
+    },
   },
 };
 

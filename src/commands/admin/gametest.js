@@ -11,7 +11,7 @@ module.exports = {
     .setName('gametest')
     .setDescription('Testa le funzioni di un gioco: fetch news + post nel canale news.')
     .addStringOption((o) =>
-      o.setName('game').setDescription('Codice gioco').setRequired(true).setAutocomplete(true)
+      o.setName('game').setDescription('Codice gioco').setRequired(true).setAutocomplete(true).setMaxLength(200)
     )
     .addBooleanOption((o) =>
       o.setName('fetch').setDescription('Forza fetch nuove news prima di postare (default: true)').setRequired(false)

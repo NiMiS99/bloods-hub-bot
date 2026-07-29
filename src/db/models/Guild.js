@@ -32,6 +32,12 @@ module.exports = (sequelize, DataTypes) => {
       automod_log_channel_id: { type: DataTypes.BIGINT.UNSIGNED, allowNull: true },
       // Temp voice
       temp_voice_creator_channel_id: { type: DataTypes.BIGINT.UNSIGNED, allowNull: true },
+      // Starboard
+      starboard_channel_id: { type: DataTypes.BIGINT.UNSIGNED, allowNull: true },
+      starboard_threshold: { type: DataTypes.INTEGER, allowNull: true, defaultValue: 5 },
+      // Birthday
+      birthday_channel_id: { type: DataTypes.BIGINT.UNSIGNED, allowNull: true },
+      birthday_role_id: { type: DataTypes.BIGINT.UNSIGNED, allowNull: true },
     },
     { tableName: 'guilds', timestamps: true }
   );

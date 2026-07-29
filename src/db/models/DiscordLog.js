@@ -28,6 +28,14 @@ module.exports = (sequelize, DataTypes) => {
       target_type: { type: DataTypes.STRING(32), allowNull: true },
       details: { type: DataTypes.JSON, allowNull: true },
     },
-    { tableName: 'discord_logs', timestamps: true, updatedAt: false, underscored: true }
+    {
+      tableName: 'discord_logs',
+      timestamps: true,
+      updatedAt: false,
+      underscored: true,
+      indexes: [
+        { fields: ['guild_id', 'event_type'] },
+      ],
+    }
   );
 };

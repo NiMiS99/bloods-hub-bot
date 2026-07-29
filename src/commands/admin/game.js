@@ -17,13 +17,13 @@ module.exports = {
       s
         .setName('add')
         .setDescription('Registra un nuovo gioco e crea la sua categoria privata + ruolo.')
-        .addStringOption((o) => o.setName('code').setDescription('Slug stabile, es. "valorant".').setRequired(true))
-        .addStringOption((o) => o.setName('name').setDescription('Nome visualizzato.').setRequired(true))
+        .addStringOption((o) => o.setName('code').setDescription('Slug stabile, es. "valorant".').setRequired(true).setMaxLength(100))
+        .addStringOption((o) => o.setName('name').setDescription('Nome visualizzato.').setRequired(true).setMaxLength(200))
         .addStringOption((o) =>
           o
             .setName('category')
             .setDescription('Genere')
-            .setRequired(true)
+            .setRequired(true).setMaxLength(100)
             .addChoices(
               { name: 'MMO', value: 'mmo' },
               { name: 'FPS', value: 'fps' },
@@ -36,7 +36,7 @@ module.exports = {
           o
             .setName('api_provider')
             .setDescription('Provider API esterno')
-            .setRequired(false)
+            .setRequired(false).setMaxLength(100)
             .addChoices(
               { name: 'Steam', value: 'steam' },
               { name: 'Battle.net', value: 'battlenet' },
@@ -45,21 +45,21 @@ module.exports = {
               { name: 'None', value: 'none' }
             )
         )
-        .addStringOption((o) => o.setName('icon_url').setDescription('URL icona per gli embed.').setRequired(false))
+        .addStringOption((o) => o.setName('icon_url').setDescription('URL icona per gli embed.').setRequired(false).setMaxLength(100))
     )
     .addSubcommand((s) => s.setName('list').setDescription('Elenca tutti i giochi registrati.'))
     .addSubcommand((s) =>
       s
         .setName('remove')
         .setDescription('Disattiva un gioco (mantiene ruolo/categoria, ma lo nasconde dal pannello).')
-        .addStringOption((o) => o.setName('code').setDescription('Codice del gioco').setRequired(true).setAutocomplete(true))
+        .addStringOption((o) => o.setName('code').setDescription('Codice del gioco').setRequired(true).setAutocomplete(true).setMaxLength(100))
         .addBooleanOption((o) => o.setName('archive').setDescription('Se true, sposta la categoria in fondo e la nasconde (default: true).').setRequired(false))
     )
     .addSubcommand((s) =>
       s
         .setName('update')
         .setDescription('Aggiorna un gioco esistente (es. imposta id ruolo/categoria).')
-        .addStringOption((o) => o.setName('code').setDescription('Codice del gioco').setRequired(true).setAutocomplete(true))
+        .addStringOption((o) => o.setName('code').setDescription('Codice del gioco').setRequired(true).setAutocomplete(true).setMaxLength(100))
         .addRoleOption((o) => o.setName('role').setDescription('Ruolo Discord che concede l\'accesso.').setRequired(false))
         .addChannelOption((o) =>
           o.setName('category').setDescription('Canale categoria Discord.').addChannelTypes(ChannelType.GuildCategory).setRequired(false)

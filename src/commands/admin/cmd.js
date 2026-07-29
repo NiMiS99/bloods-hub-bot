@@ -13,12 +13,12 @@ module.exports = {
     .addSubcommand((sc) =>
       sc.setName('add').setDescription('Crea un comando personalizzato.')
         .addStringOption((o) => o.setName('nome').setDescription('Nome del comando (senza /).').setRequired(true).setMaxLength(32))
-        .addStringOption((o) => o.setName('risposta').setDescription('Risposta del bot.').setRequired(true))
-        .addStringOption((o) => o.setName('titolo').setDescription('Titolo embed (opzionale).').setRequired(false))
-        .addStringOption((o) => o.setName('immagine').setDescription('URL immagine embed (opzionale).').setRequired(false)))
+        .addStringOption((o) => o.setName('risposta').setDescription('Risposta del bot.').setRequired(true).setMaxLength(4000))
+        .addStringOption((o) => o.setName('titolo').setDescription('Titolo embed (opzionale).').setRequired(false).setMaxLength(200))
+        .addStringOption((o) => o.setName('immagine').setDescription('URL immagine embed (opzionale).').setRequired(false).setMaxLength(100)))
     .addSubcommand((sc) =>
       sc.setName('remove').setDescription('Rimuovi un comando personalizzato.')
-        .addStringOption((o) => o.setName('nome').setDescription('Nome del comando.').setRequired(true)))
+        .addStringOption((o) => o.setName('nome').setDescription('Nome del comando.').setRequired(true).setMaxLength(100)))
     .addSubcommand((sc) =>
       sc.setName('list').setDescription('Lista comandi personalizzati.'))
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),

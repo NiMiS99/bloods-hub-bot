@@ -11,6 +11,13 @@ module.exports = (sequelize, DataTypes) => {
       target_id: { type: DataTypes.STRING(64), allowNull: true },
       details: { type: DataTypes.JSON, allowNull: true },
     },
-    { tableName: 'audit_log', timestamps: true, updatedAt: false }
+    {
+      tableName: 'audit_log',
+      timestamps: true,
+      updatedAt: false,
+      indexes: [
+        { fields: ['guild_id', 'created_at'] },
+      ],
+    }
   );
 };

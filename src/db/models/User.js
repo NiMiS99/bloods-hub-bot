@@ -16,6 +16,13 @@ module.exports = (sequelize, DataTypes) => {
       level: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false, defaultValue: 0 },
       last_xp_at: { type: DataTypes.DATE, allowNull: true },
     },
-    { tableName: 'users', timestamps: true }
+    {
+      tableName: 'users',
+      timestamps: true,
+      indexes: [
+        { fields: ['guild_id', 'user_id'], unique: true },
+        { fields: ['guild_id', 'level'] },
+      ],
+    }
   );
 };

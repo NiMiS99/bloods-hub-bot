@@ -23,10 +23,10 @@ module.exports = {
     .setDescription('Gestisci i giveaway della community.')
     .addSubcommand((sc) =>
       sc.setName('create').setDescription('Crea un nuovo giveaway.')
-        .addStringOption((o) => o.setName('premio').setDescription('Il premio del giveaway.').setRequired(true))
-        .addStringOption((o) => o.setName('durata').setDescription('Durata (es. 1h, 30m, 2d, 1h30m).').setRequired(true))
-        .addStringOption((o) => o.setName('titolo').setDescription('Titolo del giveaway.').setRequired(false))
-        .addStringOption((o) => o.setName('descrizione').setDescription('Descrizione opzionale.').setRequired(false))
+        .addStringOption((o) => o.setName('premio').setDescription('Il premio del giveaway.').setRequired(true).setMaxLength(200))
+        .addStringOption((o) => o.setName('durata').setDescription('Durata (es. 1h, 30m, 2d, 1h30m).').setRequired(true).setMaxLength(100))
+        .addStringOption((o) => o.setName('titolo').setDescription('Titolo del giveaway.').setRequired(false).setMaxLength(200))
+        .addStringOption((o) => o.setName('descrizione').setDescription('Descrizione opzionale.').setRequired(false).setMaxLength(4000))
         .addIntegerOption((o) => o.setName('vincitori').setDescription('Numero di vincitori.').setRequired(false).setMinValue(1).setMaxValue(20))
         .addRoleOption((o) => o.setName('ruolo').setDescription('Ruolo richiesto per partecipare.').setRequired(false)))
     .addSubcommand((sc) =>

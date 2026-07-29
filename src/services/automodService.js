@@ -136,15 +136,20 @@ async function executeAction(message, rule, reason) {
 
       case 'mute': {
         await message.delete().catch(() => {});
-        const muteRole = message.guild.roles.cache.find((r) => r.name === 'Muted');
-        if (muteRole) {
-          await message.member.roles.add(muteRole).catch(() => {});
-          if (rule.mute_duration) {
-            setTimeout(async () => {
-              try {
-                await message.member.roles.remove(muteRole);
-              } catch {}
-            }, rule.mute_duration * 60 * 1000);
+        // Use native Discord timeout instead of role-based mute
+        const durationMs = (rule.mute_duration || 10) * 60 * 1000;
+        if (message.member.moderatable) {
+          await message.member.timeout(durationMs, `Automod: ${reason}`).catch(() => {});
+        } else {
+          // Fallback to role-based mute if bot can't timeout (hierarchy)
+          const muteRole = message.guild.roles.cache.find((r) => r.name === 'Muted');
+          if (muteRole) {
+            await message.member.roles.add(muteRole).catch(() => {});
+            if (rule.mute_duration) {
+              setTimeout(async () => {
+                try { await message.member.roles.remove(muteRole); } catch {}
+              }, rule.mute_duration * 60 * 1000);
+            }
           }
         }
         break;
@@ -184,4 +189,4 @@ function cleanupSpamTracker() {
 // Run cleanup every 30 seconds
 setInterval(cleanupSpamTracker, 30000);
 
-module.exports = { checkMessage, executeAction };
+module.exports = { checkMessage, checkRule, executeAction };

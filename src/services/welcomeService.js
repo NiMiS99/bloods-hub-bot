@@ -115,9 +115,32 @@ async function sendWelcome(member, guildRow) {
 
     if (guildRow.welcome_image_enabled) {
       const attachment = await generateWelcomeCard(member, member.guild.name, member.guild.memberCount);
-      await channel.send({ content, files: [attachment] });
+      const { EmbedBuilder } = require('discord.js');
+      const embed = new EmbedBuilder()
+        .setColor(0x8b0000)
+        .setTitle(`Benvenuto ${member.user.username}!`)
+        .setDescription(
+          `Ciao <@${member.id}>! Sei il **membro #${member.guild.memberCount}** di **${member.guild.name}**!\n\n` +
+          `**Prossimi passi:**\n` +
+          `1. Clicca **Verifica** in <#${guildRow.welcome_channel_id}>\n` +
+          `2. Leggi il regolamento\n` +
+          `3. Seleziona i tuoi giochi in #selezione-giochi\n` +
+          `4. Esplora i canali della community!\n\n` +
+          `Buon divertimento! 🎮`
+        )
+        .setImage('attachment://welcome.png')
+        .setThumbnail(member.user.displayAvatarURL({ size: 128 }))
+        .setFooter({ text: `Membro dal ${new Date().toLocaleDateString('it-IT')}` });
+      await channel.send({ content, embeds: [embed], files: [attachment] });
     } else {
-      await channel.send(content);
+      const { EmbedBuilder } = require('discord.js');
+      const embed = new EmbedBuilder()
+        .setColor(0x8b0000)
+        .setTitle(`Benvenuto ${member.user.username}!`)
+        .setDescription(content)
+        .setThumbnail(member.user.displayAvatarURL({ size: 128 }))
+        .setFooter({ text: `Membro #${member.guild.memberCount}` });
+      await channel.send({ embeds: [embed] });
     }
 
     logger.info(`Welcome sent for ${member.user.username} in ${member.guild.name}`);

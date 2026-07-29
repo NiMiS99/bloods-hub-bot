@@ -21,19 +21,23 @@ module.exports = {
       order: [['created_at', 'DESC']],
     });
 
+    const activeWarnings = warnings.filter((w) => !w.is_expired);
+    const expiredWarnings = warnings.filter((w) => w.is_expired);
+
     if (warnings.length === 0) {
       return interaction.reply({ embeds: [baseEmbed({ description: `${target} non ha warning.`, color: 0x57f287 })], flags: 64 });
     }
 
-    const warningList = warnings.slice(0, 10).map((w, i) => {
+    const warningList = warnings.slice(0, 10).map((w) => {
       const sev = w.severity === 'high' ? '🔴' : w.severity === 'medium' ? '🟡' : '🟢';
       const date = new Date(w.created_at).toLocaleDateString('it-IT');
-      return `${sev} **[${w.severity}]** ${w.reason}\n   — da <@${w.issued_by}> il ${date}`;
+      const exp = w.is_expired ? ' ~~(scaduto)~~' : '';
+      return `${sev} **[${w.severity}]** ${w.reason}${exp}\n   — da <@${w.issued_by}> il ${date}`;
     }).join('\n\n');
 
     const embed = baseEmbed({
       title: `Warning di ${target.tag}`,
-      description: `**Totale:** ${warnings.length}\n\n${warningList}${warnings.length > 10 ? `\n\n...e altri ${warnings.length - 10} non mostrati.` : ''}`,
+      description: `**Attivi:** ${activeWarnings.length} | **Scaduti:** ${expiredWarnings.length}\n\n${warningList}${warnings.length > 10 ? `\n\n...e altri ${warnings.length - 10} non mostrati.` : ''}`,
       color: 0xff9900,
     });
 

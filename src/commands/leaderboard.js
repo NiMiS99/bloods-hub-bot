@@ -15,13 +15,13 @@ module.exports = {
     .setName('leaderboard')
     .setDescription('Mostra i migliori giocatori per un gioco o per attività Discord.')
     .addStringOption((o) =>
-      o.setName('game').setDescription('Codice gioco (es. valorant) — vuoto per attività Discord.').setRequired(false)
+      o.setName('game').setDescription('Codice gioco (es. valorant) — vuoto per attività Discord.').setRequired(false).setMaxLength(200)
     )
     .addStringOption((o) =>
       o
         .setName('metric')
         .setDescription('Metrica di classifica (es. rank, playtime_seconds, voice, messages).')
-        .setRequired(false)
+        .setRequired(false).setMaxLength(100)
     )
     .addIntegerOption((o) =>
       o.setName('top').setDescription('Quante posizioni mostrare (max 25).').setMinValue(5).setMaxValue(25).setRequired(false)

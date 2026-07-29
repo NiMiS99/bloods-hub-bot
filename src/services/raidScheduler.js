@@ -4,6 +4,7 @@
 const { RaidConfig, WowEvent, RaidEligibility } = require('../db');
 const logger = require('../utils/logger');
 const spedizioneCmd = require('../commands/spedizione');
+const config = require('../config');
 
 class RaidScheduler {
   constructor(client) {
@@ -31,7 +32,7 @@ class RaidScheduler {
   }
 
   async _tick() {
-    const GUILD_ID = '1010226759817515018';
+    const GUILD_ID = config.discord.guildId || '1010226759817515018';
     const cfg = await RaidConfig.findOne({ where: { guild_id: GUILD_ID } });
     if (!cfg || !cfg.announce_channel_id) return;
 

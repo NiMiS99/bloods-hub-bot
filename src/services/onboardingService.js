@@ -6,11 +6,12 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, PermissionsBitField } = require('discord.js');
 const logger = require('../utils/logger');
 const { toFraktur } = require('../utils/textFormatter');
+const config = require('../config');
 
-const GUILD_ID = '1010226759817515018';
-const WELCOME_CHANNEL_ID = '1010226760308240407';
-const ROLE_PANEL_CHANNEL_ID = '1529506938654818466';
-const RULES_CHANNEL_ID = '1013413920679149610';
+const GUILD_ID = config.discord.guildId || '1010226759817515018';
+const WELCOME_CHANNEL_ID = config.channels.welcome || '1010226760308240407';
+const ROLE_PANEL_CHANNEL_ID = config.channels.rolePanel || '1529506938654818466';
+const RULES_CHANNEL_ID = config.channels.rules || '1013413920679149610';
 
 // Role names
 const NON_VERIFICATO = 'Non Verificato';
@@ -152,6 +153,26 @@ async function handleVerify(interaction, client) {
     return;
   }
 
+  // Start captcha verification
+  const CaptchaService = require('./captchaService');
+  await CaptchaService.startCaptcha(interaction, client);
+}
+
+/**
+ * Complete verification after captcha is solved.
+ */
+async function completeVerification(interaction, client) {
+  const member = interaction.member;
+  const guild = interaction.guild;
+
+  const CaptchaService = require('./captchaService');
+  const result = await CaptchaService.verifyCaptcha(interaction, client);
+
+  if (!result.success) {
+    await interaction.reply({ content: `❌ ${result.error}`, flags: 64 });
+    return;
+  }
+
   // Find roles
   const nvRole = guild.roles.cache.find((r) => r.name === NON_VERIFICATO);
   const communityRole = guild.roles.cache.find((r) => r.name === MEMBRO_COMMUNITY);
@@ -168,7 +189,7 @@ async function handleVerify(interaction, client) {
   if (nvRole) await member.roles.remove(nvRole).catch(() => {});
   await member.roles.add(communityRole).catch(() => {});
 
-  logger.info(`Onboarding: ${member.user.tag} verified.`);
+  logger.info(`Onboarding: ${member.user.tag} verified (captcha passed).`);
 
   // Send welcome DM with next steps
   try {
@@ -221,6 +242,7 @@ module.exports = {
   postVerificationGate,
   setupNonVerificatoRole,
   handleVerify,
+  completeVerification,
   handleNewMember,
   GUILD_ID,
   WELCOME_CHANNEL_ID,

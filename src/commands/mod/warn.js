@@ -7,7 +7,10 @@ const { canModerate } = require('../../utils/permissions');
 const { recordAudit } = require('../../utils/auditLog');
 const logger = require('../../utils/logger');
 
-// Escalation thresholds
+// Warning decay: warnings expire after 30 days without new warnings
+const WARNING_DECAY_DAYS = 30;
+
+// Escalation thresholds (based on ACTIVE — non-expired — warnings only)
 // 1 warning  -> "Warned" role (visual indicator)
 // 3 warnings -> 10 min timeout (mute)
 // 5 warnings -> 1 hour timeout
@@ -40,9 +43,9 @@ module.exports = {
     .setName('warn')
     .setDescription('Assegna un warning a un membro con escalation automatica.')
     .addUserOption((o) => o.setName('user').setDescription('Membro da warnare.').setRequired(true))
-    .addStringOption((o) => o.setName('motivo').setDescription('Motivo del warning.').setRequired(true))
+    .addStringOption((o) => o.setName('motivo').setDescription('Motivo del warning.').setRequired(true).setMaxLength(200))
     .addStringOption((o) =>
-      o.setName('severita').setDescription('Livello di severità.').setRequired(false)
+      o.setName('severita').setDescription('Livello di severità.').setRequired(false).setMaxLength(100)
         .addChoices(
           { name: 'Basso', value: 'low' },
           { name: 'Medio', value: 'medium' },
@@ -67,16 +70,28 @@ module.exports = {
       return interaction.reply({ embeds: [errorEmbed('Membro non trovato nel server.')], flags: 64 });
     }
 
-    // Create warning record
+    // Expire old warnings (decay: 30 days without new warnings)
+    const decayDate = new Date(Date.now() - WARNING_DECAY_DAYS * 86400000);
+    await Warning.update(
+      { is_expired: true },
+      { where: { user_id: target.id, guild_id: interaction.guild.id, is_expired: false, created_at: { [require('sequelize').Op.lt]: decayDate } } }
+    );
+
+    // Create warning record with expiry date
+    const expiresAt = new Date(Date.now() + WARNING_DECAY_DAYS * 86400000);
     await Warning.create({
       user_id: target.id,
       guild_id: interaction.guild.id,
       issued_by: interaction.user.id,
       reason,
       severity,
+      expires_at: expiresAt,
     });
 
-    const count = await Warning.count({ where: { user_id: target.id, guild_id: interaction.guild.id } });
+    // Count only ACTIVE (non-expired) warnings
+    const count = await Warning.count({
+      where: { user_id: target.id, guild_id: interaction.guild.id, is_expired: false },
+    });
 
     await recordAudit({
       guildId: interaction.guild.id,

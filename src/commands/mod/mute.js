@@ -11,7 +11,7 @@ module.exports = {
     .addUserOption((o) => o.setName('user').setDescription('Membro da mutare.').setRequired(true))
     .addIntegerOption((o) =>
       o.setName('durata').setDescription('Durata in minuti.').setRequired(true).setMinValue(1).setMaxValue(40320)) // max 28 days
-    .addStringOption((o) => o.setName('motivo').setDescription('Motivo del mute.').setRequired(false)),
+    .addStringOption((o) => o.setName('motivo').setDescription('Motivo del mute.').setRequired(false).setMaxLength(200)),
 
   async execute(interaction) {
     if (!canModerate(interaction.member, [PermissionFlagsBits.ModerateMembers])) {

@@ -4,8 +4,9 @@
 const { ExternalAccount, RaidConfig, RaidEligibility, RaidAttendance, Guild } = require('../db');
 const { getApi } = require('./api');
 const logger = require('../utils/logger');
+const config = require('../config');
 
-const GUILD_ID = '1010226759817515018';
+const GUILD_ID = config.discord.guildId || '1010226759817515018';
 
 /**
  * Get or create raid config for a guild.

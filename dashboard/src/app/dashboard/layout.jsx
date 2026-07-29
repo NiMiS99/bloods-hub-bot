@@ -10,7 +10,8 @@ import {
   LayoutDashboard, Gamepad2, Users, Shield, Calendar, Trophy,
   BarChart3, Award, ScrollText, Settings, LogOut, Menu, X,
   ChevronDown, Bell, Search, Gift, Bot, FileText, Swords,
-  PartyPopper, Clock, TerminalSquare
+  PartyPopper, Clock, TerminalSquare, Lightbulb, Zap, Tag,
+  Sun, Moon, Activity
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -25,12 +26,17 @@ const NAV_ITEMS = [
   { href: '/dashboard/level-rewards', label: 'Ricompense Livelli', icon: Gift },
   { href: '/dashboard/raid', label: 'Raid & Progress', icon: Swords },
   { href: '/dashboard/giveaways', label: 'Giveaway', icon: PartyPopper },
+  { href: '/dashboard/suggestions', label: 'Suggerimenti', icon: Lightbulb },
+  { href: '/dashboard/polls', label: 'Sondaggi', icon: BarChart3 },
+  { href: '/dashboard/lfg', label: 'Sessioni LFG', icon: Gamepad2 },
+  { href: '/dashboard/xp-events', label: 'Eventi XP', icon: Zap },
   { href: '/dashboard/scheduled-messages', label: 'Messaggi Programmati', icon: Clock },
   { href: '/dashboard/custom-commands', label: 'Comandi Custom', icon: TerminalSquare },
   { href: '/dashboard/automod', label: 'Auto-Mod', icon: Bot },
   { href: '/dashboard/discord-logs', label: 'Log Discord', icon: FileText },
   { href: '/dashboard/audit-log', label: 'Registro Attività', icon: ScrollText },
   { href: '/dashboard/settings', label: 'Impostazioni', icon: Settings },
+  { href: '/dashboard/health', label: 'Health Check', icon: Activity },
 ];
 
 export default function DashboardLayout({ children, params }) {
@@ -42,6 +48,20 @@ export default function DashboardLayout({ children, params }) {
   const [guildMenuOpen, setGuildMenuOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [theme, setTheme] = useState('dark');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('dashboard-theme') || 'dark';
+    setTheme(saved);
+    document.documentElement.setAttribute('data-theme', saved);
+  }, []);
+
+  function toggleTheme() {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('dashboard-theme', newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+  }
 
   useEffect(() => {
     async function init() {
@@ -244,6 +264,13 @@ export default function DashboardLayout({ children, params }) {
               <Search size={16} />
               <span>Cerca...</span>
             </div>
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg hover:bg-dark-800 transition-colors"
+              title={theme === 'dark' ? 'Passa al tema chiaro' : 'Passa al tema scuro'}
+            >
+              {theme === 'dark' ? <Sun size={18} className="text-dark-300" /> : <Moon size={18} className="text-dark-300" />}
+            </button>
             <button className="relative p-2 rounded-lg hover:bg-dark-800 transition-colors">
               <Bell size={18} className="text-dark-300" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-bloods-600 rounded-full" />

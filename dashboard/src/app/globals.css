@@ -16,6 +16,19 @@
   --accent-hover: #b91c1c;
 }
 
+/* Light theme */
+:root[data-theme="light"] {
+  --bg-primary: #f5f5f8;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --border: #e0e0e8;
+  --text-primary: #1a1a2e;
+  --text-secondary: #4a4a5e;
+  --text-muted: #8a8a9e;
+  --accent: #8b0000;
+  --accent-hover: #b91c1c;
+}
+
 * {
   box-sizing: border-box;
 }

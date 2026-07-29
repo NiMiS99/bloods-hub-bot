@@ -4,7 +4,7 @@
 const { Client, GatewayIntentBits, ChannelType, PermissionsBitField } = require('discord.js');
 const config = require('../config');
 
-const GUILD_ID = '1010226759817515018';
+const GUILD_ID = config.discord.guildId || '1010226759817515018';
 
 // Map: category ID → role name (Fraktur names can't be matched by string)
 const GAME_CATEGORY_MAP = {

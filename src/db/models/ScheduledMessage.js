@@ -18,6 +18,9 @@ module.exports = (sequelize) => {
     tableName: 'scheduled_messages',
     underscored: true,
     timestamps: true,
+    indexes: [
+      { fields: ['guild_id', 'is_active'] },
+    ],
   });
 
   return ScheduledMessage;

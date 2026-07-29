@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-07-28T19:38:45.734Z",
+  "guild": "Bloods Community",
+  "totalRoles": 63,
+  "totalChannels": 186,
+  "totalCategories": 31,
+  "games": 18,
+  "issues": [
+    "RUOLO CON ADMIN NON STAFF: ChannelBot ha Administrator ma non è staff",
+    "RUOLO CON ADMIN NON STAFF: Streamcord ha Administrator ma non è staff",
+    "RUOLO CON ADMIN NON STAFF: Bloods Bot ha Administrator ma non è staff"
+  ]
+}

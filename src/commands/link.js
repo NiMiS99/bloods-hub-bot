@@ -13,13 +13,13 @@ module.exports = {
     .setName('link')
     .setDescription('Collega un account gaming esterno (Steam / Battle.net / Riot).')
     .addStringOption((o) =>
-      o.setName('provider').setDescription('Piattaforma.').setRequired(true).addChoices(
+      o.setName('provider').setDescription('Piattaforma.').setRequired(true).setMaxLength(100).addChoices(
         PROVIDERS.map((p) => ({ name: p, value: p }))
       )
     )
-    .addStringOption((o) => o.setName('external_id').setDescription('WoW: NomePersonaggio-Reame (es: Nimis-Antonidas). Steam: SteamID64. Riot: Nome#TAG.').setRequired(true))
+    .addStringOption((o) => o.setName('external_id').setDescription('WoW: NomePersonaggio-Reame (es: Nimis-Antonidas). Steam: SteamID64. Riot: Nome#TAG.').setRequired(true).setMaxLength(100))
     .addStringOption((o) =>
-      o.setName('region').setDescription('Regione (eu/na/kr/sea).').setRequired(false).addChoices(
+      o.setName('region').setDescription('Regione (eu/na/kr/sea).').setRequired(false).setMaxLength(100).addChoices(
         ['eu', 'na', 'kr', 'sea'].map((r) => ({ name: r, value: r }))
       )
     ),

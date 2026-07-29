@@ -1,8 +1,8 @@
 // src/commands/suggest.js
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { baseEmbed, successEmbed, errorEmbed } = require('../utils/embed');
-const { isAdmin } = require('../utils/permissions');
 const { recordAudit } = require('../utils/auditLog');
+const { createSuggestion } = require('../services/suggestService');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -15,10 +15,12 @@ module.exports = {
 
     // Find or create a suggestions channel.
     let channel = interaction.guild.channels.cache.find(
-      (c) => c.name === 'suggerimenti' || c.name === '𝔰𝔲𝔤𝔤𝔢𝔯𝔦𝔪𝔢𝔫𝔱𝔦'
+      (c) => {
+        const name = c.name.toLowerCase();
+        return name === 'suggerimenti' || name.includes('sugger') || name.includes('uggest');
+      }
     );
     if (!channel) {
-      // Fall back to current channel.
       channel = interaction.channel;
     }
 
@@ -27,6 +29,10 @@ module.exports = {
       description: text,
       footer: { text: `Proposto da ${interaction.user.tag}` },
       color: 0xfee75c,
+    }).addFields({
+      name: '📊 Voti',
+      value: '👍 0 | 👎 0 | Netto: 0',
+      inline: false,
     });
 
     const row = new ActionRowBuilder().addComponents(
@@ -35,13 +41,15 @@ module.exports = {
     );
 
     const sent = await channel.send({ embeds: [embed], components: [row] });
-    await sent.react('👍').catch(() => {});
-    await sent.react('👎').catch(() => {});
 
-    // Auto-pin if sent in a dedicated suggestions channel.
-    if (channel.name.includes('suggerimenti') || channel.name.includes('uggest')) {
-      // Don't auto-pin, just let the community vote.
-    }
+    // Save to DB
+    await createSuggestion({
+      guildId: interaction.guild.id,
+      userId: interaction.user.id,
+      messageId: sent.id,
+      channelId: channel.id,
+      content: text,
+    });
 
     await interaction.reply({ embeds: [successEmbed('Suggerimento pubblicato! Grazie per il contributo.')], flags: 64 });
   },

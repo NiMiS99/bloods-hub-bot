@@ -101,20 +101,20 @@ module.exports = {
 
     .addSubcommand((sc) => sc.setName('create')
       .setDescription('Crea una spedizione e posta il pannello (solo guida).')
-      .addStringOption((o) => o.setName('titolo').setDescription('Titolo spedizione.').setRequired(true))
-      .addStringOption((o) => o.setName('quando').setDescription('Data/ora (es: 2026-01-15 21:00).').setRequired(true))
+      .addStringOption((o) => o.setName('titolo').setDescription('Titolo spedizione.').setRequired(true).setMaxLength(200))
+      .addStringOption((o) => o.setName('quando').setDescription('Data/ora (es: 2026-01-15 21:00).').setRequired(true).setMaxLength(100))
       .addIntegerOption((o) => o.setName('posti').setDescription('Posti totali (es: 25).').setRequired(false))
-      .addStringOption((o) => o.setName('note').setDescription('Note (opzionale).').setRequired(false)))
+      .addStringOption((o) => o.setName('note').setDescription('Note (opzionale).').setRequired(false).setMaxLength(4000)))
     .addSubcommand((sc) => sc.setName('list').setDescription('Lista spedizioni attive (solo guida).'))
     .addSubcommand((sc) => sc.setName('close')
       .setDescription('Chiude una spedizione (non accetta più iscrizioni).')
-      .addStringOption((o) => o.setName('id').setDescription('ID spedizione.').setRequired(true)))
+      .addStringOption((o) => o.setName('id').setDescription('ID spedizione.').setRequired(true).setMaxLength(100)))
     .addSubcommand((sc) => sc.setName('cancel')
       .setDescription('Cancella una spedizione (rimuove pannello e dati).')
-      .addStringOption((o) => o.setName('id').setDescription('ID spedizione.').setRequired(true)))
+      .addStringOption((o) => o.setName('id').setDescription('ID spedizione.').setRequired(true).setMaxLength(100)))
     .addSubcommand((sc) => sc.setName('roster')
       .setDescription('Mostra iscritti ad una spedizione (privato).')
-      .addStringOption((o) => o.setName('id').setDescription('ID spedizione.').setRequired(true))),
+      .addStringOption((o) => o.setName('id').setDescription('ID spedizione.').setRequired(true).setMaxLength(100))),
 
   // Exported for interaction handler
   PX,

@@ -3,8 +3,9 @@
 // voice activity, and posts to a staff-only log channel.
 const { EmbedBuilder, ChannelType } = require('discord.js');
 const logger = require('../utils/logger');
+const config = require('../config');
 
-const GUILD_ID = '1010226759817515018';
+const GUILD_ID = config.discord.guildId || '1010226759817515018';
 const LOG_CHANNEL_NAME = 'log-staff';
 
 /**

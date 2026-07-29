@@ -18,7 +18,7 @@ module.exports = {
       .setDescription('Trasferisci BP ad un altro giocatore.')
       .addUserOption((o) => o.setName('destinatario').setDescription('A chi trasferire.').setRequired(true))
       .addIntegerOption((o) => o.setName('punti').setDescription('Punti da trasferire (>0).').setRequired(true))
-      .addStringOption((o) => o.setName('nota').setDescription('Nota (opzionale).').setRequired(false)))
+      .addStringOption((o) => o.setName('nota').setDescription('Nota (opzionale).').setRequired(false).setMaxLength(4000)))
     .addSubcommand((sc) => sc.setName('leaderboard')
       .setDescription('Classifica BP del server.')
       .addIntegerOption((o) => o.setName('righe').setDescription('Numero righe (max 50).').setRequired(false)))
@@ -40,23 +40,23 @@ module.exports = {
       .setDescription('Aggiungi BP ad un utente (solo guida).')
       .addUserOption((o) => o.setName('utente').setDescription('Target.').setRequired(true))
       .addIntegerOption((o) => o.setName('punti').setDescription('Punti.').setRequired(true))
-      .addStringOption((o) => o.setName('nota').setDescription('Nota.').setRequired(false)))
+      .addStringOption((o) => o.setName('nota').setDescription('Nota.').setRequired(false).setMaxLength(4000)))
     .addSubcommand((sc) => sc.setName('remove')
       .setDescription('Rimuovi BP ad un utente (solo guida).')
       .addUserOption((o) => o.setName('utente').setDescription('Target.').setRequired(true))
       .addIntegerOption((o) => o.setName('punti').setDescription('Punti.').setRequired(true))
-      .addStringOption((o) => o.setName('nota').setDescription('Nota.').setRequired(false)))
+      .addStringOption((o) => o.setName('nota').setDescription('Nota.').setRequired(false).setMaxLength(4000)))
     .addSubcommand((sc) => sc.setName('set')
       .setDescription('Imposta BP di un utente (solo guida).')
       .addUserOption((o) => o.setName('utente').setDescription('Target.').setRequired(true))
       .addIntegerOption((o) => o.setName('punti').setDescription('Punti.').setRequired(true))
-      .addStringOption((o) => o.setName('nota').setDescription('Nota.').setRequired(false)))
+      .addStringOption((o) => o.setName('nota').setDescription('Nota.').setRequired(false).setMaxLength(4000)))
     .addSubcommand((sc) => sc.setName('reset').setDescription('Azzera tutti i BP del server (solo guida).'))
     .addSubcommand((sc) => sc.setName('addmulti')
       .setDescription('Aggiungi BP a più utenti (solo guida).')
       .addIntegerOption((o) => o.setName('punti').setDescription('Punti da aggiungere.').setRequired(true))
-      .addStringOption((o) => o.setName('utenti').setDescription('Elenco menzioni: @A @B @C').setRequired(true))
-      .addStringOption((o) => o.setName('nota').setDescription('Nota (opzionale).').setRequired(false))),
+      .addStringOption((o) => o.setName('utenti').setDescription('Elenco menzioni: @A @B @C').setRequired(true).setMaxLength(4000))
+      .addStringOption((o) => o.setName('nota').setDescription('Nota (opzionale).').setRequired(false).setMaxLength(4000))),
 
   async execute(interaction, client) {
     const sub = interaction.options.getSubcommand();

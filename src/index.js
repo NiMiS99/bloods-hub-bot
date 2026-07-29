@@ -14,6 +14,7 @@ const MetaScheduler = require('./services/metaScheduler');
 const NewsPoster = require('./services/newsPoster');
 const GuidePoster = require('./services/guidePoster');
 const CleanupScheduler = require('./services/cleanupScheduler');
+const BackupScheduler = require('./services/backupScheduler');
 const StatRefreshScheduler = require('./services/statRefreshScheduler');
 const RaidScheduler = require('./services/raidScheduler');
 const OnboardingService = require('./services/onboardingService');
@@ -26,6 +27,19 @@ const MemberCounterService = require('./services/memberCounterService');
 const GiveawayService = require('./services/giveawayService');
 const ScheduledMessageService = require('./services/scheduledMessageService');
 const AlertService = require('./services/alertService');
+const AutomodService = require('./services/automodService');
+const AntiRaidService = require('./services/antiRaidService');
+const WelcomeService = require('./services/welcomeService');
+const BadgeService = require('./services/badgeService');
+const ReminderService = require('./services/reminderService');
+const BirthdayService = require('./services/birthdayService');
+const ReactionRoleService = require('./services/reactionRoleService');
+const StarboardService = require('./services/starboardService');
+const XpEventService = require('./services/xpEventService');
+const LfgService = require('./services/lfgService');
+const ChallengeService = require('./services/challengeService');
+const ReputationService = require('./services/reputationService');
+const GameNightService = require('./services/gameNightService');
 const HealthServer = require('./server/healthServer');
 const DashboardServer = require('./server/dashboardServer');
 
@@ -41,8 +55,10 @@ async function main() {
       GatewayIntentBits.GuildMessages,
       GatewayIntentBits.GuildVoiceStates,
       GatewayIntentBits.MessageContent,
+      GatewayIntentBits.GuildMessageReactions,
+      GatewayIntentBits.GuildMembers,
     ],
-    partials: [Partials.Channel, Partials.GuildMember, Partials.Message],
+    partials: [Partials.Channel, Partials.GuildMember, Partials.Message, Partials.Reaction, Partials.User],
   });
 
   // 3. Commands
@@ -75,6 +91,8 @@ async function main() {
   client.cleanupScheduler = new CleanupScheduler(client);
   client.cleanupScheduler.start();
 
+  BackupScheduler.start();
+
   client.statRefreshScheduler = new StatRefreshScheduler(client);
   client.statRefreshScheduler.start();
 
@@ -93,10 +111,36 @@ async function main() {
   // Alert monitoring (memory, errors, crashes)
   AlertService.init(client);
 
+  // Stateless services (initialized for reference, used by event handlers)
+  client.automodService = AutomodService;
+  client.antiRaidService = AntiRaidService;
+  client.welcomeService = WelcomeService;
+  client.badgeService = BadgeService;
+  client.reactionRoleService = ReactionRoleService;
+  client.starboardService = StarboardService;
+
+  // Reminder scheduler (checks every 30s)
+  ReminderService.start(client);
+
+  // Birthday cron (daily at 9:00 AM)
+  BirthdayService.start(client);
+
+  // XP event — load from DB on startup
+  XpEventService.loadFromDB(config.discord.guildId || '1010226759817515018').catch(() => {});
+
+  // LFG session expiry scheduler (every 5 min)
+  setInterval(() => LfgService.expireOldSessions().catch(() => {}), 300000);
+
+  // Challenge expiry scheduler (every hour)
+  setInterval(() => ChallengeService.expireOldChallenges().catch(() => {}), 3600000);
+
+  // Game night scheduler (every 10 min check)
+  GameNightService.start(client);
+
   // Onboarding + ticket panels (post after ready)
   client.on('clientReady', async () => {
     try {
-      const guild = client.guilds.cache.get('1010226759817515018');
+      const guild = client.guilds.cache.get(config.discord.guildId || '1010226759817515018');
       if (guild) {
         await OnboardingService.setupNonVerificatoRole(guild);
         await OnboardingService.postVerificationGate(client);
@@ -104,7 +148,9 @@ async function main() {
         await AdminPanelService.postPanels(client);
         await RulesPanelService.postRulesPanel(client);
         await GameModeService.postGameModePanel(client);
-        logger.info('Onboarding + ticket + admin + rules + gamemode panels posted.');
+        const WowProfessionPanel = require('./ui/wowProfessionPanel');
+        await WowProfessionPanel.postProfessionPanel(client);
+        logger.info('Onboarding + ticket + admin + rules + gamemode + wowprof panels posted.');
       }
     } catch (e) {
       logger.warn(`Onboarding setup failed: ${e.message}`);
@@ -130,12 +176,15 @@ async function main() {
       client.newsPoster?.stop();
       client.guidePoster?.stop();
       client.cleanupScheduler?.stop();
+      BackupScheduler.stop();
       client.statRefreshScheduler?.stop();
       client.raidScheduler?.stop();
       MemberCounterService?.stop();
       GiveawayService?.stop();
       ScheduledMessageService?.stop();
       AlertService?.stop();
+      ReminderService?.stop();
+      BirthdayService?.stop();
       client.healthServer?.stop();
       client.dashboardServer?.stop();
       client.destroy();

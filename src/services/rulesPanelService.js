@@ -2,8 +2,9 @@
 // Interactive rules panel in #Regolamento — buttons to show each section.
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const logger = require('../utils/logger');
+const config = require('../config');
 
-const GUILD_ID = '1010226759817515018';
+const GUILD_ID = config.discord.guildId || '1010226759817515018';
 const RULES_CHANNEL_ID = '1013413920679149610';
 
 const CID = {
