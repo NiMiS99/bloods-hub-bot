@@ -7,7 +7,7 @@
 //
 // Level curve: level = floor(sqrt(xp / 100))
 //   Level 1: 100 XP, Level 5: 2500 XP, Level 10: 10000 XP, Level 20: 40000 XP
-const { User } = require('../db');
+const { User, Guild } = require('../db');
 const logger = require('../utils/logger');
 const { checkLevelRewards } = require('./levelRewardService');
 
@@ -63,13 +63,29 @@ async function awardXp(user, amount, client, channel) {
   user.level = newLevel;
 
   const leveledUp = newLevel > oldLevel;
-  if (leveledUp && channel) {
+  if (leveledUp && client) {
     try {
-      const member = await channel.guild.members.fetch(user.user_id, { force: false }).catch(() => null);
-      const name = member ? member.displayName : user.username;
-      await channel.send({
-        content: `🎉 **${name}** ha raggiunto il livello **${newLevel}**!`,
-      });
+      const guild = client.guilds.cache.get(user.guild_id);
+      if (guild) {
+        // Determine which channel to announce in
+        let announceChannel = channel;
+        if (!announceChannel) {
+          const guildRow = await Guild.findByPk(user.guild_id);
+          const levelUpChannelId = guildRow?.level_up_channel_id;
+          if (levelUpChannelId) {
+            announceChannel = guild.channels.cache.get(levelUpChannelId);
+          }
+        }
+        if (announceChannel) {
+          const member = await guild.members.fetch(user.user_id, { force: false }).catch(() => null);
+          const name = member ? member.displayName : user.username;
+          // Get custom message template or use default
+          const guildRow = await Guild.findByPk(user.guild_id);
+          const template = guildRow?.level_up_message || '🎉 **{user}** ha raggiunto il livello **{level}**!';
+          const msg = template.replace('{user}', name).replace('{level}', newLevel);
+          await announceChannel.send({ content: msg });
+        }
+      }
     } catch (e) {
       logger.debug(`Level-up announcement failed: ${e.message}`);
     }

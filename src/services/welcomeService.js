@@ -147,6 +147,51 @@ async function sendWelcome(member, guildRow) {
   } catch (err) {
     logger.error(`Welcome send failed: ${err.message}`);
   }
+
+  // Send DM with onboarding info
+  await sendOnboardingDM(member, guildRow);
+}
+
+/**
+ * Send a DM to new members with onboarding info.
+ * @param {object} member - Discord GuildMember
+ * @param {object} guildRow - Guild DB row
+ */
+async function sendOnboardingDM(member, _guildRow) {
+  try {
+    const dm = await member.user.createDM().catch(() => null);
+    if (!dm) return;
+
+    const { EmbedBuilder } = require('discord.js');
+    const embed = new EmbedBuilder()
+      .setColor(0x8b0000)
+      .setTitle(`Benvenuto in ${member.guild.name}! 🩸`)
+      .setDescription(
+        `Ciao **${member.user.username}**! Benvenuto nella nostra community.\n\n` +
+        '**Ecco cosa puoi fare:**\n' +
+        '• `/verify` — Verificati per accedere a tutti i canali\n' +
+        '• `/mystats` — Visualizza le tue statistiche (livello, XP, messaggi)\n' +
+        '• `/rank` — Controlla la tua posizione in classifica\n' +
+        '• `/lfg` — Cerca compagni di gioco\n' +
+        '• `/suggest` — Proponi idee per il server\n' +
+        '• `/tag` — Consulta le guide salvate\n' +
+        '• `/help` — Lista completa dei comandi\n\n' +
+        '**Canali importanti:**\n' +
+        `• <#${member.guild.rulesChannelId || '—'}> — Regolamento\n` +
+        '• Seleziona i tuoi giochi per accedere ai canali dedicati\n\n' +
+        'Buon divertimento! 🎮'
+      )
+      .setThumbnail(member.guild.iconURL({ size: 256 }))
+      .setFooter({ text: member.guild.name })
+      .setTimestamp();
+
+    await dm.send({ embeds: [embed] }).catch(() => {
+      // User has DMs disabled — not an error
+      logger.debug(`Onboarding DM: ${member.user.username} has DMs disabled.`);
+    });
+  } catch (err) {
+    logger.debug(`Onboarding DM failed for ${member.user.username}: ${err.message}`);
+  }
 }
 
 module.exports = { generateWelcomeCard, sendWelcome };

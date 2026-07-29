@@ -32,6 +32,8 @@ export default function SettingsPage() {
           welcomeImageEnabled: d.guild.welcomeImageEnabled ?? true,
           autoRoleId: d.guild.autoRoleId || '',
           levelRewardChannelId: d.guild.levelRewardChannelId || '',
+          levelUpChannelId: d.guild.levelUpChannelId || '',
+          levelUpMessage: d.guild.levelUpMessage || '🎉 **{user}** ha raggiunto il livello **{level}**!',
           automodEnabled: d.guild.automodEnabled || false,
           automodLogChannelId: d.guild.automodLogChannelId || '',
           tempVoiceCreatorChannelId: d.guild.tempVoiceCreatorChannelId || '',

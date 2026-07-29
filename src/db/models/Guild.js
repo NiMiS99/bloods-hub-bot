@@ -27,6 +27,8 @@ module.exports = (sequelize, DataTypes) => {
       auto_role_id: { type: DataTypes.BIGINT.UNSIGNED, allowNull: true },
       // Level rewards
       level_reward_channel_id: { type: DataTypes.BIGINT.UNSIGNED, allowNull: true },
+      level_up_channel_id: { type: DataTypes.BIGINT.UNSIGNED, allowNull: true },
+      level_up_message: { type: DataTypes.STRING(500), allowNull: true, defaultValue: '🎉 **{user}** ha raggiunto il livello **{level}**!' },
       // Automod
       automod_enabled: { type: DataTypes.BOOLEAN, allowNull: true, defaultValue: false },
       automod_log_channel_id: { type: DataTypes.BIGINT.UNSIGNED, allowNull: true },

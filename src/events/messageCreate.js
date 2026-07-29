@@ -5,6 +5,7 @@ const { User, ActivityLog, Guild, CustomCommand } = require('../db');
 const { awardMessageXp } = require('../services/xpService');
 const { checkBadges } = require('../services/badgeService');
 const { checkMessage, executeAction } = require('../services/automodService');
+const autoThreadService = require('../services/autoThreadService');
 const { baseEmbed } = require('../utils/embed');
 const logger = require('../utils/logger');
 
@@ -36,6 +37,9 @@ module.exports = {
         await executeAction(message, amResult.rule, amResult.reason);
         return; // Don't track XP for deleted messages
       }
+
+      // Auto-thread check (create thread if channel is configured)
+      await autoThreadService.handleMessage(message).catch(() => {});
 
       await Guild.findOrCreate({
         where: { guild_id: message.guild.id },

@@ -34,6 +34,9 @@ const BadgeService = require('./services/badgeService');
 const ReminderService = require('./services/reminderService');
 const BirthdayService = require('./services/birthdayService');
 const ReactionRoleService = require('./services/reactionRoleService');
+const MilestoneService = require('./services/milestoneService');
+const WeeklyStatsService = require('./services/weeklyStatsService');
+const GuildChallengeService = require('./services/guildChallengeService');
 const StarboardService = require('./services/starboardService');
 const XpEventService = require('./services/xpEventService');
 const LfgService = require('./services/lfgService');
@@ -111,6 +114,15 @@ async function main() {
   // Alert monitoring (memory, errors, crashes)
   AlertService.init(client);
 
+  // Milestone announcements (member count)
+  MilestoneService.start(client);
+
+  // Weekly stats (auto-post every Sunday at 6 PM)
+  WeeklyStatsService.start(client);
+
+  // Guild challenges (community-wide goals)
+  GuildChallengeService.start(client);
+
   // Stateless services (initialized for reference, used by event handlers)
   client.automodService = AutomodService;
   client.antiRaidService = AntiRaidService;
@@ -185,6 +197,9 @@ async function main() {
       AlertService?.stop();
       ReminderService?.stop();
       BirthdayService?.stop();
+      MilestoneService.stop();
+      WeeklyStatsService.stop();
+      GuildChallengeService.stop();
       client.healthServer?.stop();
       client.dashboardServer?.stop();
       client.destroy();
@@ -204,6 +219,20 @@ async function main() {
   // 7. Login
   await client.login(config.discord.token);
   logger.info(`Logged in as ${client.user?.tag}`);
+
+  // 8. Reconnect handling & connection alerts
+  client.on('disconnect', () => {
+    logger.warn('WebSocket disconnected. discord.js will auto-reconnect.');
+  });
+  client.on('reconnecting', () => {
+    logger.info('WebSocket reconnecting...');
+  });
+  client.on('resume', () => {
+    logger.info('WebSocket resumed. Connection restored.');
+  });
+  client.on('error', (err) => {
+    logger.error(`Client error: ${err.message}`);
+  });
 }
 
 main().catch((err) => {

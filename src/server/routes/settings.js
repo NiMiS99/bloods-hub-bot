@@ -70,6 +70,7 @@ module.exports = function (client, jwtSecret) {
         welcomeEnabled, welcomeMessage, welcomeImageEnabled, autoRoleId,
         levelRewardChannelId, automodEnabled, automodLogChannelId,
         tempVoiceCreatorChannelId,
+        levelUpChannelId, levelUpMessage,
       } = req.body;
 
       const [guild, _created] = await Guild.findOrCreate({
@@ -98,6 +99,9 @@ module.exports = function (client, jwtSecret) {
       if (automodLogChannelId !== undefined) updates.automod_log_channel_id = automodLogChannelId || null;
       // Temp voice
       if (tempVoiceCreatorChannelId !== undefined) updates.temp_voice_creator_channel_id = tempVoiceCreatorChannelId || null;
+      // Level-up
+      if (levelUpChannelId !== undefined) updates.level_up_channel_id = levelUpChannelId || null;
+      if (levelUpMessage !== undefined) updates.level_up_message = levelUpMessage;
 
       await guild.update(updates);
 
