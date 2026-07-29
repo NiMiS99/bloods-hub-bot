@@ -1,6 +1,6 @@
 // src/server/middleware/auth.js
 const jwt = require('jsonwebtoken');
-const { Guild } = require('../../db');
+const { Guild: _Guild } = require('../../db');
 
 /**
  * Verify JWT token from cookie or Authorization header.
@@ -16,7 +16,7 @@ function requireAuth(jwtSecret) {
       const decoded = jwt.verify(token, jwtSecret);
       req.user = decoded;
       next();
-    } catch (err) {
+    } catch (_err) {
       return res.status(401).json({ error: 'Token non valido o scaduto' });
     }
   };
@@ -43,7 +43,7 @@ function requireGuildMember(client) {
       req.guild = guild;
       req.member = member;
       next();
-    } catch (err) {
+    } catch (_err) {
       return res.status(500).json({ error: 'Errore interno del server' });
     }
   };
@@ -92,7 +92,7 @@ function requireAdmin() {
       }
 
       return res.status(403).json({ error: 'Permessi insufficienti' });
-    } catch (err) {
+    } catch (_err) {
       return res.status(500).json({ error: 'Errore verifica permessi' });
     }
   };

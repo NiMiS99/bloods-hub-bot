@@ -81,7 +81,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       // Filter guilds where the bot is present
-      const botGuilds = guildsRes.data.filter((g) => client.guilds.cache.has(g.id));
+      const _botGuilds = guildsRes.data.filter((g) => client.guilds.cache.has(g.id));
 
       // Create JWT
       const token = jwt.sign(

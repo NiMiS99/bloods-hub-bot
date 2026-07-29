@@ -2,7 +2,7 @@
 // /session — game session tools for players.
 // Provides: quick LFG, voice channel info, game tips, party finder.
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType } = require('discord.js');
-const { Game, UserGame, User } = require('../db');
+const { Game } = require('../db');
 const { baseEmbed, errorEmbed, successEmbed } = require('../utils/embed');
 const { createSession } = require('../services/lfgService');
 

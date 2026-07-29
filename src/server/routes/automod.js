@@ -28,7 +28,7 @@ module.exports = function (client, jwtSecret) {
       }));
 
       res.json({ rules: enriched });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore recupero regole automod' });
     }
   });
@@ -60,7 +60,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true, rule });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore creazione regola' });
     }
   });
@@ -94,7 +94,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true, rule });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore aggiornamento regola' });
     }
   });
@@ -119,7 +119,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore eliminazione regola' });
     }
   });

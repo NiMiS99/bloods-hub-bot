@@ -56,7 +56,7 @@ module.exports = function (client, jwtSecret) {
           },
         },
       });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore recupero impostazioni' });
     }
   });
@@ -72,7 +72,7 @@ module.exports = function (client, jwtSecret) {
         tempVoiceCreatorChannelId,
       } = req.body;
 
-      const [guild, created] = await Guild.findOrCreate({
+      const [guild, _created] = await Guild.findOrCreate({
         where: { guild_id: req.guild.id },
         defaults: { guild_id: req.guild.id, name: req.guild.name },
       });
@@ -111,7 +111,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true, guild });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore aggiornamento impostazioni' });
     }
   });

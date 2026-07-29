@@ -22,7 +22,7 @@ module.exports = {
       sc.setName('status').setDescription('Mostra lo stato dei canali temporanei.'))
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
 
-  async execute(interaction, client) {
+  async execute(interaction, _client) {
     if (!isAdmin(interaction.member)) {
       return interaction.reply({ embeds: [errorEmbed('Solo gli admin possono usare questo comando.')], flags: 64 });
     }
@@ -65,7 +65,7 @@ module.exports = {
         return interaction.reply({ embeds: [errorEmbed('I canali vocali temporanei non sono configurati. Usa `/tempvc setup`.')], flags: 64 });
       }
 
-      const activeCount = [...tempChannels.values()].filter((t) => true).length;
+      const activeCount = [...tempChannels.values()].filter((_t) => true).length;
       return interaction.reply({
         embeds: [successEmbed(
           `**Stato Canali Temporanei:**\n` +

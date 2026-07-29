@@ -1,7 +1,7 @@
 // src/commands/dashboard.js
 // /dashboard — opens the dashboard as a Discord Embedded Activity (iframe in Discord).
 // Falls back to posting the URL if Embedded Activities aren't available.
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ActivityType } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { errorEmbed } = require('../utils/embed');
 const { isAdmin } = require('../utils/permissions');
 
@@ -12,7 +12,7 @@ module.exports = {
     .setName('dashboard')
     .setDescription('Apri la dashboard admin (Embedded Activity o link).'),
 
-  async execute(interaction, client) {
+  async execute(interaction, _client) {
     // Only admins can use this
     if (!isAdmin(interaction.member)) {
       await interaction.reply({
@@ -51,7 +51,7 @@ module.exports = {
         await interaction.reply({ embeds: [embed], flags: 64 });
         return;
       }
-    } catch (err) {
+    } catch (_err) {
       // Fall through to link
     }
 

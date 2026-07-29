@@ -1,11 +1,11 @@
 // src/commands/bp.js
 // BP (Bloods Points / DKP) management: balance, transfer, leaderboard, admin ops, raid roster.
-const { SlashCommandBuilder, MessageFlags, AttachmentBuilder } = require('discord.js');
-const { BpUser, BpRaidRoster, AuditLog } = require('../db');
-const { baseEmbed, successEmbed, errorEmbed } = require('../utils/embed');
+const { SlashCommandBuilder } = require('discord.js');
+const { BpUser } = require('../db');
+const { errorEmbed } = require('../utils/embed');
 const { recordAudit } = require('../utils/auditLog');
 const { isRaidLeader, getBpUser, getRoster, extractUserIdsFromMentions } = require('../utils/bpHelpers');
-const logger = require('../utils/logger');
+const _logger = require('../utils/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -58,7 +58,7 @@ module.exports = {
       .addStringOption((o) => o.setName('utenti').setDescription('Elenco menzioni: @A @B @C').setRequired(true).setMaxLength(4000))
       .addStringOption((o) => o.setName('nota').setDescription('Nota (opzionale).').setRequired(false).setMaxLength(4000))),
 
-  async execute(interaction, client) {
+  async execute(interaction, _client) {
     const sub = interaction.options.getSubcommand();
     const guildId = interaction.guildId;
     if (!guildId) {

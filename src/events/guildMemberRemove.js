@@ -6,7 +6,7 @@ const AdvancedLogger = require('../services/advancedLogger');
 
 module.exports = {
   name: 'guildMemberRemove',
-  async execute(member, client) {
+  async execute(member, _client) {
     try {
       // Embed log (channel)
       await AdvancedLogger.onMemberLeave(member);

@@ -1,8 +1,8 @@
 // src/commands/spedizione.js
 // WoW spedizione: create events with class/spec signups via interactive panels.
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { WowEvent, WowEventSignup } = require('../db');
-const { baseEmbed, successEmbed, errorEmbed } = require('../utils/embed');
+const { baseEmbed, errorEmbed } = require('../utils/embed');
 const { recordAudit } = require('../utils/auditLog');
 const { isRaidLeader } = require('../utils/bpHelpers');
 const { CLASSES, findClassByKey } = require('../data/wowClasses');
@@ -89,7 +89,7 @@ async function refreshEventMessage(evt, client) {
       embeds: [buildEventEmbed(evt, signups)],
       components: isOpen ? [buildClassMenu(evt.id), buildUnsubButton(evt.id, false)] : [buildUnsubButton(evt.id, true)],
     });
-  } catch (e) {
+  } catch (_e) {
     // message may be deleted — ignore
   }
 }
@@ -148,7 +148,7 @@ module.exports = {
     if (sub === 'roster') return this._roster(interaction);
   },
 
-  async _create(interaction, client) {
+  async _create(interaction, _client) {
     const title = interaction.options.getString('titolo', true);
     const quando = interaction.options.getString('quando', true);
     const slots = interaction.options.getInteger('posti') ?? 0;

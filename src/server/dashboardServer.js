@@ -2,17 +2,17 @@
 // Express server integrated in the bot process.
 // Serves the dashboard frontend (static) + REST API on port 4567.
 const express = require('express');
-const jwt = require('jsonwebtoken');
+const _jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
 const fs = require('fs');
-const axios = require('axios');
+const _axios = require('axios');
 const logger = require('../utils/logger');
-const config = require('../config');
-const { recordAudit } = require('../utils/auditLog');
+const _config = require('../config');
+const { recordAudit: _recordAudit } = require('../utils/auditLog');
 
 // API routes
 const authRoutes = require('./routes/auth');
@@ -74,6 +74,37 @@ class DashboardServer {
     });
     this.app.use('/api/auth/login', authLimiter);
     this.app.use('/api/auth/callback', authLimiter);
+
+    // Rate limiting: moderation endpoints (30 req / 15 min — sensitive actions)
+    const modLimiter = rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 30,
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: { error: 'Troppe azioni di moderazione. Riprova tra qualche minuto.' },
+    });
+    this.app.use('/api/guilds/:gid/warnings', modLimiter);
+    this.app.use('/api/guilds/:gid/automod', modLimiter);
+
+    // Rate limiting: audit log (60 req / 15 min — read-heavy but can be expensive)
+    const auditLimiter = rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 60,
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: { error: 'Troppe richieste. Riprova tra qualche minuto.' },
+    });
+    this.app.use('/api/guilds/:gid/audit-log', auditLimiter);
+
+    // Rate limiting: settings (20 req / 15 min — config changes are rare)
+    const settingsLimiter = rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 20,
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: { error: 'Troppe modifiche alle impostazioni. Riprova tra qualche minuto.' },
+    });
+    this.app.use('/api/guilds/:gid/settings', settingsLimiter);
 
     // Standard middleware
     this.app.use(cors({ origin: true, credentials: true }));

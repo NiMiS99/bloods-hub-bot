@@ -6,7 +6,7 @@ const { successEmbed, errorEmbed, baseEmbed } = require('../../utils/embed');
 const { isAdmin } = require('../../utils/permissions');
 const { recordAudit } = require('../../utils/auditLog');
 const GameModeService = require('../../services/gameModeService');
-const logger = require('../../utils/logger');
+const _logger = require('../../utils/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()

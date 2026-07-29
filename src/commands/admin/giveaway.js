@@ -6,7 +6,7 @@ const { successEmbed, errorEmbed } = require('../../utils/embed');
 const { isAdmin } = require('../../utils/permissions');
 const { recordAudit } = require('../../utils/auditLog');
 const GiveawayService = require('../../services/giveawayService');
-const logger = require('../../utils/logger');
+const _logger = require('../../utils/logger');
 
 // Parse duration string like "1h", "30m", "2d", "1h30m"
 function parseDuration(str) {

@@ -3,9 +3,9 @@
 // New users get "Non Verificato" role → can only see #Benvenuto.
 // Click "Verifica" → get "Membro della community" → unlock server.
 // Then see: rules panel → game selection → profession selection.
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, PermissionsBitField } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType } = require('discord.js');
 const logger = require('../utils/logger');
-const { toFraktur } = require('../utils/textFormatter');
+const { toFraktur: _toFraktur } = require('../utils/textFormatter');
 const config = require('../config');
 
 const GUILD_ID = config.discord.guildId || '1010226759817515018';

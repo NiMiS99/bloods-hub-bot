@@ -28,7 +28,7 @@
 // ============================================================================
 const { SlashCommandBuilder, PermissionFlagsBits, ChannelType, PermissionsBitField } = require('discord.js');
 const { Guild, User } = require('../../db');
-const { successEmbed, errorEmbed, baseEmbed } = require('../../utils/embed');
+const { errorEmbed, baseEmbed } = require('../../utils/embed');
 const { toFraktur } = require('../../utils/textFormatter');
 const config = require('../../config');
 const logger = require('../../utils/logger');
@@ -72,7 +72,7 @@ const PROTECTED_CATEGORIES = [
 
 // Existing reusable channels — the bot routes to these instead of duplicating.
 const EXISTING_LOG_BOT_CHANNEL_ID = '1459341780607700992';     // 🤖丨𝖫𝗈𝗀-𝖡𝗈𝗍
-const EXISTING_COMANDI_BOT_CHANNEL_ID = '1430308477615607940'; // 💻丨𝖢𝗈𝗆𝖺𝗇𝖽𝗂-𝖡𝗈𝗍
+const _EXISTING_COMANDI_BOT_CHANNEL_ID = '1430308477615607940'; // 💻丨𝖢𝗈𝗆𝖺𝗇𝖽𝗂-𝖡𝗈𝗍
 
 // Onboarding channel mapping: env config key → DB config field.
 const ONBOARDING_CHANNEL_MAP = [

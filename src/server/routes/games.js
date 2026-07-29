@@ -1,6 +1,6 @@
 // src/server/routes/games.js
 const express = require('express');
-const { Game, UserGame, User } = require('../../db');
+const { Game, UserGame } = require('../../db');
 const { requireAuth, requireGuildMember, requireAdmin, requireAdminOnly } = require('../middleware/auth');
 const { recordAudit } = require('../../utils/auditLog');
 
@@ -27,7 +27,7 @@ module.exports = function (client, jwtSecret) {
         };
       }));
       res.json({ games: result });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore recupero giochi' });
     }
   });
@@ -53,7 +53,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true, game });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore creazione gioco' });
     }
   });
@@ -82,7 +82,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true, game });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore aggiornamento gioco' });
     }
   });
@@ -105,7 +105,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore rimozione gioco' });
     }
   });

@@ -1,7 +1,7 @@
 // src/commands/search.js
 // /search — search messages in the server by user or content.
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { baseEmbed, errorEmbed } = require('../utils/embed');
+const { errorEmbed } = require('../utils/embed');
 const { ActivityLog } = require('../db');
 const { Op } = require('sequelize');
 

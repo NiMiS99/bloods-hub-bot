@@ -21,7 +21,7 @@ module.exports = {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
 
-  async execute(interaction, client) {
+  async execute(interaction, _client) {
     if (!isAdmin(interaction.member)) {
       return interaction.reply({
         embeds: [errorEmbed('Non hai i permessi per usare questo comando. Serve il ruolo **Bloods Admin** o permessi Discord equivalenti.')],

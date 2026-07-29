@@ -3,7 +3,7 @@ const AdvancedLogger = require('../services/advancedLogger');
 
 module.exports = {
   name: 'messageDelete',
-  async execute(message, client) {
+  async execute(message, _client) {
     await AdvancedLogger.onMessageDelete(message);
   },
 };

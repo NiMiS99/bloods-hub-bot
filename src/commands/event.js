@@ -1,7 +1,7 @@
 // src/commands/event.js
 // Event system: create, list, join, leave, info, delete.
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { CommunityEvent, EventParticipant, Game, User } = require('../db');
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { CommunityEvent, EventParticipant, Game } = require('../db');
 const { Op } = require('sequelize');
 const { baseEmbed, successEmbed, errorEmbed } = require('../utils/embed');
 const { isAdmin } = require('../utils/permissions');

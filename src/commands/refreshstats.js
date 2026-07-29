@@ -45,7 +45,7 @@ module.exports = {
         try {
           const n = await api.refreshForUser(models, user, acct);
           total += n;
-        } catch (err) {
+        } catch (_err) {
           // surfaced by service; continue
         }
       }

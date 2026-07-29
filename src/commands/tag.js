@@ -1,11 +1,11 @@
 // src/commands/tag.js
 // /tag — manage and use predefined text tags (FAQ snippets).
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { baseEmbed, successEmbed, errorEmbed } = require('../utils/embed');
+const { successEmbed, errorEmbed } = require('../utils/embed');
 const { isAdmin } = require('../utils/permissions');
 const { recordAudit } = require('../utils/auditLog');
 const { Tag } = require('../db');
-const { Op } = require('sequelize');
+const { Op: _Op } = require('sequelize');
 
 module.exports = {
   data: new SlashCommandBuilder()

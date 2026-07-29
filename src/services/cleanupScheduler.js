@@ -3,7 +3,7 @@
 // unbounded table growth. Aggregated totals are preserved in users table.
 const cron = require('node-cron');
 const { Op } = require('sequelize');
-const { ActivityLog } = require('../db');
+const { ActivityLog, DiscordLog } = require('../db');
 const logger = require('../utils/logger');
 
 class CleanupScheduler {
@@ -25,11 +25,21 @@ class CleanupScheduler {
 
   async run() {
     const cutoff = new Date(Date.now() - 30 * 86400 * 1000);
-    const deleted = await ActivityLog.destroy({
+
+    // Prune old activity_log rows
+    const deletedActivity = await ActivityLog.destroy({
       where: { occurred_at: { [Op.lt]: cutoff } },
     });
-    if (deleted > 0) {
-      logger.info(`Cleanup: pruned ${deleted} activity_log rows older than 30 days.`);
+    if (deletedActivity > 0) {
+      logger.info(`Cleanup: pruned ${deletedActivity} activity_log rows older than 30 days.`);
+    }
+
+    // Prune old discord_logs rows (same 30-day retention)
+    const deletedDiscordLogs = await DiscordLog.destroy({
+      where: { created_at: { [Op.lt]: cutoff } },
+    });
+    if (deletedDiscordLogs > 0) {
+      logger.info(`Cleanup: pruned ${deletedDiscordLogs} discord_logs rows older than 30 days.`);
     }
   }
 }

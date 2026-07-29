@@ -2,7 +2,6 @@
 // /gameroles — show all game roles and their member counts.
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { Game, UserGame, User } = require('../db');
-const { baseEmbed } = require('../utils/embed');
 
 module.exports = {
   data: new SlashCommandBuilder()

@@ -1,9 +1,8 @@
 // src/commands/admin/game.js
 // /game add|list|update — manage the games catalog (admin only).
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChannelType, PermissionsBitField } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require('discord.js');
 const { Game } = require('../../db');
 const { successEmbed, errorEmbed, baseEmbed } = require('../../utils/embed');
-const { toFraktur } = require('../../utils/textFormatter');
 const { createGameCategory, createGameChannels } = require('../../utils/gameChannels');
 const { refreshRolePanel } = require('../../ui/roleSelection');
 const { recordAudit } = require('../../utils/auditLog');

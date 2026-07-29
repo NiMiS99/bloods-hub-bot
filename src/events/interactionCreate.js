@@ -101,7 +101,7 @@ module.exports = {
         if (interaction.customId === 'giveaway:join') {
           const GiveawayService = require('../services/giveawayService');
           const { Giveaway } = require('../db');
-          const giveawayId = parseInt(interaction.message.id ? 0 : 0, 10); // not used; we lookup by message_id
+          const _giveawayId = parseInt(interaction.message.id ? 0 : 0, 10); // not used; we lookup by message_id
 
           // Find giveaway by message_id
           const giveaway = await Giveaway.findOne({

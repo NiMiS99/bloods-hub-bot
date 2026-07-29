@@ -83,7 +83,7 @@ async function generateBracket(tournamentId) {
 
   // Build rounds
   const rounds = [];
-  let currentRound = [];
+  const currentRound = [];
   for (let i = 0; i < slots.length; i += 2) {
     const p1 = slots[i];
     const p2 = slots[i + 1];

@@ -1,6 +1,6 @@
 // src/services/badgeService.js
 // Badge/achievement system. Checks conditions and awards badges.
-const { User, UserBadge, UserGame, Game, CommunityEvent, EventParticipant, LfgSession } = require('../db');
+const { User, UserBadge, UserGame, CommunityEvent, LfgSession } = require('../db');
 const logger = require('../utils/logger');
 
 // Badge definitions with check functions.
@@ -10,7 +10,7 @@ const BADGES = {
     name: 'Fondatore',
     icon: '👑',
     description: 'Primo membro del server',
-    check: async (user, guild) => {
+    check: async (user, _guild) => {
       const firstUser = await User.findOne({
         where: { guild_id: user.guild_id },
         order: [['joined_discord_at', 'ASC']],

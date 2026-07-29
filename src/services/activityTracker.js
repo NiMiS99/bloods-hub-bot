@@ -2,7 +2,7 @@
 // Periodically scans voice channels, computes elapsed seconds since the last
 // tick for each connected member, and persists voice_seconds activity +
 // increments users.total_voice_seconds. Also flushes last_seen_at.
-const { User, ActivityLog, Guild } = require('../db');
+const { User, ActivityLog } = require('../db');
 const { awardVoiceXp } = require('./xpService');
 const { checkBadges } = require('./badgeService');
 const config = require('../config');

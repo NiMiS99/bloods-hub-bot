@@ -44,7 +44,7 @@ class RiotApi extends BaseGameApi {
     if (!this.enabled) return [];
     const { puuid } = await this.fetchProfile(accountId, region).catch(() => ({ puuid: accountId }));
     const plat = PLATFORM[region] || 'euw1';
-    const reg = REGIONAL[region] || 'europe';
+    const _reg = REGIONAL[region] || 'europe';
     const stats = [];
 
     if (this.gameCode === 'valorant') {

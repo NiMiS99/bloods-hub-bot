@@ -7,10 +7,10 @@
 //
 // Messages are tracked in the GuideMessage table so they can be edited
 // in-place (auto-refresh) rather than re-posted.
-const { EmbedBuilder, ChannelType } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { Game, Guild, GuideMessage } = require('../db');
 const logger = require('../utils/logger');
-const { toFraktur } = require('../utils/textFormatter');
+const { toFraktur: _toFraktur } = require('../utils/textFormatter');
 
 const COLORS = {
   blue: 0x3498db,

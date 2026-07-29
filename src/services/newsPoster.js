@@ -4,9 +4,9 @@
 // Tracks which entries have already been posted to avoid duplicates.
 const cron = require('node-cron');
 const { Op } = require('sequelize');
-const { Game, GameMeta, Guild } = require('../db');
+const { Game, GameMeta } = require('../db');
 const logger = require('../utils/logger');
-const { toFraktur } = require('../utils/textFormatter');
+const { toFraktur: _toFraktur } = require('../utils/textFormatter');
 const config = require('../config');
 
 // In-memory set of posted GameMeta IDs (cleared on restart, dedup is also in DB)

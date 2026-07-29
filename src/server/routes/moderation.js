@@ -1,9 +1,9 @@
 // src/server/routes/moderation.js
 const express = require('express');
-const { Warning, AuditLog } = require('../../db');
+const { Warning } = require('../../db');
 const { requireAuth, requireGuildMember, requireAdmin } = require('../middleware/auth');
 const { recordAudit } = require('../../utils/auditLog');
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField: _PermissionsBitField } = require('discord.js');
 
 module.exports = function (client, jwtSecret) {
   const router = express.Router();
@@ -49,7 +49,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ warnings, total: count, page, totalPages: Math.ceil(count / limit) });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore recupero warning' });
     }
   });
@@ -84,7 +84,7 @@ module.exports = function (client, jwtSecret) {
       } catch {}
 
       res.json({ success: true, warning });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore creazione warning' });
     }
   });
@@ -111,7 +111,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore mute' });
     }
   });
@@ -134,7 +134,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore unmute' });
     }
   });
@@ -159,7 +159,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore kick' });
     }
   });
@@ -186,7 +186,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore ban' });
     }
   });

@@ -1,6 +1,6 @@
 // src/server/middleware/validate.js
 // Input validation middleware for Express routes.
-const logger = require('../../utils/logger');
+const _logger = require('../../utils/logger');
 
 /**
  * Validate pagination params (page, limit) with safe bounds.

@@ -4,7 +4,7 @@ const { ChannelType } = require('discord.js');
 const logger = require('../utils/logger');
 const config = require('../config');
 
-const GUILD_ID = config.discord.guildId || '1010226759817515018';
+const _GUILD_ID = config.discord.guildId || '1010226759817515018';
 const COUNTER_CHANNEL_NAME = 'Membri Totali';
 const COUNTER_CATEGORY_ID = '1530567851839062077'; // Area Iniziale
 const UPDATE_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes

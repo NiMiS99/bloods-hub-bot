@@ -1,6 +1,6 @@
 // src/server/routes/badges.js
 const express = require('express');
-const { UserBadge, User } = require('../../db');
+const { UserBadge } = require('../../db');
 const { requireAuth, requireGuildMember, requireAdmin } = require('../middleware/auth');
 const { BADGES } = require('../../services/badgeService');
 
@@ -49,7 +49,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ badges: badgeStats, recentAwards });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore recupero badge' });
     }
   });

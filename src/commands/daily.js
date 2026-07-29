@@ -1,7 +1,7 @@
 // src/commands/daily.js
 // /daily — view and claim daily/weekly challenges.
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { baseEmbed, successEmbed, errorEmbed } = require('../utils/embed');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { baseEmbed } = require('../utils/embed');
 const {
   assignDailyChallenges, assignWeeklyChallenges,
   getActiveChallenges, getStreak,

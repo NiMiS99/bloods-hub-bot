@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { GuildContext } from '@/lib/guildContext';
+import { SearchBar } from './SearchBar';
 import {
   LayoutDashboard, Gamepad2, Users, Shield, Calendar, Trophy,
   BarChart3, Award, ScrollText, Settings, LogOut, Menu, X,
@@ -260,10 +261,7 @@ export default function DashboardLayout({ children, params }) {
             </h2>
           </div>
           <div className="flex items-center gap-3">
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-dark-800 rounded-lg text-sm text-dark-400">
-              <Search size={16} />
-              <span>Cerca...</span>
-            </div>
+            <SearchBar />
             <button
               onClick={toggleTheme}
               className="p-2 rounded-lg hover:bg-dark-800 transition-colors"

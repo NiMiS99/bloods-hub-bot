@@ -1,6 +1,6 @@
 // src/services/challengeService.js
 // Daily and weekly challenges with streak tracking and XP rewards.
-const { DailyChallenge, UserStreak, User, ActivityLog } = require('../db');
+const { DailyChallenge, UserStreak, User } = require('../db');
 const { Op } = require('sequelize');
 const logger = require('../utils/logger');
 

@@ -1,6 +1,6 @@
 // src/server/routes/leaderboard.js
 const express = require('express');
-const { User, GameStat, Game, LeaderboardCache } = require('../../db');
+const { User, LeaderboardCache } = require('../../db');
 const { requireAuth, requireGuildMember, requireAdmin } = require('../middleware/auth');
 
 module.exports = function (client, jwtSecret) {
@@ -48,7 +48,7 @@ module.exports = function (client, jwtSecret) {
       }
 
       res.json({ metric, entries });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore recupero classifica' });
     }
   });

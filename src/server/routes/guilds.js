@@ -1,9 +1,9 @@
 // src/server/routes/guilds.js
 const express = require('express');
-const { User, Game, UserGame, ActivityLog, Guild } = require('../../db');
-const { Op } = require('sequelize');
+const { User, Game, UserGame } = require('../../db');
+const { Op: _Op } = require('sequelize');
 const { requireAuth, requireGuildMember, requireAdmin } = require('../middleware/auth');
-const { recordAudit } = require('../../utils/auditLog');
+const { recordAudit: _recordAudit } = require('../../utils/auditLog');
 
 module.exports = function (client, jwtSecret) {
   const router = express.Router();
@@ -80,7 +80,7 @@ module.exports = function (client, jwtSecret) {
         }
       }
       res.json({ users: results });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore risoluzione utenti' });
     }
   });

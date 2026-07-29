@@ -4,7 +4,7 @@ const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { Game, GameMeta } = require('../../db');
 const { successEmbed, errorEmbed } = require('../../utils/embed');
 const { isAdmin } = require('../../utils/permissions');
-const logger = require('../../utils/logger');
+const _logger = require('../../utils/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()

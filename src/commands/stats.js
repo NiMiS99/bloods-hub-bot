@@ -1,10 +1,10 @@
 // src/commands/stats.js
 // /stats — community-wide stats summary.
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const { User, Game, UserGame } = require('../db');
 const { baseEmbed } = require('../utils/embed');
 const { formatDuration } = require('../utils/format');
-const { Sequelize } = require('sequelize');
+const { Sequelize: _Sequelize } = require('sequelize');
 
 module.exports = {
   data: new SlashCommandBuilder().setName('stats').setDescription('Statistiche generali della community.'),

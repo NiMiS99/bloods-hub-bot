@@ -1,7 +1,6 @@
 // src/commands/help.js
 // /help — dynamically lists all available commands grouped by category.
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require('discord.js');
-const { baseEmbed } = require('../utils/embed');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
 const config = require('../config');
 
 // Command metadata — kept in sync with actual registered commands.
@@ -135,7 +134,7 @@ module.exports = {
 
     if (category) {
       // Show specific category
-      const group = COMMAND_GROUPS.find((g) => g.name.includes(category) || categoryMap(category) === g);
+      const _group = COMMAND_GROUPS.find((g) => g.name.includes(category) || categoryMap(category) === g);
       const targetGroup = categoryMap(category);
       if (targetGroup) {
         const embed = new EmbedBuilder()

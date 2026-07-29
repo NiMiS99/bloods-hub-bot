@@ -1,6 +1,6 @@
 // src/commands/rank.js
 // Shows a user's level, XP, and progress to the next level.
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const { User } = require('../db');
 const { baseEmbed, errorEmbed } = require('../utils/embed');
 const { xpToNextLevel, xpForLevel } = require('../services/xpService');
@@ -27,7 +27,7 @@ module.exports = {
       return;
     }
 
-    const { currentLevel, nextLevel, xpToNext, progress } = xpToNextLevel(user.xp);
+    const { currentLevel, nextLevel, progress } = xpToNextLevel(user.xp);
     const xpForCurrent = xpForLevel(currentLevel);
     const xpForNext = xpForLevel(nextLevel);
     const xpRange = xpForNext - xpForCurrent;

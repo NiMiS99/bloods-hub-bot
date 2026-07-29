@@ -1,6 +1,6 @@
 // src/commands/poll.js
 // Poll with DB persistence and automatic closure.
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const { baseEmbed, errorEmbed } = require('../utils/embed');
 const { Poll } = require('../db');
 const logger = require('../utils/logger');

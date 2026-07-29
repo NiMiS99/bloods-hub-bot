@@ -2,7 +2,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { Op } = require('sequelize');
 const { LeaderboardCache, Game, GameStat, User } = require('../db');
-const { baseEmbed } = require('../utils/embed');
 const { formatDuration, ordinal } = require('../utils/format');
 
 const DISCORD_METRICS = {

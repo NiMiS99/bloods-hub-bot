@@ -1,8 +1,8 @@
 // src/services/captchaService.js
 // Simple math captcha for verification — anti-bot measure.
 // Generates a math problem that the user must solve before being verified.
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, TextInputBuilder, TextInputStyle, ModalBuilder } = require('discord.js');
-const logger = require('../utils/logger');
+const { ActionRowBuilder, TextInputBuilder, TextInputStyle, ModalBuilder } = require('discord.js');
+const _logger = require('../utils/logger');
 
 // In-memory store: userId -> { question, answer, expiresAt }
 const _pending = new Map();
@@ -36,7 +36,7 @@ function generateCaptcha() {
  * Start captcha verification for a user.
  * Sends a modal with the math question.
  */
-async function startCaptcha(interaction, client) {
+async function startCaptcha(interaction, _client) {
   const captcha = generateCaptcha();
   _pending.set(interaction.user.id, {
     question: captcha.question,
@@ -65,7 +65,7 @@ async function startCaptcha(interaction, client) {
 /**
  * Verify captcha answer from modal submission.
  */
-async function verifyCaptcha(interaction, client) {
+async function verifyCaptcha(interaction, _client) {
   const pending = _pending.get(interaction.user.id);
 
   if (!pending) {

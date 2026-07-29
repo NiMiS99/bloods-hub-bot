@@ -4,7 +4,7 @@ const axios = require('axios');
 
 async function fetchMeta() {
   const items = [];
-  const now = new Date().toISOString();
+  const _now = new Date().toISOString();
 
   // 1. Patch notes page (always relevant)
   items.push({

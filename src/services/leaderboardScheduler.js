@@ -3,7 +3,7 @@
 // combinations so /leaderboard responses are fast. Runs every 5 minutes.
 const cron = require('node-cron');
 const { Op } = require('sequelize');
-const { sequelize, LeaderboardCache, GameStat, User, Game } = require('../db');
+const { LeaderboardCache, GameStat, User, Game } = require('../db');
 const logger = require('../utils/logger');
 
 class LeaderboardScheduler {

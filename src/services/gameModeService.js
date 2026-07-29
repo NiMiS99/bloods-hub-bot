@@ -7,7 +7,6 @@ const {
   ButtonStyle,
   EmbedBuilder,
   ChannelType,
-  StringSelectMenuBuilder,
 } = require('discord.js');
 const { GameMode } = require('../db');
 const { baseEmbed } = require('../utils/embed');
@@ -125,7 +124,7 @@ async function buildGameModePanel(guild) {
 /**
  * Build a detailed server info embed (shown when a button is clicked).
  */
-async function buildServerDetails(serverId, guild) {
+async function buildServerDetails(serverId, _guild) {
   const server = await GameMode.findByPk(serverId);
   if (!server || !server.is_active) {
     return {
@@ -203,7 +202,7 @@ async function postGameModePanel(client) {
 
     // Find existing panel message (from guide_messages or by scanning)
     const { GuideMessage } = require('../db');
-    let existing = await GuideMessage.findOne({
+    const existing = await GuideMessage.findOne({
       where: { guild_id: guild.id, channel_id: channel.id, guide_type: 'gamemode_panel' },
     });
 

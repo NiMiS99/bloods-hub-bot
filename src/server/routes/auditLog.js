@@ -52,7 +52,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ logs, total: count, page, totalPages: Math.ceil(count / limit) });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore recupero audit log' });
     }
   });

@@ -1,6 +1,6 @@
 // src/services/lfgService.js
 // Persistent LFG (Looking For Group) service with DB backing.
-const { LfgSession, Game } = require('../db');
+const { LfgSession } = require('../db');
 const logger = require('../utils/logger');
 
 const DEFAULT_EXPIRY_HOURS = 4;
@@ -115,10 +115,10 @@ async function getSessionsByGame(guildId, gameName) {
 /**
  * Build the LFG embed from a session.
  */
-function buildLfgEmbed(session, guild) {
+function buildLfgEmbed(session, _guild) {
   const { EmbedBuilder } = require('discord.js');
   const participants = session.participants || [];
-  const participantList = participants.map((id, i) => {
+  const participantList = participants.map((id, _i) => {
     const isCaptain = id === session.captain_id.toString();
     return `• <@${id}>${isCaptain ? ' (capitano)' : ''}`;
   }).join('\n');

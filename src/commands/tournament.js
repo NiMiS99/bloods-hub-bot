@@ -1,7 +1,7 @@
 // src/commands/tournament.js
 // /tournament — create and manage tournaments with brackets.
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { baseEmbed, successEmbed, errorEmbed } = require('../utils/embed');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { successEmbed, errorEmbed } = require('../utils/embed');
 const { isAdmin } = require('../utils/permissions');
 const { recordAudit } = require('../utils/auditLog');
 const {

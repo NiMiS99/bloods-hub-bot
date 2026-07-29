@@ -4,7 +4,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { ExternalAccount, User, Guild } = require('../db');
 const { successEmbed, errorEmbed } = require('../utils/embed');
-const { getApi } = require('../services/api');
+const { getApi: _getApi } = require('../services/api');
 
 const PROVIDERS = ['steam', 'battlenet', 'riot'];
 

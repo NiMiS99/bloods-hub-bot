@@ -1,7 +1,7 @@
 // src/commands/thank.js
 // /thank — thank a user for their help, giving them reputation.
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { baseEmbed, successEmbed, errorEmbed } = require('../utils/embed');
+const { errorEmbed } = require('../utils/embed');
 const { thankUser, getReputation, getTopReputation } = require('../services/reputationService');
 
 module.exports = {

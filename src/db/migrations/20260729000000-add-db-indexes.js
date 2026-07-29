@@ -5,7 +5,7 @@
 // supported by MySQL < 8.0, so we catch duplicate errors.
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface, _Sequelize) {
     const indexes = [
       { table: 'activity_log', name: 'idx_activity_guild_user', fields: ['guild_id', 'user_id'] },
       { table: 'activity_log', name: 'idx_activity_guild_type', fields: ['guild_id', 'event_type'] },
@@ -46,7 +46,7 @@ module.exports = {
     }
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface, _Sequelize) {
     const indexNames = [
       'idx_activity_guild_user', 'idx_activity_guild_type', 'idx_activity_occurred',
       'idx_user_guild_level', 'idx_warn_guild_user', 'idx_warn_expires',

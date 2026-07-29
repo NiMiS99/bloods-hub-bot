@@ -76,7 +76,7 @@ module.exports = {
     }
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface, _Sequelize) {
     await queryInterface.dropTable('scheduled_messages').catch(() => {});
     await queryInterface.dropTable('custom_commands').catch(() => {});
     await queryInterface.dropTable('giveaways').catch(() => {});

@@ -1,8 +1,7 @@
 // src/commands/serverstats.js
 // /serverstats — server statistics with activity charts.
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { baseEmbed } = require('../utils/embed');
-const { User, ActivityLog, Game, Guild } = require('../db');
+const { User, ActivityLog, Game } = require('../db');
 const { Op } = require('sequelize');
 
 module.exports = {

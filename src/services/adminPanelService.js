@@ -2,9 +2,9 @@
 // Posts interactive admin panels in the #dashboard-admin channel.
 // Panels: dashboard link, live stats, member management, audit log.
 // All interactive via buttons — no external browser needed for common actions.
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, ChannelType, PermissionsBitField } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, PermissionsBitField } = require('discord.js');
 const logger = require('../utils/logger');
-const { User, Guild, AuditLog, DiscordLog, BpUser, RaidEligibility, RaidConfig } = require('../db');
+const { AuditLog, DiscordLog, BpUser, RaidEligibility, RaidConfig } = require('../db');
 const config = require('../config');
 
 const GUILD_ID = config.discord.guildId || '1010226759817515018';
@@ -238,7 +238,7 @@ function findRoleMemberCount(guild, roleName) {
 /**
  * Panel 4: Audit log
  */
-async function postAuditPanel(channel, client) {
+async function postAuditPanel(channel, _client) {
   const logs = await AuditLog.findAll({
     where: { guild_id: GUILD_ID },
     order: [['created_at', 'DESC']],
@@ -269,7 +269,7 @@ async function postAuditPanel(channel, client) {
 
 // ===== Button handlers =====
 
-async function handleButton(interaction, client) {
+async function handleButton(interaction, _client) {
   const { customId } = interaction;
 
   if (customId === CID.statsRefresh) {

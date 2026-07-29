@@ -1,7 +1,7 @@
 // src/server/routes/events.js
 const express = require('express');
 const { CommunityEvent, EventParticipant, Game } = require('../../db');
-const { Op } = require('sequelize');
+const { Op: _Op } = require('sequelize');
 const { requireAuth, requireGuildMember, requireAdmin } = require('../middleware/auth');
 const { recordAudit } = require('../../utils/auditLog');
 
@@ -35,7 +35,7 @@ module.exports = function (client, jwtSecret) {
       }));
 
       res.json({ events: result });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore recupero eventi' });
     }
   });
@@ -75,7 +75,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true, event });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore creazione evento' });
     }
   });
@@ -99,7 +99,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true });
-    } catch (err) {
+    } catch (_err) {
       res.status(500).json({ error: 'Errore eliminazione evento' });
     }
   });

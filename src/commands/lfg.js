@@ -3,8 +3,8 @@
 // Now backed by DB for persistence across restarts.
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { Game } = require('../db');
-const { baseEmbed, errorEmbed, successEmbed } = require('../utils/embed');
-const { createSession, getActiveSessions, buildLfgEmbed, buildLfgButtons } = require('../services/lfgService');
+const { baseEmbed, errorEmbed } = require('../utils/embed');
+const { createSession, getActiveSessions } = require('../services/lfgService');
 
 module.exports = {
   data: new SlashCommandBuilder()

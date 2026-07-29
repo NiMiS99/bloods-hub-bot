@@ -6,7 +6,7 @@ const AdvancedLogger = require('../services/advancedLogger');
 
 module.exports = {
   name: 'guildBanAdd',
-  async execute(ban, client) {
+  async execute(ban, _client) {
     try {
       // Embed log (channel)
       await AdvancedLogger.onBanAdd(ban);

@@ -1,7 +1,7 @@
 // src/services/gameNightService.js
 // Recurring game night events — auto-creates LFG sessions on schedule.
 const cron = require('node-cron');
-const { GameNight, Game, Guild } = require('../db');
+const { GameNight, Game } = require('../db');
 const { createSession } = require('./lfgService');
 const logger = require('../utils/logger');
 
@@ -83,7 +83,7 @@ async function _triggerNight(client, night) {
     const role = game ? guild.roles.cache.get(game.role_id) : null;
 
     // Find or use LFG channel
-    let channel = night.text_channel_id
+    const channel = night.text_channel_id
       ? guild.channels.cache.get(night.text_channel_id)
       : guild.channels.cache.find((c) => c.name.toLowerCase().includes('lfg'));
 

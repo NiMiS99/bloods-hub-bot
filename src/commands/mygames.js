@@ -3,7 +3,7 @@
 // edit the selection (links to the role panel channel).
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { UserGame, Game, User } = require('../db');
-const { baseEmbed, errorEmbed } = require('../utils/embed');
+const { errorEmbed } = require('../utils/embed');
 const { formatDuration } = require('../utils/format');
 const config = require('../config');
 

@@ -1,7 +1,7 @@
 // src/server/routes/raid.js
 // API routes for raid config, eligibility, and attendance.
 const express = require('express');
-const { RaidConfig, RaidEligibility, RaidAttendance, User, ExternalAccount } = require('../../db');
+const { RaidConfig, RaidEligibility, RaidAttendance, User } = require('../../db');
 const { requireAuth, requireGuildMember, requireAdmin } = require('../middleware/auth');
 const { recordAudit } = require('../../utils/auditLog');
 

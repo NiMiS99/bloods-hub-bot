@@ -6,7 +6,7 @@ const logger = require('../utils/logger');
 
 module.exports = {
   name: 'guildMemberUpdate',
-  async execute(oldMember, newMember, client) {
+  async execute(oldMember, newMember, _client) {
     await AdvancedLogger.onGuildMemberUpdate(oldMember, newMember);
 
     // Detect server boost

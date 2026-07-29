@@ -1,7 +1,7 @@
 // src/commands/mod/warn.js
 // /warn — assigns a warning, applies "Warned" role, and auto-escalates on repeated offenses.
 const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
-const { Warning, Guild } = require('../../db');
+const { Warning } = require('../../db');
 const { successEmbed, errorEmbed, baseEmbed } = require('../../utils/embed');
 const { canModerate } = require('../../utils/permissions');
 const { recordAudit } = require('../../utils/auditLog');

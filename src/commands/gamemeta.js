@@ -2,7 +2,7 @@
 // /gameta <game> <kind> — show the latest cached patch / meta / server-status.
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { Game, GameMeta } = require('../db');
-const { baseEmbed, errorEmbed } = require('../utils/embed');
+const { errorEmbed } = require('../utils/embed');
 
 module.exports = {
   data: new SlashCommandBuilder()

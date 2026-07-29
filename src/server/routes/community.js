@@ -8,8 +8,8 @@ const { requireAuth, requireGuildMember, requireAdmin } = require('../middleware
 const { validatePagination } = require('../middleware/validate');
 const { recordAudit } = require('../../utils/auditLog');
 const XpEventService = require('../../services/xpEventService');
-const logger = require('../../utils/logger');
-const { Op } = require('sequelize');
+const _logger = require('../../utils/logger');
+const { Op: _Op } = require('sequelize');
 
 module.exports = function (client, jwtSecret) {
   const router = express.Router();
@@ -28,7 +28,7 @@ module.exports = function (client, jwtSecret) {
         suggestions: rows,
         pagination: { page: req.query.page, totalPages: Math.ceil(count / req.query.limit), total: count },
       });
-    } catch (err) { res.status(500).json({ error: 'Errore' }); }
+    } catch (_err) { res.status(500).json({ error: 'Errore' }); }
   });
 
   router.put('/:guildId/suggestions/:id/status', requireAuth(jwtSecret), requireGuildMember(client), requireAdmin(), async (req, res) => {
@@ -40,7 +40,7 @@ module.exports = function (client, jwtSecret) {
       await Suggestion.update({ status }, { where: { id: req.params.id, guild_id: req.guild.id } });
       await recordAudit({ guildId: req.guild.id, actorId: req.user.id, action: 'dashboard.suggestion.status', targetType: 'suggestion', targetId: req.params.id, details: { status } });
       res.json({ success: true });
-    } catch (err) { res.status(500).json({ error: 'Errore' }); }
+    } catch (_err) { res.status(500).json({ error: 'Errore' }); }
   });
 
   // ============ POLLS ============
@@ -55,7 +55,7 @@ module.exports = function (client, jwtSecret) {
         polls: rows,
         pagination: { page: req.query.page, totalPages: Math.ceil(count / req.query.limit), total: count },
       });
-    } catch (err) { res.status(500).json({ error: 'Errore' }); }
+    } catch (_err) { res.status(500).json({ error: 'Errore' }); }
   });
 
   router.post('/:guildId/polls/:id/close', requireAuth(jwtSecret), requireGuildMember(client), requireAdmin(), async (req, res) => {
@@ -64,7 +64,7 @@ module.exports = function (client, jwtSecret) {
       await closePoll(client, req.guild.id, req.params.id);
       await recordAudit({ guildId: req.guild.id, actorId: req.user.id, action: 'dashboard.poll.close', targetType: 'poll', targetId: req.params.id });
       res.json({ success: true });
-    } catch (err) { res.status(500).json({ error: 'Errore' }); }
+    } catch (_err) { res.status(500).json({ error: 'Errore' }); }
   });
 
   // ============ LFG SESSIONS ============
@@ -76,7 +76,7 @@ module.exports = function (client, jwtSecret) {
         order: [['created_at', 'DESC']], raw: true,
       });
       res.json({ sessions });
-    } catch (err) { res.status(500).json({ error: 'Errore' }); }
+    } catch (_err) { res.status(500).json({ error: 'Errore' }); }
   });
 
   // ============ XP EVENTS ============
@@ -88,7 +88,7 @@ module.exports = function (client, jwtSecret) {
       const settings = guild?.settings || {};
       const events = settings.xpEventHistory || [];
       res.json({ events, active });
-    } catch (err) { res.status(500).json({ error: 'Errore' }); }
+    } catch (_err) { res.status(500).json({ error: 'Errore' }); }
   });
 
   router.post('/:guildId/xp-events', requireAuth(jwtSecret), requireGuildMember(client), requireAdmin(), async (req, res) => {
@@ -98,7 +98,7 @@ module.exports = function (client, jwtSecret) {
       await XpEventService.startEvent(req.guild.id, multiplier, durationHours, req.user.id);
       await recordAudit({ guildId: req.guild.id, actorId: req.user.id, action: 'dashboard.xpevent.start', targetType: 'guild', details: { multiplier, durationHours } });
       res.json({ success: true });
-    } catch (err) { res.status(500).json({ error: 'Errore' }); }
+    } catch (_err) { res.status(500).json({ error: 'Errore' }); }
   });
 
   router.post('/:guildId/xp-events/stop', requireAuth(jwtSecret), requireGuildMember(client), requireAdmin(), async (req, res) => {
@@ -106,7 +106,7 @@ module.exports = function (client, jwtSecret) {
       await XpEventService.stopEvent(req.guild.id);
       await recordAudit({ guildId: req.guild.id, actorId: req.user.id, action: 'dashboard.xpevent.stop', targetType: 'guild' });
       res.json({ success: true });
-    } catch (err) { res.status(500).json({ error: 'Errore' }); }
+    } catch (_err) { res.status(500).json({ error: 'Errore' }); }
   });
 
   // ============ TOURNAMENTS ============
@@ -117,7 +117,7 @@ module.exports = function (client, jwtSecret) {
         where: { guild_id: req.guild.id }, order: [['created_at', 'DESC']], raw: true,
       });
       res.json({ tournaments });
-    } catch (err) { res.status(500).json({ error: 'Errore' }); }
+    } catch (_err) { res.status(500).json({ error: 'Errore' }); }
   });
 
   // ============ GAME NIGHTS ============
@@ -128,7 +128,7 @@ module.exports = function (client, jwtSecret) {
         where: { guild_id: req.guild.id }, order: [['created_at', 'DESC']], raw: true,
       });
       res.json({ gameNights: nights });
-    } catch (err) { res.status(500).json({ error: 'Errore' }); }
+    } catch (_err) { res.status(500).json({ error: 'Errore' }); }
   });
 
   // ============ TAGS ============
@@ -139,7 +139,7 @@ module.exports = function (client, jwtSecret) {
         where: { guild_id: req.guild.id, is_active: true }, order: [['name', 'ASC']], raw: true,
       });
       res.json({ tags });
-    } catch (err) { res.status(500).json({ error: 'Errore' }); }
+    } catch (_err) { res.status(500).json({ error: 'Errore' }); }
   });
 
   return router;

@@ -171,7 +171,7 @@ module.exports = {
 
       // Try to delete the original message too
       try {
-        const panels = await reactionRoleService.listPanels(interaction.guild.id);
+        const _panels = await reactionRoleService.listPanels(interaction.guild.id);
         // The panel is already removed from DB, so we need to find the channel from the message
         // We'll search channels for the message
         for (const ch of interaction.guild.channels.cache.values()) {

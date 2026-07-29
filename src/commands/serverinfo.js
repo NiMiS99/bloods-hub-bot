@@ -1,7 +1,6 @@
 // src/commands/serverinfo.js
 // /serverinfo — shows comprehensive server information.
 const { SlashCommandBuilder, EmbedBuilder, ChannelType } = require('discord.js');
-const { baseEmbed } = require('../utils/embed');
 const { User, Game, UserGame, Warning } = require('../db');
 
 module.exports = {

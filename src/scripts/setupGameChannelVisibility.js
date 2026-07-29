@@ -1,7 +1,7 @@
 // src/scripts/setupGameChannelVisibility.js
 // Hides game categories from @everyone — only visible with the game role.
 // Run once to apply permissions, then the role panel auto-manages access.
-const { Client, GatewayIntentBits, ChannelType, PermissionsBitField } = require('discord.js');
+const { Client, GatewayIntentBits, ChannelType } = require('discord.js');
 const config = require('../config');
 
 const GUILD_ID = config.discord.guildId || '1010226759817515018';

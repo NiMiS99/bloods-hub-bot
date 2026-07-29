@@ -1,7 +1,7 @@
 // src/services/birthdayService.js
 // Birthday system: store user birthdays, send daily announcements, list upcoming.
 const cron = require('node-cron');
-const { Op } = require('sequelize');
+const { Op: _Op } = require('sequelize');
 const { Birthday, Guild } = require('../db');
 const { baseEmbed } = require('../utils/embed');
 const logger = require('../utils/logger');

@@ -1,9 +1,9 @@
 // src/commands/loot.js
 // Loot roll system: start/status/close/cancel rolls, roll, loot recap, items list.
-const { SlashCommandBuilder, MessageFlags } = require('discord.js');
-const { BpItem, BpLootHistory, BpActiveRoll, sequelize } = require('../db');
+const { SlashCommandBuilder } = require('discord.js');
+const { BpItem, BpLootHistory, sequelize } = require('../db');
 const { Op } = require('sequelize');
-const { baseEmbed, successEmbed, errorEmbed } = require('../utils/embed');
+const { errorEmbed } = require('../utils/embed');
 const { recordAudit } = require('../utils/auditLog');
 const { isRaidLeader, getBpUser, getRoster, getActiveRoll, randInt, computeScore } = require('../utils/bpHelpers');
 
@@ -48,7 +48,7 @@ module.exports = {
     })));
   },
 
-  async execute(interaction, client) {
+  async execute(interaction, _client) {
     const sub = interaction.options.getSubcommand();
     const guildId = interaction.guildId;
     if (!guildId) {

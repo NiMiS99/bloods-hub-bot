@@ -1,8 +1,8 @@
 // src/commands/mod/userinfo.js
-const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { User, UserGame, Game, ExternalAccount, Warning } = require('../../db');
 const { baseEmbed, errorEmbed } = require('../../utils/embed');
-const { isAdmin, canModerate } = require('../../utils/permissions');
+const { canModerate } = require('../../utils/permissions');
 const { formatDuration } = require('../../utils/format');
 const { getUserBadges } = require('../../services/badgeService');
 const { xpToNextLevel } = require('../../services/xpService');

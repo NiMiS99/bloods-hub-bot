@@ -82,8 +82,8 @@ async function handleProfessionSelect(interaction, guild) {
   const selected = interaction.values || [];
   const member = interaction.member;
 
-  let added = [];
-  let removed = [];
+  const added = [];
+  const removed = [];
 
   for (const prof of PROFESSIONS) {
     const roleName = `WoW ${prof.name}`;
@@ -128,7 +128,7 @@ async function handleProfessionSelect(interaction, guild) {
  */
 async function handleClear(interaction, guild) {
   const member = interaction.member;
-  let removed = [];
+  const removed = [];
 
   for (const prof of PROFESSIONS) {
     const roleName = `WoW ${prof.name}`;

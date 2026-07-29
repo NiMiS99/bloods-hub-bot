@@ -1,7 +1,7 @@
 // src/commands/admin/gamenight.js
 // /gamenight — manage recurring game night events.
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { baseEmbed, successEmbed, errorEmbed } = require('../../utils/embed');
+const { successEmbed, errorEmbed } = require('../../utils/embed');
 const { isAdmin } = require('../../utils/permissions');
 const { recordAudit } = require('../../utils/auditLog');
 const { createNight, listNights, toggleNight, deleteNight } = require('../../services/gameNightService');

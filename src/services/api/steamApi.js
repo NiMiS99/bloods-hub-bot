@@ -4,7 +4,7 @@ const axios = require('axios');
 const BaseGameApi = require('./baseApi');
 const { acquire: rateLimit } = require('./rateLimiter');
 const config = require('../../config');
-const logger = require('../../utils/logger');
+const _logger = require('../../utils/logger');
 
 // Map our game codes -> Steam app ids.
 const APP_IDS = {

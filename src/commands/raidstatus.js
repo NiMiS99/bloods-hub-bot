@@ -1,8 +1,8 @@
 // src/commands/raidstatus.js
 // /raidstatus — shows player's raid eligibility status.
 // /raidcheck — Guida runs eligibility check on all members.
-const { SlashCommandBuilder, MessageFlags } = require('discord.js');
-const { RaidConfig, RaidEligibility, ExternalAccount } = require('../db');
+const { SlashCommandBuilder } = require('discord.js');
+const { RaidEligibility, ExternalAccount } = require('../db');
 const { baseEmbed, successEmbed, errorEmbed } = require('../utils/embed');
 const { recordAudit } = require('../utils/auditLog');
 const { isRaidLeader } = require('../utils/bpHelpers');
@@ -23,7 +23,7 @@ module.exports = {
 
   async execute(interaction, client) {
     const sub = interaction.options.getSubcommand();
-    const guildId = interaction.guildId;
+    const _guildId = interaction.guildId;
 
     if (sub === 'me') return this._me(interaction, client);
     if (sub === 'check') {
@@ -42,7 +42,7 @@ module.exports = {
     }
   },
 
-  async _me(interaction, client) {
+  async _me(interaction, _client) {
     await interaction.deferReply({ flags: 64 });
 
     const cfg = await getRaidConfig(interaction.guildId);
@@ -121,7 +121,7 @@ module.exports = {
     await interaction.editReply({ embeds: [embed] });
   },
 
-  async _check(interaction, client) {
+  async _check(interaction, _client) {
     await interaction.deferReply({ flags: 64 });
 
     const guild = interaction.guild;

@@ -5,7 +5,7 @@ const logger = require('../utils/logger');
 const { EmbedBuilder } = require('discord.js');
 const config = require('../config');
 
-const GUILD_ID = config.discord.guildId || '1010226759817515018';
+const _GUILD_ID = config.discord.guildId || '1010226759817515018';
 
 // Thresholds
 const JOIN_THRESHOLD = 5;       // Max joins allowed

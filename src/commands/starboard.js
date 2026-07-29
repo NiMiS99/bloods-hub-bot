@@ -24,7 +24,7 @@ module.exports = {
       sc.setName('leaderboard').setDescription('Top 10 utenti più stellati.'))
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
 
-  async execute(interaction, client) {
+  async execute(interaction, _client) {
     if (!isAdmin(interaction.member)) {
       return interaction.reply({
         embeds: [errorEmbed('Solo gli admin possono usare questo comando.')],

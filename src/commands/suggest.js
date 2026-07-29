@@ -1,7 +1,7 @@
 // src/commands/suggest.js
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { baseEmbed, successEmbed, errorEmbed } = require('../utils/embed');
-const { recordAudit } = require('../utils/auditLog');
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { baseEmbed, successEmbed } = require('../utils/embed');
+const { recordAudit: _recordAudit } = require('../utils/auditLog');
 const { createSuggestion } = require('../services/suggestService');
 
 module.exports = {

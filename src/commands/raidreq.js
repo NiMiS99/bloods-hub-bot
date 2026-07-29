@@ -1,6 +1,6 @@
 // src/commands/raidreq.js
 // Configure raid requirements (Guida only).
-const { SlashCommandBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const { RaidConfig } = require('../db');
 const { baseEmbed, successEmbed, errorEmbed } = require('../utils/embed');
 const { recordAudit } = require('../utils/auditLog');
@@ -36,7 +36,7 @@ module.exports = {
       .setDescription('Imposta canale per annunci raid.')
       .addChannelOption((o) => o.setName('canale').setDescription('Canale annunci.').setRequired(true))),
 
-  async execute(interaction, client) {
+  async execute(interaction, _client) {
     if (!isRaidLeader(interaction.member)) {
       await interaction.reply({ embeds: [errorEmbed('Comando riservato alle **Guide Incursioni/Spedizioni** e staff.')], flags: 64 });
       return;

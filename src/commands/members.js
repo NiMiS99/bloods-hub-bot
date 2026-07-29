@@ -1,7 +1,7 @@
 // src/commands/members.js
 // /members — list members by role.
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { baseEmbed, errorEmbed } = require('../utils/embed');
+const { errorEmbed } = require('../utils/embed');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -42,7 +42,7 @@ module.exports = {
     const totalPages = Math.ceil(members.length / pageSize);
     const page1 = members.slice(0, pageSize);
 
-    const memberList = page1.map((m, i) => {
+    const memberList = page1.map((m, _i) => {
       const status = m.presence?.status === 'online' ? '🟢' : m.presence?.status === 'idle' ? '🟡' : m.presence?.status === 'dnd' ? '🔴' : '⚫';
       const joinDate = new Date(m.joinedTimestamp).toLocaleDateString('it-IT');
       return `${status} <@${m.id}> — ${m.user.tag}\n   Unitosi: ${joinDate}`;
