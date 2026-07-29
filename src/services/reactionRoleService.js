@@ -1,7 +1,7 @@
 // src/services/reactionRoleService.js
 // Reaction role system: post panels with emoji->role mappings and handle reactions.
 const { ReactionRole } = require('../db');
-const { baseEmbed, errorEmbed, successEmbed } = require('../utils/embed');
+const { baseEmbed } = require('../utils/embed');
 const logger = require('../utils/logger');
 
 /**

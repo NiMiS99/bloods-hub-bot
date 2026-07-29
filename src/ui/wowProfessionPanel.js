@@ -8,8 +8,8 @@ const {
   EmbedBuilder,
   ChannelType,
 } = require('discord.js');
-const { Guild } = require('../db');
-const { baseEmbed } = require('../utils/embed');
+const { Guild: _Guild } = require('../db');
+const { baseEmbed: _baseEmbed } = require('../utils/embed');
 const logger = require('../utils/logger');
 const config = require('../config');
 
@@ -36,7 +36,7 @@ const PROFESSIONS = [
 /**
  * Build the WoW profession panel.
  */
-async function buildProfessionPanel(guild) {
+async function buildProfessionPanel(_guild) {
   const embed = new EmbedBuilder()
     .setTitle('⚒️ Professioni WoW')
     .setColor(0x8b0000)

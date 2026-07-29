@@ -2,7 +2,7 @@
 // Handles button interactions for events (join/leave).
 const { EventParticipant, CommunityEvent } = require('../db');
 const { successEmbed, errorEmbed, baseEmbed } = require('../utils/embed');
-const logger = require('../utils/logger');
+const _logger = require('../utils/logger');
 
 async function handleButton(interaction, client, action, rest) {
   // action === 'join' or 'leave', rest[0] === eventId
@@ -17,7 +17,7 @@ async function handleButton(interaction, client, action, rest) {
   }
 
   if (action === 'join') {
-    const [participant, created] = await EventParticipant.findOrCreate({
+    const [_participant, created] = await EventParticipant.findOrCreate({
       where: { event_id: eventId, user_id: interaction.user.id },
       defaults: { event_id: eventId, user_id: interaction.user.id, guild_id: interaction.guild.id },
     });

@@ -1,7 +1,7 @@
 // src/services/starboardService.js
 // Starboard system: track starred messages, post top messages to a starboard channel.
 // Config is stored in the Guild model (starboard_channel_id, starboard_threshold).
-const { Op } = require('sequelize');
+const { Op: _Op } = require('sequelize');
 const { EmbedBuilder } = require('discord.js');
 const { Starboard, Guild } = require('../db');
 const logger = require('../utils/logger');
@@ -52,7 +52,7 @@ async function setConfig(guildId, channelId, threshold) {
  * @param {object} reaction - Discord MessageReaction
  * @returns {number}
  */
-function getStarCount(reaction) {
+function _getStarCount(reaction) {
   if (!reaction) return 0;
   const name = reaction.emoji.name;
   if (name === STAR_EMOJI || name === '🌟') {

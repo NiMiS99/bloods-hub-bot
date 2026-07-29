@@ -139,7 +139,7 @@ async function setupNonVerificatoRole(guild) {
  */
 async function handleVerify(interaction, client) {
   const member = interaction.member;
-  const guild = interaction.guild;
+  const _guild = interaction.guild;
 
   // Check if already verified
   const hasCommunity = member.roles.cache.some((r) => r.name === MEMBRO_COMMUNITY);
@@ -224,8 +224,8 @@ async function completeVerification(interaction, client) {
  * Auto-assign "Non Verificato" role to new members.
  */
 async function handleNewMember(member) {
-  const communityRole = member.guild.roles.cache.find((r) => r.name === MEMBRO_COMMUNITY);
-  const bloodsRole = member.guild.roles.cache.find((r) => r.name === BLOODS);
+  const _communityRole = member.guild.roles.cache.find((r) => r.name === MEMBRO_COMMUNITY);
+  const _bloodsRole = member.guild.roles.cache.find((r) => r.name === BLOODS);
 
   // If already has a role, don't assign Non Verificato
   if (member.roles.cache.some((r) => r.name === MEMBRO_COMMUNITY || r.name === BLOODS)) return;

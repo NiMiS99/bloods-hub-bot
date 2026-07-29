@@ -1,7 +1,7 @@
 // src/services/tournamentService.js
 // Tournament management — single elimination brackets.
 const { Tournament, TournamentParticipant } = require('../db');
-const logger = require('../utils/logger');
+const _logger = require('../utils/logger');
 
 /**
  * Create a new tournament.

@@ -1,7 +1,7 @@
 // src/services/rankCardService.js
 // Generates a rank card image using @napi-rs/canvas.
 // Shows: avatar, username, level, XP, progress bar, rank position.
-const { createCanvas, loadImage, registerFont } = require('@napi-rs/canvas');
+const { createCanvas, loadImage } = require('@napi-rs/canvas');
 const { User } = require('../db');
 const { xpToNextLevel, xpForLevel } = require('./xpService');
 const logger = require('../utils/logger');
@@ -70,7 +70,7 @@ async function generateRankCard(guild, targetUser, member) {
 
     // If user not in DB, use defaults (level 0, 0 XP)
     const xp = user?.xp || 0;
-    const { currentLevel, nextLevel, progress } = xpToNextLevel(xp);
+    const { currentLevel, nextLevel, progress: _progress } = xpToNextLevel(xp);
     const xpForCurrent = xpForLevel(currentLevel);
     const xpForNext = xpForLevel(nextLevel);
     const xpRange = xpForNext - xpForCurrent;
@@ -124,7 +124,7 @@ async function generateRankCard(guild, targetUser, member) {
       ctx.beginPath();
       ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2 + 3, 0, Math.PI * 2);
       ctx.stroke();
-    } catch (e) {
+    } catch {
       // Fallback: draw a placeholder circle
       ctx.fillStyle = '#333333';
       ctx.beginPath();

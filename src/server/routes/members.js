@@ -142,7 +142,7 @@ module.exports = function (client, jwtSecret) {
         })),
         externalAccounts: extAccounts.map((e) => ({ provider: e.provider, externalId: e.external_id, verified: e.verified })),
       });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore recupero dettagli membro' });
     }
   });

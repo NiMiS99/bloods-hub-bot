@@ -1,9 +1,9 @@
 // src/services/raidScheduler.js
 // Auto-schedules raid reminders and creates spedizione events the day before raid.
 // Runs hourly, checks if tomorrow is a raid day.
-const { RaidConfig, WowEvent, RaidEligibility } = require('../db');
+const { RaidConfig, RaidEligibility } = require('../db');
 const logger = require('../utils/logger');
-const spedizioneCmd = require('../commands/spedizione');
+const _spedizioneCmd = require('../commands/spedizione');
 const config = require('../config');
 
 class RaidScheduler {

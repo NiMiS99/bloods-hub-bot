@@ -1,6 +1,6 @@
 // src/commands/spedizione.js
 // WoW spedizione: create events with class/spec signups via interactive panels.
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommandBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { WowEvent, WowEventSignup } = require('../db');
 const { baseEmbed, errorEmbed } = require('../utils/embed');
 const { recordAudit } = require('../utils/auditLog');
@@ -89,7 +89,7 @@ async function refreshEventMessage(evt, client) {
       embeds: [buildEventEmbed(evt, signups)],
       components: isOpen ? [buildClassMenu(evt.id), buildUnsubButton(evt.id, false)] : [buildUnsubButton(evt.id, true)],
     });
-  } catch (_e) {
+  } catch {
     // message may be deleted — ignore
   }
 }

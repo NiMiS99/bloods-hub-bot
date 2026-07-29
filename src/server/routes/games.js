@@ -27,7 +27,7 @@ module.exports = function (client, jwtSecret) {
         };
       }));
       res.json({ games: result });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore recupero giochi' });
     }
   });
@@ -53,7 +53,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true, game });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore creazione gioco' });
     }
   });
@@ -82,7 +82,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true, game });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore aggiornamento gioco' });
     }
   });
@@ -105,7 +105,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore rimozione gioco' });
     }
   });

@@ -37,7 +37,7 @@ const MAX_SELECT_OPTIONS = 25; // Discord hard limit.
  * Build the role-selection message payload (embed + components).
  * @param {import('discord.js').Guild} guild
  */
-async function buildRolePanel(guild) {
+async function buildRolePanel(_guild) {
   // Only show games that have a Discord role configured (role_id IS NOT NULL).
   // This excludes WoW (legacy, no bot-managed role) and any unconfigured game.
   const games = await Game.findAll({

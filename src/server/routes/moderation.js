@@ -49,7 +49,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ warnings, total: count, page, totalPages: Math.ceil(count / limit) });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore recupero warning' });
     }
   });
@@ -84,7 +84,7 @@ module.exports = function (client, jwtSecret) {
       } catch {}
 
       res.json({ success: true, warning });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore creazione warning' });
     }
   });
@@ -111,7 +111,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore mute' });
     }
   });
@@ -134,7 +134,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore unmute' });
     }
   });
@@ -159,7 +159,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore kick' });
     }
   });
@@ -186,7 +186,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore ban' });
     }
   });

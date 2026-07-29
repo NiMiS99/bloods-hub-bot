@@ -51,7 +51,7 @@ module.exports = {
         await interaction.reply({ embeds: [embed], flags: 64 });
         return;
       }
-    } catch (_err) {
+    } catch {
       // Fall through to link
     }
 

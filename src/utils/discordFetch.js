@@ -11,7 +11,7 @@ const logger = require('./logger');
  */
 async function fetchMember(guild, userId, opts = {}) {
   if (!guild || !userId) return null;
-  const { force = false, timeoutMs = 5000 } = opts;
+  const { force = false, timeoutMs: _timeoutMs = 5000 } = opts;
   try {
     // Try cache first (force: false)
     const member = await guild.members.fetch(userId, { force }).catch(() => null);

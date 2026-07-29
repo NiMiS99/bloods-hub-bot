@@ -1,14 +1,14 @@
 // src/ui/lfgInteractions.js
 // Handles LFG button interactions (join/leave/close) using persistent DB sessions.
-const { baseEmbed, errorEmbed } = require('../utils/embed');
+const { errorEmbed } = require('../utils/embed');
 const { isAdmin } = require('../utils/permissions');
 const {
   getSession, joinSession, leaveSession, closeSession,
   buildLfgEmbed, buildLfgButtons,
 } = require('../services/lfgService');
-const logger = require('../utils/logger');
+const _logger = require('../utils/logger');
 
-async function handleButton(interaction, client, action, rest) {
+async function handleButton(interaction, client, action, _rest) {
   const session = await getSession(interaction.message.id);
 
   if (!session) {

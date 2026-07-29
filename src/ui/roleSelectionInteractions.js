@@ -14,7 +14,7 @@ const { awardRoleBonus } = require('../services/xpService');
 const { checkBadges } = require('../services/badgeService');
 const logger = require('../utils/logger');
 
-async function handleButton(interaction, client, action, rest) {
+async function handleButton(interaction, client, action, _rest) {
   // Defer immediately — role operations + DB queries can exceed 3s.
   await interaction.deferReply({ flags: 64 });
 
@@ -100,7 +100,7 @@ async function handleButton(interaction, client, action, rest) {
   }
 }
 
-async function handleSelectMenu(interaction, client, action, rest) {
+async function handleSelectMenu(interaction, client, action, _rest) {
   // Defer immediately — role operations + DB queries can exceed 3s.
   await interaction.deferReply({ flags: 64 });
 

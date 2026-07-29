@@ -1,17 +1,17 @@
 // src/services/tempVoiceService.js
 // Temporary voice channels: users join a "creator" channel and get their own private voice channel.
 // Channel is deleted when empty. Owner can rename/lock/limit via buttons.
-const { ChannelType, PermissionFlagsBits, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
+const { ChannelType, PermissionFlagsBits, ActionRowBuilder } = require('discord.js');
 const logger = require('../utils/logger');
 
 // In-memory tracking: channelId -> { ownerId, createdAt }
 const _tempChannels = new Map();
 
-const BUTTON_RENAME = 'tempvc:rename';
-const BUTTON_LOCK = 'tempvc:lock';
-const BUTTON_LIMIT = 'tempvc:limit';
-const BUTTON_TRANSFER = 'tempvc:transfer';
-const BUTTON_DELETE = 'tempvc:delete';
+const _BUTTON_RENAME = 'tempvc:rename';
+const _BUTTON_LOCK = 'tempvc:lock';
+const _BUTTON_LIMIT = 'tempvc:limit';
+const _BUTTON_TRANSFER = 'tempvc:transfer';
+const _BUTTON_DELETE = 'tempvc:delete';
 
 /**
  * Setup the temp voice system: monitor the creator channel via voiceStateUpdate.
@@ -49,7 +49,7 @@ async function getCreatorChannelId(guild) {
 /**
  * User joined a channel — if it's the creator channel, create a temp channel.
  */
-async function onUserJoin(state, client) {
+async function onUserJoin(state, _client) {
   const creatorChannelId = await getCreatorChannelId(state.guild);
   if (!creatorChannelId || state.channelId !== creatorChannelId) return;
 
@@ -94,7 +94,7 @@ async function onUserJoin(state, client) {
 /**
  * User left a channel — if it's a temp channel and empty, delete it.
  */
-async function onUserLeave(state, client) {
+async function onUserLeave(state, _client) {
   const tempInfo = _tempChannels.get(state.channelId);
   if (!tempInfo) return;
 
@@ -115,7 +115,7 @@ async function onUserLeave(state, client) {
 /**
  * Handle button interactions for temp voice control panel.
  */
-async function handleButton(interaction, client) {
+async function handleButton(interaction, _client) {
   const action = interaction.customId.split(':')[1];
   const tempInfo = _tempChannels.get(interaction.channelId);
   
@@ -185,7 +185,7 @@ async function handleButton(interaction, client) {
 /**
  * Handle modal submissions for temp voice.
  */
-async function handleModalSubmit(interaction, client) {
+async function handleModalSubmit(interaction, _client) {
   if (!interaction.customId.startsWith('tempvc:')) return false;
   
   const action = interaction.customId.split(':')[1];

@@ -56,7 +56,7 @@ module.exports = function (client, jwtSecret) {
           },
         },
       });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore recupero impostazioni' });
     }
   });
@@ -111,7 +111,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true, guild });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore aggiornamento impostazioni' });
     }
   });

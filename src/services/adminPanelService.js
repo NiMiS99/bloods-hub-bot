@@ -4,7 +4,7 @@
 // All interactive via buttons — no external browser needed for common actions.
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, PermissionsBitField } = require('discord.js');
 const logger = require('../utils/logger');
-const { AuditLog, DiscordLog, BpUser, RaidEligibility, RaidConfig } = require('../db');
+const { AuditLog, BpUser, RaidEligibility, RaidConfig } = require('../db');
 const config = require('../config');
 
 const GUILD_ID = config.discord.guildId || '1010226759817515018';

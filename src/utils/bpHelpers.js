@@ -1,7 +1,7 @@
 // src/utils/bpHelpers.js
 // Helpers for BP (Bloods Points / DKP) system.
 const { BpUser, BpRaidRoster, BpActiveRoll } = require('../db');
-const { Op } = require('sequelize');
+const { Op: _Op } = require('sequelize');
 
 // Role names that can use BP admin commands (Guida + staff)
 const RAID_LEADER_ROLES = [

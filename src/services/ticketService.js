@@ -7,7 +7,7 @@ const config = require('../config');
 const GUILD_ID = config.discord.guildId || '1010226759817515018';
 
 // Category for tickets (will be set dynamically)
-const TICKET_CATEGORY_NAME = 'Assistenza';
+const _TICKET_CATEGORY_NAME = 'Assistenza';
 const STAFF_ROLES = ['Bloods Admin', 'Consigliere', 'Founder', 'Owner', 'Officer', 'Officer Reclutatore', 'Officer in Prova'];
 
 const CID = {
@@ -170,7 +170,7 @@ async function handleOpen(interaction, client) {
 /**
  * Handle "Chiudi Ticket" button — archive/delete the channel.
  */
-async function handleClose(interaction, client) {
+async function handleClose(interaction, _client) {
   const channel = interaction.channel;
   const member = interaction.member;
 

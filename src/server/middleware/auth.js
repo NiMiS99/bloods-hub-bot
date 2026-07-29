@@ -16,7 +16,7 @@ function requireAuth(jwtSecret) {
       const decoded = jwt.verify(token, jwtSecret);
       req.user = decoded;
       next();
-    } catch (_err) {
+    } catch {
       return res.status(401).json({ error: 'Token non valido o scaduto' });
     }
   };
@@ -43,7 +43,7 @@ function requireGuildMember(client) {
       req.guild = guild;
       req.member = member;
       next();
-    } catch (_err) {
+    } catch {
       return res.status(500).json({ error: 'Errore interno del server' });
     }
   };
@@ -92,7 +92,7 @@ function requireAdmin() {
       }
 
       return res.status(403).json({ error: 'Permessi insufficienti' });
-    } catch (_err) {
+    } catch {
       return res.status(500).json({ error: 'Errore verifica permessi' });
     }
   };

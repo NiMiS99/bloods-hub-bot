@@ -1,9 +1,8 @@
 // src/ui/spedizioneInteractions.js
 // Handles select-menu (class/spec) and button (unsub) interactions for WoW spedizioni.
-const { MessageFlags } = require('discord.js');
-const { WowEvent, WowEventSignup, RaidConfig, RaidEligibility, sequelize } = require('../db');
+const { WowEvent, WowEventSignup, RaidEligibility, sequelize } = require('../db');
 const spedizioneCmd = require('../commands/spedizione');
-const { findClassByKey, buildSpecMenu, buildClassMenu, buildUnsubButton, refreshEventMessage, buildEventEmbed } = spedizioneCmd;
+const { findClassByKey, buildSpecMenu, refreshEventMessage } = spedizioneCmd;
 const { checkUser, getRaidConfig } = require('../services/raidEligibilityChecker');
 
 /**

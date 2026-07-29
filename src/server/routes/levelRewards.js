@@ -29,7 +29,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ rewards: enriched });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore recupero ricompense' });
     }
   });
@@ -57,7 +57,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true, reward });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore creazione ricompensa' });
     }
   });
@@ -82,7 +82,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore eliminazione ricompensa' });
     }
   });

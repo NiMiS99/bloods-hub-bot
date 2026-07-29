@@ -1,12 +1,12 @@
 // src/services/raidEligibilityChecker.js
 // Checks raid eligibility for guild members based on Blizzard API data.
 // Assigns/removes Discord "Raid Eligible" role automatically.
-const { ExternalAccount, RaidConfig, RaidEligibility, RaidAttendance, Guild } = require('../db');
+const { ExternalAccount, RaidConfig, RaidEligibility, RaidAttendance } = require('../db');
 const { getApi } = require('./api');
 const logger = require('../utils/logger');
 const config = require('../config');
 
-const GUILD_ID = config.discord.guildId || '1010226759817515018';
+const _GUILD_ID = config.discord.guildId || '1010226759817515018';
 
 /**
  * Get or create raid config for a guild.

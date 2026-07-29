@@ -49,7 +49,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ badges: badgeStats, recentAwards });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore recupero badge' });
     }
   });

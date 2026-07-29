@@ -35,7 +35,7 @@ module.exports = function (client, jwtSecret) {
       }));
 
       res.json({ events: result });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore recupero eventi' });
     }
   });
@@ -75,7 +75,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true, event });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore creazione evento' });
     }
   });
@@ -99,7 +99,7 @@ module.exports = function (client, jwtSecret) {
       });
 
       res.json({ success: true });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore eliminazione evento' });
     }
   });

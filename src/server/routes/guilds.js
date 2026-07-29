@@ -80,7 +80,7 @@ module.exports = function (client, jwtSecret) {
         }
       }
       res.json({ users: results });
-    } catch (_err) {
+    } catch {
       res.status(500).json({ error: 'Errore risoluzione utenti' });
     }
   });

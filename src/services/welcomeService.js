@@ -1,12 +1,12 @@
 // src/services/welcomeService.js
 // Generates welcome card images and sends welcome messages.
-const { createCanvas, loadImage, GlobalFonts } = require('@napi-rs/canvas');
+const { createCanvas, loadImage } = require('@napi-rs/canvas');
 const { AttachmentBuilder } = require('discord.js');
-const path = require('path');
+const _path = require('path');
 const logger = require('../utils/logger');
 
 // Brand colors
-const BG_COLOR = '#0a0a12';
+const _BG_COLOR = '#0a0a12';
 const CARD_GRADIENT_TOP = '#1a0a0a';
 const CARD_GRADIENT_BOT = '#0a0a12';
 const ACCENT = '#8b0000';

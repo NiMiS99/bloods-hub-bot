@@ -8,10 +8,10 @@ module.exports = {
     if (user.bot) return;
 
     if (reaction.partial) {
-      try { await reaction.fetch(); } catch (_e) { return; }
+      try { await reaction.fetch(); } catch { return; }
     }
     if (reaction.message.partial) {
-      try { await reaction.message.fetch(); } catch (_e) { return; }
+      try { await reaction.message.fetch(); } catch { return; }
     }
 
     // --- Reaction Roles ---
