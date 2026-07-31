@@ -6,14 +6,24 @@ const { awardMessageXp } = require('../services/xpService');
 const { checkBadges } = require('../services/badgeService');
 const { checkMessage, executeAction } = require('../services/automodService');
 const autoThreadService = require('../services/autoThreadService');
+const feedbackService = require('../services/feedbackService');
 const { baseEmbed } = require('../utils/embed');
 const logger = require('../utils/logger');
+
+// Channel name that triggers feedback ticket creation
+const FEEDBACK_CHANNEL_NAME = 'modifiche-da-apportare';
 
 module.exports = {
   name: 'messageCreate',
   async execute(message, client) {
     if (message.author.bot || !message.guild) return;
     try {
+      // Feedback ticket system: if message is in #modifiche-da-apportare, create a ticket
+      const channelName = message.channel.name?.toLowerCase().replace(/[^a-z0-9-]/g, '');
+      if (channelName === FEEDBACK_CHANNEL_NAME) {
+        await feedbackService.createTicket(message);
+        // Still track XP/activity for the message
+      }
       // Custom command check (prefix !)
       if (message.content.startsWith('!')) {
         const cmdName = message.content.slice(1).split(/\s+/)[0].toLowerCase().replace(/[^a-z0-9_-]/g, '');

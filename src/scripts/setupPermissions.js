@@ -199,13 +199,29 @@ async function setupCategory(guild, categoryId, config) {
   console.log(`  Setting up: ${category.name}`);
 
   if (DRY_RUN) {
-    console.log(`    [DRY RUN] Would apply ${config.overwrites.length} overwrites`);
+    console.log(`    [DRY RUN] Would apply ${config.overwrites.length} overwrites + sync ${category.children.cache.size} channels`);
     return;
   }
 
   try {
+    // 1. Set category overwrites
     await category.permissionOverwrites.set(config.overwrites);
-    console.log(`    ✓ Applied ${config.overwrites.length} overwrites`);
+    console.log(`    ✓ Category: ${config.overwrites.length} overwrites applied`);
+
+    // 2. Sync ALL child channels with category (remove custom channel overwrites)
+    // This is critical: channels with custom overwrites DON'T inherit from category.
+    // Without this, channels like "pubblica#1" keep their old broken permissions.
+    let synced = 0;
+    for (const [channelId, channel] of category.children.cache) {
+      try {
+        // lockPermissions() makes the channel inherit from its parent category
+        await channel.lockPermissions();
+        synced++;
+      } catch (err) {
+        console.error(`    ✗ Failed to sync channel ${channel.name}: ${err.message}`);
+      }
+    }
+    console.log(`    ✓ Synced ${synced}/${category.children.cache.size} child channels to inherit from category`);
   } catch (err) {
     console.error(`    ✗ Failed: ${err.message}`);
   }

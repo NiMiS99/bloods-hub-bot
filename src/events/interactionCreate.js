@@ -77,6 +77,23 @@ module.exports = {
           return;
         }
 
+        // Feedback ticket status buttons (feedback:action:ticketId)
+        if (group === 'feedback') {
+          const feedbackService = require('../services/feedbackService');
+          const ticketId = parseInt(payload[0], 10);
+          const statusMap = {
+            analyze: 'analyzing',
+            progress: 'in_progress',
+            resolve: 'resolved',
+            close: 'closed',
+          };
+          const newStatus = statusMap[type];
+          if (newStatus && ticketId) {
+            await feedbackService.updateStatus(interaction, ticketId, newStatus);
+          }
+          return;
+        }
+
         // Admin panel buttons (dash:*)
         if (interaction.customId.startsWith('dash:')) {
           const AdminPanelService = require('../services/adminPanelService');

@@ -619,7 +619,7 @@ async function e2eTests() {
   test('HealthServer can be instantiated', () => {
     const hs = new HealthServer({ guilds: { cache: { size: 1 } } });
     assert.ok(hs);
-    assert.strictEqual(hs.port, 3000);
+    assert.strictEqual(hs.port, parseInt(process.env.HEALTH_PORT || '3000', 10));
   });
 
   // --- Config validation ---

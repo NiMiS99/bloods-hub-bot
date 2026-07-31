@@ -70,6 +70,7 @@ const TournamentModel = require('./models/Tournament');
 const TournamentParticipantModel = require('./models/TournamentParticipant');
 const GameNightModel = require('./models/GameNight');
 const TagModel = require('./models/Tag');
+const FeedbackModel = require('./models/Feedback');
 
 // Initialize
 const Guild = GuildModel(sequelize, DataTypes);
@@ -118,6 +119,7 @@ const Tournament = TournamentModel(sequelize, DataTypes);
 const TournamentParticipant = TournamentParticipantModel(sequelize, DataTypes);
 const GameNight = GameNightModel(sequelize, DataTypes);
 const Tag = TagModel(sequelize, DataTypes);
+const Feedback = FeedbackModel(sequelize, DataTypes);
 
 // Associations
 Guild.hasMany(User, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
@@ -345,4 +347,5 @@ module.exports = {
   TournamentParticipant,
   GameNight,
   Tag,
+  Feedback,
 };
