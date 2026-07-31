@@ -44,6 +44,7 @@ const ChallengeService = require('./services/challengeService');
 const _ReputationService = require('./services/reputationService');
 const GameNightService = require('./services/gameNightService');
 const MusicService = require('./services/musicService');
+const FeedbackService = require('./services/feedbackService');
 const HealthServer = require('./server/healthServer');
 const DashboardServer = require('./server/dashboardServer');
 
@@ -150,6 +151,9 @@ async function main() {
   // Game night scheduler (every 10 min check)
   GameNightService.start(client);
 
+  // Feedback watcher — checks pending-fixes.json for completed fixes (every 30s)
+  FeedbackService.startWatcher(client);
+
   // Onboarding + ticket panels (post after ready)
   client.on('clientReady', async () => {
     try {
@@ -203,6 +207,7 @@ async function main() {
       GuildChallengeService.stop();
       GameNightService.stop();
       MusicService.stopAll();
+      FeedbackService.stopWatcher();
       client.healthServer?.stop();
       client.dashboardServer?.stop();
       client.destroy();

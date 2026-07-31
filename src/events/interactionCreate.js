@@ -77,19 +77,27 @@ module.exports = {
           return;
         }
 
-        // Feedback ticket status buttons (feedback:action:ticketId)
+        // Feedback ticket buttons (feedback:action:ticketId)
         if (group === 'feedback') {
           const feedbackService = require('../services/feedbackService');
           const ticketId = parseInt(payload[0], 10);
-          const statusMap = {
-            analyze: 'analyzing',
-            progress: 'in_progress',
-            resolve: 'resolved',
-            close: 'closed',
-          };
-          const newStatus = statusMap[type];
-          if (newStatus && ticketId) {
-            await feedbackService.updateStatus(interaction, ticketId, newStatus);
+
+          if (type === 'modal') {
+            // Show the feedback modal form
+            await feedbackService.showFeedbackModal(interaction);
+            return;
+          }
+          if (type === 'approve' && ticketId) {
+            await feedbackService.approveTicket(interaction, ticketId);
+            return;
+          }
+          if (type === 'close' && ticketId) {
+            await feedbackService.closeTicket(interaction, ticketId);
+            return;
+          }
+          if (type === 'reopen' && ticketId) {
+            await feedbackService.reopenTicket(interaction, ticketId);
+            return;
           }
           return;
         }
@@ -273,6 +281,13 @@ module.exports = {
         if (interaction.customId === 'captcha:modal') {
           const OnboardingService = require('../services/onboardingService');
           await OnboardingService.completeVerification(interaction, client);
+          return;
+        }
+
+        // Feedback modal submit
+        if (interaction.customId === 'feedback:modal') {
+          const feedbackService = require('../services/feedbackService');
+          await feedbackService.handleModalSubmit(interaction);
           return;
         }
       }
