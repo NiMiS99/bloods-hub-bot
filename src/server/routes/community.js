@@ -3,6 +3,7 @@
 const express = require('express');
 const {
   Suggestion, Poll, LfgSession, Tournament, GameNight, Tag, Guild,
+  Birthday, Reminder, Starboard,
 } = require('../../db');
 const { requireAuth, requireGuildMember, requireAdmin } = require('../middleware/auth');
 const { validatePagination } = require('../middleware/validate');
@@ -139,6 +140,58 @@ module.exports = function (client, jwtSecret) {
         where: { guild_id: req.guild.id, is_active: true }, order: [['name', 'ASC']], raw: true,
       });
       res.json({ tags });
+    } catch { res.status(500).json({ error: 'Errore' }); }
+  });
+
+  // ============ BIRTHDAYS ============
+
+  router.get('/:guildId/birthdays', requireAuth(jwtSecret), requireGuildMember(client), requireAdmin(), async (req, res) => {
+    try {
+      const birthdays = await Birthday.findAll({
+        where: { guild_id: req.guild.id },
+        order: [['month', 'ASC'], ['day', 'ASC']],
+        raw: true,
+      });
+      res.json({ birthdays });
+    } catch { res.status(500).json({ error: 'Errore' }); }
+  });
+
+  // ============ REMINDERS ============
+
+  router.get('/:guildId/reminders', requireAuth(jwtSecret), requireGuildMember(client), requireAdmin(), validatePagination, async (req, res) => {
+    try {
+      const { count, rows } = await Reminder.findAndCountAll({
+        where: { guild_id: req.guild.id },
+        order: [['remind_at', 'ASC']],
+        limit: req.query.limit,
+        offset: req.query.offset,
+        raw: true,
+      });
+      res.json({ reminders: rows, total: count });
+    } catch { res.status(500).json({ error: 'Errore' }); }
+  });
+
+  router.delete('/:guildId/reminders/:id', requireAuth(jwtSecret), requireGuildMember(client), requireAdmin(), async (req, res) => {
+    try {
+      const deleted = await Reminder.destroy({ where: { id: req.params.id, guild_id: req.guild.id } });
+      if (!deleted) return res.status(404).json({ error: 'Promemoria non trovato' });
+      await recordAudit({ guildId: req.guild.id, actorId: req.user.id, action: 'dashboard.reminder.delete', targetType: 'reminder', targetId: req.params.id });
+      res.json({ success: true });
+    } catch { res.status(500).json({ error: 'Errore' }); }
+  });
+
+  // ============ STARBOARD ============
+
+  router.get('/:guildId/starboard', requireAuth(jwtSecret), requireGuildMember(client), requireAdmin(), validatePagination, async (req, res) => {
+    try {
+      const { count, rows } = await Starboard.findAndCountAll({
+        where: { guild_id: req.guild.id },
+        order: [['star_count', 'DESC']],
+        limit: req.query.limit,
+        offset: req.query.offset,
+        raw: true,
+      });
+      res.json({ starboard: rows, total: count });
     } catch { res.status(500).json({ error: 'Errore' }); }
   });
 

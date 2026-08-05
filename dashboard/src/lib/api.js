@@ -138,6 +138,16 @@ export const api = {
   // Tags
   getTags: (gid) => fetchAPI(`/guilds/${gid}/tags`),
 
+  // Birthdays
+  getBirthdays: (gid) => fetchAPI(`/guilds/${gid}/birthdays`),
+
+  // Reminders
+  getReminders: (gid, page = 1) => fetchAPI(`/guilds/${gid}/reminders?page=${page}`),
+  deleteReminder: (gid, id) => fetchAPI(`/guilds/${gid}/reminders/${id}`, { method: 'DELETE' }),
+
+  // Starboard
+  getStarboard: (gid, page = 1) => fetchAPI(`/guilds/${gid}/starboard?page=${page}`),
+
   // Resolve user IDs to names/avatars (for dashboard display)
   resolveUsers: (gid, ids) => fetchAPI(`/guilds/${gid}/resolve-users?ids=${ids.join(',')}`),
 

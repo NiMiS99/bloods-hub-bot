@@ -12,7 +12,7 @@ import {
   BarChart3, Award, ScrollText, Settings, LogOut, Menu, X,
   ChevronDown, Bell, Search, Gift, Bot, FileText, Swords,
   PartyPopper, Clock, TerminalSquare, Lightbulb, Zap, Tag,
-  Sun, Moon, Activity, ClipboardList
+  Sun, Moon, Activity, ClipboardList, Cake, Star
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -37,6 +37,11 @@ const NAV_ITEMS = [
   { href: '/dashboard/automod', label: 'Auto-Mod', icon: Bot },
   { href: '/dashboard/discord-logs', label: 'Log Discord', icon: FileText },
   { href: '/dashboard/audit-log', label: 'Registro Attività', icon: ScrollText },
+  { href: '/dashboard/tags', label: 'Tag', icon: Tag },
+  { href: '/dashboard/birthdays', label: 'Compleanni', icon: Cake },
+  { href: '/dashboard/reminders', label: 'Promemoria', icon: Bell },
+  { href: '/dashboard/starboard', label: 'Starboard', icon: Star },
+  { href: '/dashboard/search', label: 'Ricerca Globale', icon: Search },
   { href: '/dashboard/settings', label: 'Impostazioni', icon: Settings },
   { href: '/dashboard/health', label: 'Health Check', icon: Activity },
 ];

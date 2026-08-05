@@ -32,7 +32,7 @@ module.exports = [
       'no-var': 'warn',
       'prefer-const': 'warn',
       'no-async-promise-executor': 'error',
-      'require-await': 'warn',
+      'require-await': 'off', // Many async functions are async for API compatibility
       'no-await-in-loop': 'off',
 
       // Relax for discord.js patterns
