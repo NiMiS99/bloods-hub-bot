@@ -45,13 +45,13 @@ cd dashboard && npm install && npm run build
 docker compose --env-file .env up -d --build
 ```
 
-## Comandi (60)
+## Comandi (61)
 
 ### Utente (25)
 | Comando | Descrizione |
 |---------|-------------|
 | `/ping` | Verifica latenza bot |
-| `/help` | Lista tutti i comandi (60) |
+| `/help` | Lista tutti i comandi (61) |
 | `/mystats [user]` | Profilo community (XP, badge, stat, link) |
 | `/mygames` | I tuoi giochi + statistiche |
 | `/rank [user]` | Livello, XP, badge, posizione classifica |
@@ -94,7 +94,7 @@ docker compose --env-file .env up -d --build
 | `/slowmode <canale> <secondi>` | Imposta slowmode |
 | `/lockdown [stato]` | Lockdown server |
 
-### Admin (17)
+### Admin (18)
 | Comando | Descrizione |
 |---------|-------------|
 | `/game add/list/remove/update` | Gestione catalogo giochi |
@@ -107,8 +107,8 @@ docker compose --env-file .env up -d --build
 | `/setup run/status` | Configurazione server |
 | `/guida` | Gestione guide |
 | `/gametest` | Test funzionalità giochi |
-| `/gametest` | Test funzionalità giochi |
 | `/giveaway create/end/list` | Gestione giveaway |
+| `/feedback setup/stats/list/close` | Sistema segnalazioni admin (modal form + workflow) |
 | `/gamenight` | Game night ricorrenti |
 | `/tempvc setup/disable/status` | Canali vocali temporanei |
 | `/cmd add/remove/list` | Comandi personalizzati (!nome) |
@@ -162,16 +162,36 @@ deploy/                # Dockerfile + docker-compose
 
 ## Dashboard Web
 
-Dashboard admin su **Next.js 14** con 22 pagine:
+Dashboard admin su **Next.js 14** con 23 pagine:
 - Overview, Analytics, Audit Log, Automod, Badges
 - Discord Logs, Events, Games, Leaderboard, Level Rewards
 - Members, Moderation, Raid, Settings, Health, Search
 - Scheduled Messages, Custom Commands, Giveaways, Starboard
-- XP Events, Birthdays, Tags
+- XP Events, Birthdays, Tags, **Feedback** (segnalazioni admin)
 
 **Auth**: Discord OAuth2 (JWT)
 **Security**: Helmet, rate limiting (per-endpoint), input validation
 **Features**: Search bar (Ctrl+K), dark mode, error boundaries
+
+## Sistema Feedback Admin
+
+Sistema strutturato per segnalazioni admin con workflow automatizzato:
+
+```
+Admin clicca "Apri Segnalazione" → Modal form (titolo, categoria, priorità, descrizione)
+         ↓
+Bot crea ticket + thread di discussione
+         ↓
+Owner clicca "Approva Fix" → ticket in pending-fixes.json
+         ↓
+Devin legge il file → fixa il codice → marks completed
+         ↓
+Bot watcher (30s) → aggiorna Discord → notifica admin nel thread
+```
+
+**Stati**: 🔴 Aperto → 🟠 Approvato → 🔵 In Lavorazione → 🟢 Risolto / ⚪ Chiuso
+
+**Comando**: `/feedback setup` per creare il canale con il bottone
 
 ## Test
 

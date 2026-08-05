@@ -36,6 +36,8 @@
 ### Fraktur
 - Nomi canali/categorie usano `toFraktur()` da `src/utils/textFormatter.js`.
 - Non applicare Fraktur a mention, ID, o URL.
+- **Per cercare canali/categorie per nome**: usa `fromFraktur()` per decodificare il nome Unicode prima del match. I nomi Discord sono in Mathematical Sans-Serif, quindi `'wow'.includes('wow')` fallisce su `'𝖶𝗈𝗋𝗅𝖽 𝗈𝖿 𝖶𝖺𝗋𝖼𝗋𝖺𝖋𝗍'`.
+- Pattern corretto: `channels.cache.find(c => fromFraktur(c.name).toLowerCase().includes('wow'))`
 
 ### DB
 - Modelli in `src/db/models/`, registrati in `src/db/index.js`.
@@ -218,3 +220,24 @@
 - `.github/workflows/ci.yml`: test + build dashboard su push/PR.
 - `.github/workflows/deploy.yml`: auto-deploy via SSH su push main.
 - Richiede secrets: `DEPLOY_SSH_KEY`, `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PATH`, `KNOWN_HOSTS`.
+
+### Sistema feedback admin (strutturato)
+- Comando: `/feedback setup/stats/list/close`
+- Canale: `#modifiche-da-apportare` con bottone "Apri Segnalazione"
+- Modal form con campi: titolo, categoria, priorità, canali/ruoli coinvolti, descrizione
+- Workflow: open → approved → in_progress → resolved/closed
+- Solo Owner/Founder può approvare fix (bottone "Approva Fix" sull'embed)
+- Thread dedicato per ogni ticket (7 giorni auto-archive)
+- Modello DB: `Feedback` (id, title, category, priority, description, status, approved_by, fix_notes, fix_commit)
+- File bridge: `pending-fixes.json` (bot scrive ticket approvati, Devin legge/fixa/marks completed)
+- Watcher: ogni 30s controlla il file e sincronizza lo stato su Discord
+- Dashboard: pagina `/dashboard/feedback` con stats, filtri, lista ticket, cambio stato
+- API: `GET /api/guilds/:gid/feedback`, `GET /feedback/stats`, `PUT /feedback/:id/status`
+- Servizio: `src/services/feedbackService.js`
+- Comando: `src/commands/admin/feedback.js`
+
+### Onboarding avanzato
+- DM benvenuto con guida comandi strutturata (5 categorie, 16 comandi chiave)
+- Messaggio pubblico in #generale quando un utente si verifica
+- Comandi evidenziati: /help, /daily, /lfg, /music play, /mystats, /rank, /suggest, /poll
+- Servizio: `src/services/onboardingService.js`
