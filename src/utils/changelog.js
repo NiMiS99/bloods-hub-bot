@@ -1,6 +1,6 @@
 // src/utils/changelog.js
 // Helper to post changelog and updates to Discord channels.
-const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const logger = require('./logger');
 
 let _client = null;

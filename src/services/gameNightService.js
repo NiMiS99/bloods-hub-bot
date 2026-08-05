@@ -19,14 +19,17 @@ async function start(client) {
   logger.info(`GameNightService: started ${nights.length} recurring game nights.`);
 
   // Check every 10 minutes for new/updated game nights
-  setInterval(() => _reloadAll(client), 600000);
+  _reloadInterval = setInterval(() => _reloadAll(client), 600000).unref();
 }
+
+let _reloadInterval = null;
 
 /**
  * Stop all game night tasks.
  */
 function stop() {
   for (const [, task] of _tasks) task.stop();
+  if (_reloadInterval) clearInterval(_reloadInterval);
   _tasks.clear();
 }
 

@@ -184,7 +184,6 @@ BpActiveRoll.belongsTo(BpItem, { foreignKey: 'item_id', targetKey: 'id', as: 'it
 
 Guild.hasMany(BpRaidRoster, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
 BpRaidRoster.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
-BpRaidRoster.belongsTo(User, { foreignKey: 'user_id', targetKey: 'user_id' });
 
 Guild.hasMany(BpItem, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
 BpItem.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });

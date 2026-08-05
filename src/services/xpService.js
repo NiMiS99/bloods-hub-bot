@@ -28,12 +28,14 @@ const ROLE_BONUS_XP = 10;
 const _msgRateLimit = new Map();
 
 // Cleanup stale rate limit entries every 5 minutes
-setInterval(() => {
+const _cleanupInterval = setInterval(() => {
   const now = Date.now();
   for (const [key, val] of _msgRateLimit) {
     if (val && now - val.windowStart > 60000) _msgRateLimit.delete(key);
   }
 }, 300000).unref();
+
+function stop() { if (_cleanupInterval) clearInterval(_cleanupInterval); }
 
 /**
  * Award XP to a user and handle level-up.
@@ -169,4 +171,5 @@ module.exports = {
   MSG_XP,
   VOICE_XP_PER_MIN,
   ROLE_BONUS_XP,
+  stop,
 };

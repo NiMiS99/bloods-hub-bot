@@ -211,6 +211,11 @@ async function main() {
       GameNightService.stop();
       MusicService.stopAll();
       FeedbackService.stopWatcher();
+      // Stop interval-based services without explicit stop in shutdown
+      try { require('./services/xpService').stop(); } catch {}
+      try { require('./services/captchaService').stop(); } catch {}
+      try { require('./services/reputationService').stop(); } catch {}
+      try { require('./services/automodService').stop(); } catch {}
       client.healthServer?.stop();
       client.dashboardServer?.stop();
       client.destroy();

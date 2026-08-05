@@ -1,7 +1,7 @@
 // src/commands/admin/onboarding.js
 // /onboarding — Posts a comprehensive command guide panel in the channel.
 // Helps users discover all bot features at a glance.
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { successEmbed, errorEmbed, baseEmbed } = require('../../utils/embed');
 const { isAdmin } = require('../../utils/permissions');
 const { recordAudit } = require('../../utils/auditLog');
@@ -17,7 +17,7 @@ module.exports = {
       sub.setName('dm').setDescription('Invia la guida comandi in DM a un utente')
         .addUserOption((opt) => opt.setName('user').setDescription('Utente destinatario').setRequired(true))),
 
-  async execute(interaction, client) {
+  async execute(interaction, _client) {
     if (!isAdmin(interaction.member)) {
       await interaction.reply({ embeds: [errorEmbed('Solo gli admin possono usare questo comando.')], flags: 64 });
       return;

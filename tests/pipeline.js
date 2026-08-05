@@ -839,11 +839,11 @@ async function serviceTests() {
     assert(hasGuildAssoc, 'BpActiveRoll should be associated with Guild');
   });
 
-  test('BpRaidRoster has association with User', () => {
-    const { BpRaidRoster, User } = require('../src/db');
+  test('BpRaidRoster has association with Guild (not User — roster is per-guild)', () => {
+    const { BpRaidRoster, Guild } = require('../src/db');
     assert(BpRaidRoster.associations, 'BpRaidRoster should have associations');
-    const hasUserAssoc = Object.values(BpRaidRoster.associations).some(a => a.target === User);
-    assert(hasUserAssoc, 'BpRaidRoster should be associated with User');
+    const hasGuildAssoc = Object.values(BpRaidRoster.associations).some(a => a.target === Guild);
+    assert(hasGuildAssoc, 'BpRaidRoster should be associated with Guild');
   });
 
   // --- Phase 3 services: pure function tests ---

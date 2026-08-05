@@ -317,14 +317,14 @@ module.exports = {
         try {
           await queryInterface.addIndex(table, fields, { name: indexName });
           console.log(`  Added index: ${indexName}`);
-        } catch (e) {
+        } catch {
           console.log(`  Skipped index (exists): ${indexName}`);
         }
       }
     }
   },
 
-  down: async (queryInterface) => {
+  down: async (_queryInterface) => {
     // Don't drop tables in down — data loss risk
     console.log('Down migration: no tables dropped (safety)');
   },

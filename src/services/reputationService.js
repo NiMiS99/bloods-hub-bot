@@ -9,12 +9,14 @@ const DAILY_LIMIT = 5; // Max 5 thanks per day
 const _cooldowns = new Map(); // key: fromId:toId -> timestamp
 
 // Cleanup expired cooldowns every 10 minutes to prevent memory leak
-setInterval(() => {
+const _cleanupInterval = setInterval(() => {
   const now = Date.now();
   for (const [key, ts] of _cooldowns) {
     if (now - ts > COOLDOWN_MS) _cooldowns.delete(key);
   }
 }, 600000).unref();
+
+function stop() { if (_cleanupInterval) clearInterval(_cleanupInterval); }
 
 /**
  * Thank a user — adds reputation.
@@ -107,4 +109,4 @@ async function getTopReputation(guildId, limit = 10) {
   return results;
 }
 
-module.exports = { thankUser, getReputation, getTopReputation, COOLDOWN_MS, DAILY_LIMIT };
+module.exports = { thankUser, getReputation, getTopReputation, COOLDOWN_MS, DAILY_LIMIT, stop };

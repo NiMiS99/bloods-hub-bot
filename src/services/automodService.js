@@ -187,6 +187,8 @@ function cleanupSpamTracker() {
 }
 
 // Run cleanup every 30 seconds
-setInterval(cleanupSpamTracker, 30000);
+const _cleanupInterval = setInterval(cleanupSpamTracker, 30000).unref();
 
-module.exports = { checkMessage, checkRule, executeAction };
+function stop() { if (_cleanupInterval) clearInterval(_cleanupInterval); }
+
+module.exports = { checkMessage, checkRule, executeAction, stop };

@@ -98,6 +98,8 @@ function cleanupExpired() {
 }
 
 // Auto cleanup every 5 minutes
-setInterval(cleanupExpired, 300000);
+const _cleanupInterval = setInterval(cleanupExpired, 300000).unref();
 
-module.exports = { startCaptcha, verifyCaptcha, generateCaptcha };
+function stop() { if (_cleanupInterval) clearInterval(_cleanupInterval); }
+
+module.exports = { startCaptcha, verifyCaptcha, generateCaptcha, stop };
