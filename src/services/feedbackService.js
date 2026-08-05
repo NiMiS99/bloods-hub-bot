@@ -66,16 +66,16 @@ async function showFeedbackModal(interaction) {
 
   const categoryInput = new TextInputBuilder()
     .setCustomId('feedback_category')
-    .setLabel('Categoria (permissions/bot_command/bot_bug/dashboard/feature_request/other)')
-    .setPlaceholder('permissions')
+    .setLabel('Categoria')
+    .setPlaceholder('permissions / bot_command / bot_bug / dashboard / feature_request / other')
     .setStyle(TextInputStyle.Short)
     .setRequired(true)
     .setMaxLength(30);
 
   const priorityInput = new TextInputBuilder()
     .setCustomId('feedback_priority')
-    .setLabel('Priorità (low/medium/high/critical)')
-    .setPlaceholder('high')
+    .setLabel('Priorità')
+    .setPlaceholder('low / medium / high / critical')
     .setStyle(TextInputStyle.Short)
     .setRequired(true)
     .setMaxLength(10);
@@ -90,7 +90,7 @@ async function showFeedbackModal(interaction) {
 
   const descInput = new TextInputBuilder()
     .setCustomId('feedback_description')
-    .setLabel('Descrizione dettagliata del problema')
+    .setLabel('Descrizione dettagliata')
     .setPlaceholder('Descrivi cosa succede, cosa ti aspetti, e come riprodurre il problema...')
     .setStyle(TextInputStyle.Paragraph)
     .setRequired(true)
