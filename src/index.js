@@ -172,6 +172,9 @@ async function main() {
     } catch (e) {
       logger.warn(`Onboarding setup failed: ${e.message}`);
     }
+    // Set changelog client for posting updates
+    const { setClient: setChangelogClient } = require('./utils/changelog');
+    setChangelogClient(client);
   });
 
   // Health check HTTP server.
