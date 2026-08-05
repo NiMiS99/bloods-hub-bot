@@ -156,7 +156,8 @@ async function postProfessionPanel(client) {
   // Find WoW category (names use Fraktur styling, so decode before matching)
   const wowCategory = [...guild.channels.cache.values()].find(
     (c) => c.type === ChannelType.GuildCategory && c.name &&
-      fromFraktur(c.name).toLowerCase().includes('wow')
+      (fromFraktur(c.name).toLowerCase().includes('warcraft') ||
+       fromFraktur(c.name).toLowerCase().includes('wow'))
   );
   if (!wowCategory) {
     logger.warn('WoW profession panel: WoW category not found');
