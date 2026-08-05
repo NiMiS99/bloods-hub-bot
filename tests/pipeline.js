@@ -1047,6 +1047,87 @@ async function additionalTests() {
     assert.ok(typeof musicService === 'object' || typeof musicService === 'function');
   });
 
+  // --- Music command ---
+  console.log('\nMusic command:');
+  const musicCmd = require('../src/commands/music');
+
+  test('music command has data and execute', () => {
+    assert.ok(musicCmd.data);
+    assert.strictEqual(typeof musicCmd.execute, 'function');
+  });
+  test('music command has 6 subcommands', () => {
+    const subs = musicCmd.data.options.map(o => o.name);
+    assert.ok(subs.includes('play'), 'Should have play');
+    assert.ok(subs.includes('skip'), 'Should have skip');
+    assert.ok(subs.includes('stop'), 'Should have stop');
+    assert.ok(subs.includes('queue'), 'Should have queue');
+    assert.ok(subs.includes('pause'), 'Should have pause');
+    assert.ok(subs.includes('resume'), 'Should have resume');
+  });
+
+  // --- Search command ---
+  console.log('\nSearch command:');
+  const searchCmd = require('../src/commands/search');
+
+  test('search command has data and execute', () => {
+    assert.ok(searchCmd.data);
+    assert.strictEqual(typeof searchCmd.execute, 'function');
+  });
+
+  // --- Tag command ---
+  console.log('\nTag command:');
+  const tagCmd = require('../src/commands/tag');
+
+  test('tag command has data and execute', () => {
+    assert.ok(tagCmd.data);
+    assert.strictEqual(typeof tagCmd.execute, 'function');
+  });
+
+  // --- Tournament command ---
+  console.log('\nTournament command:');
+  const tournamentCmd = require('../src/commands/tournament');
+
+  test('tournament command has data and execute', () => {
+    assert.ok(tournamentCmd.data);
+    assert.strictEqual(typeof tournamentCmd.execute, 'function');
+  });
+
+  // --- Daily command ---
+  console.log('\nDaily command:');
+  const dailyCmd = require('../src/commands/daily');
+
+  test('daily command has data and execute', () => {
+    assert.ok(dailyCmd.data);
+    assert.strictEqual(typeof dailyCmd.execute, 'function');
+  });
+
+  // --- Birthday command ---
+  console.log('\nBirthday command:');
+  const birthdayCmd = require('../src/commands/birthday');
+
+  test('birthday command has data and execute', () => {
+    assert.ok(birthdayCmd.data);
+    assert.strictEqual(typeof birthdayCmd.execute, 'function');
+  });
+
+  // --- Remind command ---
+  console.log('\nRemind command:');
+  const remindCmd = require('../src/commands/remind');
+
+  test('remind command has data and execute', () => {
+    assert.ok(remindCmd.data);
+    assert.strictEqual(typeof remindCmd.execute, 'function');
+  });
+
+  // --- Starboard command ---
+  console.log('\nStarboard command:');
+  const starboardCmd = require('../src/commands/starboard');
+
+  test('starboard command has data and execute', () => {
+    assert.ok(starboardCmd.data);
+    assert.strictEqual(typeof starboardCmd.execute, 'function');
+  });
+
   // --- Community route ---
   console.log('\nCommunity route:');
   const communityRoute = require('../src/server/routes/community');
