@@ -16,7 +16,8 @@
     "dashboard:build": "cd dashboard && npm run build",
     "dashboard:dev": "cd dashboard && npm run dev",
     "lint": "eslint src/ --ext .js",
-    "lint:fix": "eslint src/ --ext .js --fix"
+    "lint:fix": "eslint src/ --ext .js --fix",
+    "post-commit": "node scripts/post_commit.js"
   },
   "engines": {
     "node": ">=18.0.0"

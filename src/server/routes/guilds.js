@@ -85,5 +85,53 @@ module.exports = function (client, jwtSecret) {
     }
   });
 
+  // GET /api/guilds/:guildId/commands — list registered slash commands
+  router.get('/:guildId/commands', requireAuth(jwtSecret), requireGuildMember(client), async (req, res) => {
+    try {
+      const guild = client.guilds.cache.get(req.guild.guild_id);
+      if (!guild) return res.status(404).json({ error: 'Guild non trovata' });
+
+      const cmds = await guild.commands.fetch().catch(() => null);
+      if (!cmds) return res.json({ commands: [] });
+
+      // Categorize commands based on file location
+      const path = require('path');
+      const fs = require('fs');
+      const cmdDir = path.join(__dirname, '..', '..', 'commands');
+      const cmdFiles = {};
+      function scanDir(dir, prefix = '') {
+        const entries = fs.readdirSync(dir, { withFileTypes: true });
+        for (const entry of entries) {
+          if (entry.isDirectory()) {
+            scanDir(path.join(dir, entry.name), entry.name + '/');
+          } else if (entry.name.endsWith('.js')) {
+            const name = entry.name.replace('.js', '');
+            cmdFiles[name] = prefix;
+          }
+        }
+      }
+      scanDir(cmdDir);
+
+      const commands = cmds.map(c => {
+        const prefix = cmdFiles[c.name] || '';
+        const category = prefix.includes('admin') ? 'admin'
+          : prefix.includes('mod') ? 'mod'
+          : ['bp', 'loot', 'spedizione', 'raidreq', 'raidstatus'].includes(c.name) ? 'raid'
+          : 'user';
+        return {
+          name: c.name,
+          description: c.description,
+          category,
+          options: c.options ? c.options.map(o => ({ name: o.name, description: o.description, type: o.type })) : [],
+        };
+      }).sort((a, b) => a.name.localeCompare(b.name));
+
+      res.json({ commands });
+    } catch (err) {
+      console.error('Commands list error:', err);
+      res.status(500).json({ error: 'Errore recupero comandi' });
+    }
+  });
+
   return router;
 };

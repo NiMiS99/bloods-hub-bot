@@ -1128,6 +1128,53 @@ async function additionalTests() {
     assert.strictEqual(typeof starboardCmd.execute, 'function');
   });
 
+  // --- Updates command ---
+  console.log('\nUpdates command:');
+  const updatesCmd = require('../src/commands/updates');
+
+  test('updates command has data and execute', () => {
+    assert.ok(updatesCmd.data);
+    assert.strictEqual(typeof updatesCmd.execute, 'function');
+  });
+  test('updates command name is "updates"', () => {
+    assert.strictEqual(updatesCmd.data.name, 'updates');
+  });
+
+  // --- Restore command ---
+  console.log('\nRestore command:');
+  const restoreCmd = require('../src/commands/admin/restore');
+
+  test('restore command has data and execute', () => {
+    assert.ok(restoreCmd.data);
+    assert.strictEqual(typeof restoreCmd.execute, 'function');
+  });
+  test('restore command has list, show, download subcommands', () => {
+    const subs = restoreCmd.data.options.map(o => o.name);
+    assert.ok(subs.includes('list'), 'Should have list');
+    assert.ok(subs.includes('show'), 'Should have show');
+    assert.ok(subs.includes('download'), 'Should have download');
+  });
+
+  // --- Serverinfo command ---
+  console.log('\nServerinfo command:');
+  const serverinfoCmd = require('../src/commands/serverinfo');
+
+  test('serverinfo command has data and execute', () => {
+    assert.ok(serverinfoCmd.data);
+    assert.strictEqual(typeof serverinfoCmd.execute, 'function');
+  });
+
+  // --- Post-commit script ---
+  console.log('\nPost-commit script:');
+  const fs2 = require('fs');
+  test('post_commit.js exists', () => {
+    assert.ok(fs2.existsSync('scripts/post_commit.js'));
+  });
+  test('package.json has post-commit script', () => {
+    const pkg = JSON.parse(fs2.readFileSync('package.json', 'utf8'));
+    assert.ok(pkg.scripts['post-commit'], 'Should have post-commit script');
+  });
+
   // --- Community route ---
   console.log('\nCommunity route:');
   const communityRoute = require('../src/server/routes/community');

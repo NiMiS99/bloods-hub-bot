@@ -45,7 +45,7 @@ cd dashboard && npm install && npm run build
 docker compose --env-file .env up -d --build
 ```
 
-## Comandi (62)
+## Comandi (65)
 
 ### Utente (25)
 | Comando | Descrizione |
@@ -119,7 +119,7 @@ docker compose --env-file .env up -d --build
 
 ```
 src/
-├── commands/          # Slash commands (auto-loaded, 62)
+├── commands/          # Slash commands (auto-loaded, 65)
 │   ├── admin/         # /game, /giveaway, /tempvc, /cmd, /schedule, /config, /hobbies, /autothread, ecc.
 │   ├── mod/           # /warn, /mute, /purge, /userinfo, /slowmode, /lockdown, ecc.
 │   └── *.js           # /rank, /mystats, /poll, /lfg, /bp, /loot, /music, ecc.
@@ -133,7 +133,7 @@ src/
 ├── modules/games/     # Per-game meta fetchers
 ├── db/                # Sequelize models (46) + migrations
 └── server/            # Health check + Dashboard API (69 route)
-dashboard/             # Next.js 14 frontend (27 pagine)
+dashboard/             # Next.js 14 frontend (30 pagine)
 .github/workflows/     # CI/CD (ci.yml + deploy.yml)
 deploy/                # Dockerfile + docker-compose
 ```
@@ -162,7 +162,7 @@ deploy/                # Dockerfile + docker-compose
 
 ## Dashboard Web
 
-Dashboard admin su **Next.js 14** con 27 pagine:
+Dashboard admin su **Next.js 14** con 30 pagine:
 - Overview, Analytics, Audit Log, Automod, Badges
 - Discord Logs, Events, Games, Leaderboard, Level Rewards
 - Members, Moderation, Raid, Settings, Health, Search

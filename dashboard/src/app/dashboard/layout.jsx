@@ -42,6 +42,8 @@ const NAV_ITEMS = [
   { href: '/dashboard/reminders', label: 'Promemoria', icon: Bell },
   { href: '/dashboard/starboard', label: 'Starboard', icon: Star },
   { href: '/dashboard/search', label: 'Ricerca Globale', icon: Search },
+  { href: '/dashboard/commands', label: 'Comandi', icon: TerminalSquare },
+  { href: '/dashboard/activity', label: 'Activity Log', icon: Activity },
   { href: '/dashboard/settings', label: 'Impostazioni', icon: Settings },
   { href: '/dashboard/health', label: 'Health Check', icon: Activity },
 ];

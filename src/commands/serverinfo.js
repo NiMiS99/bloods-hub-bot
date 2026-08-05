@@ -33,6 +33,12 @@ module.exports = {
     const dbMemberships = await UserGame.count({ where: { guild_id: guild.id } });
     const dbWarnings = await Warning.count({ where: { guild_id: guild.id } });
 
+    // Bot stats
+    const botCommands = await guild.commands.fetch().catch(() => ({ size: 0 }));
+    const botCmdCount = botCommands.size || 0;
+    const changelogCh = process.env.CHANGELOG_CHANNEL_ID ? guild.channels.cache.get(process.env.CHANGELOG_CHANNEL_ID) : null;
+    const updatesCh = process.env.UPDATES_CHANNEL_ID ? guild.channels.cache.get(process.env.UPDATES_CHANNEL_ID) : null;
+
     // Server dates
     const created = `<t:${Math.floor(guild.createdTimestamp / 1000)}:D>`;
     const owner = await guild.fetchOwner();
@@ -66,6 +72,10 @@ module.exports = {
         { name: 'Giochi Attivi', value: `${dbGames}`, inline: true },
         { name: 'Iscrizioni Giochi', value: `${dbMemberships}`, inline: true },
         { name: 'Warning Attivi', value: `${dbWarnings}`, inline: true },
+        { name: '\u200B', value: '\u200B', inline: false },
+        { name: '🤖 Comandi Bot', value: `${botCmdCount} slash commands`, inline: true },
+        { name: '📋 Changelog', value: changelogCh ? `<#${changelogCh.id}>` : 'Non configurato', inline: true },
+        { name: '📢 Updates', value: updatesCh ? `<#${updatesCh.id}>` : 'Non configurato', inline: true },
       )
       .setTimestamp()
       .setFooter({ text: `Bloods Community • ${guild.name}` });
