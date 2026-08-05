@@ -459,6 +459,7 @@ async function writePendingFixes() {
   const tickets = await Feedback.findAll({
     where: { status: ['approved', 'in_progress'] },
     order: [['priority', 'DESC'], ['approved_at', 'ASC']],
+    limit: 50,
   });
 
   const data = {

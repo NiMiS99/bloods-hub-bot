@@ -96,6 +96,7 @@ class LeaderboardScheduler {
       },
       order: [['generated_at', 'DESC']],
       offset: 3,
+      limit: 100,
       attributes: ['id'],
     }).catch(() => []);
     if (oldEntries.length > 0) {
