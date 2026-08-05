@@ -221,6 +221,29 @@ async function completeVerification(interaction, client) {
     // DM might be closed — not critical
   }
 
+  // Post welcome message in general channel (engagement boost)
+  try {
+    const generalChannel = member.guild.channels.cache.find(
+      (c) => c.name === 'generale' || c.name === 'general'
+    );
+    if (generalChannel) {
+      const welcomeEmbed = new EmbedBuilder()
+        .setColor(0x8b0000)
+        .setDescription(
+          `🎉 **Benvenuto ${member} nei Bloods!**\n` +
+          `Ti sei appena verificato. Ecco cosa puoi fare:\n` +
+          `• Usa \`/help\` per vedere tutti i comandi\n` +
+          `• Usa \`/daily\` per la tua ricompensa giornaliera\n` +
+          `• Usa \`/lfg\` per trovare compagni di gioco\n` +
+          `• Usa \`/music play\` per ascoltare musica in vocale`
+        )
+        .setFooter({ text: 'Bloods Hub · Nuovo membro verificato' });
+      await generalChannel.send({ embeds: [welcomeEmbed] });
+    }
+  } catch {
+    // Not critical
+  }
+
   await interaction.reply({
     content: `✅ **Verifica completata!** Benvenuto ${member.user.username}!\nControlla i tuoi messaggi privati per i prossimi passi.`,
     flags: 64,
