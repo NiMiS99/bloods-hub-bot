@@ -132,8 +132,8 @@ src/
 ├── utils/             # Helpers (embed, format, permissions, discordFetch, ecc.)
 ├── modules/games/     # Per-game meta fetchers
 ├── db/                # Sequelize models (46) + migrations
-└── server/            # Health check + Dashboard API (22 route)
-dashboard/             # Next.js 14 frontend (22 pagine)
+└── server/            # Health check + Dashboard API (69 route)
+dashboard/             # Next.js 14 frontend (27 pagine)
 .github/workflows/     # CI/CD (ci.yml + deploy.yml)
 deploy/                # Dockerfile + docker-compose
 ```
@@ -162,7 +162,7 @@ deploy/                # Dockerfile + docker-compose
 
 ## Dashboard Web
 
-Dashboard admin su **Next.js 14** con 22 pagine:
+Dashboard admin su **Next.js 14** con 27 pagine:
 - Overview, Analytics, Audit Log, Automod, Badges
 - Discord Logs, Events, Games, Leaderboard, Level Rewards
 - Members, Moderation, Raid, Settings, Health, Search
