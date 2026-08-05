@@ -91,6 +91,39 @@ async function unitTests() {
     assert.strictEqual(Object.keys(SANS_LOWER).length, 26);
   });
 
+  // --- fromFraktur (reverse decoding) ---
+  console.log('fromFraktur:');
+  const { fromFraktur } = require('../src/utils/textFormatter');
+  test('fromFraktur("World of Warcraft") decodes mixed Sans-Serif + Bold Fraktur', () => {
+    assert.strictEqual(fromFraktur('𝖶𝗈𝗋𝗅𝖽 𝗈𝖿 𝖶𝖺𝗋𝖼𝗋𝖺𝖋𝗍'), 'World of Warcraft');
+  });
+  test('fromFraktur("Community Hub") decodes Sans-Serif', () => {
+    assert.strictEqual(fromFraktur('𝖢𝗈𝗆𝗆𝗎𝗇𝗂𝗍𝗒 𝖧𝗎𝖻'), 'Community Hub');
+  });
+  test('fromFraktur handles plain ASCII (no-op)', () => {
+    assert.strictEqual(fromFraktur('Hello World'), 'Hello World');
+  });
+  test('fromFraktur(null) returns null', () => {
+    assert.strictEqual(fromFraktur(null), null);
+  });
+  test('fromFraktur("") returns ""', () => {
+    assert.strictEqual(fromFraktur(''), '');
+  });
+  test('fromFraktur preserves digits and symbols', () => {
+    assert.strictEqual(fromFraktur('123!@# 𝖳𝖾𝗌𝗍'), '123!@# Test');
+  });
+  test('fromFraktur handles Bold Fraktur block', () => {
+    assert.strictEqual(fromFraktur('𝕬𝖇𝖈'), 'Abc');
+  });
+  test('fromFraktur handles Monospace block', () => {
+    assert.strictEqual(fromFraktur('𝙰𝚋𝚌'), 'Abc');
+  });
+  test('fromFraktur + toFraktur roundtrip', () => {
+    const original = 'Bloods Hub Bot';
+    const styled = toFraktur(original);
+    assert.strictEqual(fromFraktur(styled), original);
+  });
+
   // --- format.js ---
   console.log('\nformat.js:');
   const { formatDuration, ordinal, truncate } = require('../src/utils/format');

@@ -45,13 +45,13 @@ cd dashboard && npm install && npm run build
 docker compose --env-file .env up -d --build
 ```
 
-## Comandi (61)
+## Comandi (62)
 
 ### Utente (25)
 | Comando | Descrizione |
 |---------|-------------|
 | `/ping` | Verifica latenza bot |
-| `/help` | Lista tutti i comandi (61) |
+| `/help` | Lista tutti i comandi (62) |
 | `/mystats [user]` | Profilo community (XP, badge, stat, link) |
 | `/mygames` | I tuoi giochi + statistiche |
 | `/rank [user]` | Livello, XP, badge, posizione classifica |
@@ -119,7 +119,7 @@ docker compose --env-file .env up -d --build
 
 ```
 src/
-├── commands/          # Slash commands (auto-loaded, 60)
+├── commands/          # Slash commands (auto-loaded, 62)
 │   ├── admin/         # /game, /giveaway, /tempvc, /cmd, /schedule, /config, /hobbies, /autothread, ecc.
 │   ├── mod/           # /warn, /mute, /purge, /userinfo, /slowmode, /lockdown, ecc.
 │   └── *.js           # /rank, /mystats, /poll, /lfg, /bp, /loot, /music, ecc.
@@ -162,7 +162,7 @@ deploy/                # Dockerfile + docker-compose
 
 ## Dashboard Web
 
-Dashboard admin su **Next.js 14** con 23 pagine:
+Dashboard admin su **Next.js 14** con 22 pagine:
 - Overview, Analytics, Audit Log, Automod, Badges
 - Discord Logs, Events, Games, Leaderboard, Level Rewards
 - Members, Moderation, Raid, Settings, Health, Search
