@@ -111,6 +111,12 @@ export const api = {
   getSuggestions: (gid, status = 'all', page = 1) => fetchAPI(`/guilds/${gid}/suggestions?status=${status}&page=${page}`),
   updateSuggestionStatus: (gid, id, status) => fetchAPI(`/guilds/${gid}/suggestions/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) }),
 
+  // Feedback tickets
+  getFeedback: (gid, status = 'all') => fetchAPI(`/guilds/${gid}/feedback?status=${status}`),
+  getFeedbackStats: (gid) => fetchAPI(`/guilds/${gid}/feedback/stats`),
+  getFeedbackTicket: (gid, id) => fetchAPI(`/guilds/${gid}/feedback/${id}`),
+  updateFeedbackStatus: (gid, id, status) => fetchAPI(`/guilds/${gid}/feedback/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) }),
+
   // Polls
   getPolls: (gid, page = 1) => fetchAPI(`/guilds/${gid}/polls?page=${page}`),
   closePoll: (gid, id) => fetchAPI(`/guilds/${gid}/polls/${id}/close`, { method: 'POST' }),

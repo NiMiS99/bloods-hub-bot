@@ -12,7 +12,7 @@ import {
   BarChart3, Award, ScrollText, Settings, LogOut, Menu, X,
   ChevronDown, Bell, Search, Gift, Bot, FileText, Swords,
   PartyPopper, Clock, TerminalSquare, Lightbulb, Zap, Tag,
-  Sun, Moon, Activity
+  Sun, Moon, Activity, ClipboardList
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -28,6 +28,7 @@ const NAV_ITEMS = [
   { href: '/dashboard/raid', label: 'Raid & Progress', icon: Swords },
   { href: '/dashboard/giveaways', label: 'Giveaway', icon: PartyPopper },
   { href: '/dashboard/suggestions', label: 'Suggerimenti', icon: Lightbulb },
+  { href: '/dashboard/feedback', label: 'Segnalazioni Admin', icon: ClipboardList },
   { href: '/dashboard/polls', label: 'Sondaggi', icon: BarChart3 },
   { href: '/dashboard/lfg', label: 'Sessioni LFG', icon: Gamepad2 },
   { href: '/dashboard/xp-events', label: 'Eventi XP', icon: Zap },

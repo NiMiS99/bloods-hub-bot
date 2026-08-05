@@ -34,6 +34,7 @@ const giveawayRoutes = require('./routes/giveaway');
 const scheduledMessageRoutes = require('./routes/scheduledMessages');
 const customCommandRoutes = require('./routes/customCommands');
 const communityRoutes = require('./routes/community');
+const feedbackRoutes = require('./routes/feedback');
 
 class DashboardServer {
   constructor(client) {
@@ -136,6 +137,7 @@ class DashboardServer {
       this.app.use('/api/guilds', scheduledMessageRoutes(this.client, this.jwtSecret));
       this.app.use('/api/guilds', customCommandRoutes(this.client, this.jwtSecret));
       this.app.use('/api/guilds', communityRoutes(this.client, this.jwtSecret));
+      this.app.use('/api/guilds', feedbackRoutes(this.client, this.jwtSecret));
     } catch (err) {
       logger.error('Failed to register API routes:', err.message);
     }

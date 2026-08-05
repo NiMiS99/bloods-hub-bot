@@ -191,7 +191,7 @@ async function completeVerification(interaction, client) {
 
   logger.info(`Onboarding: ${member.user.tag} verified (captcha passed).`);
 
-  // Send welcome DM with next steps
+  // Send welcome DM with next steps + command guide
   try {
     const dmEmbed = new EmbedBuilder()
       .setTitle('Benvenuto nei Bloods!')
@@ -199,15 +199,22 @@ async function completeVerification(interaction, client) {
       .setDescription(
         `**Ciao ${member.user.username}!**\n\n` +
         'Sei stato verificato con successo! Ora puoi accedere a tutti i canali della community.\n\n' +
-        '**Prossimi passi consigliati:**\n' +
+        '**Prossimi passi:**\n' +
         `1. Leggi il <#${RULES_CHANNEL_ID}> per conoscere le regole\n` +
-        `2. Vai in <#${ROLE_PANEL_CHANNEL_ID}> per selezionare:\n` +
-        '   • I giochi a cui sei interessato\n' +
-        '   • Le professioni WoW\n' +
-        '3. Usa i comandi in #Comandi-Bot per esplorare le funzionalità\n\n' +
-        'Buon divertimento! 🎮'
+        `2. Vai in <#${ROLE_PANEL_CHANNEL_ID}> per selezionare i tuoi giochi e professioni WoW\n` +
+        '3. Esplora i comandi qui sotto!\n\n' +
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n' +
+        '**📋 COMANDI PRINCIPALI**\n' +
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'
       )
-      .setFooter({ text: 'Bloods Hub · Benvenuto nella community' });
+      .addFields(
+        { name: '👤 Profilo & Statistiche', value: '`/mystats` — Tue statistiche\n`/rank` — Il tuo livello e XP\n`/profile` — Profilo completo\n`/mygames` — Giochi a cui sei iscritto', inline: false },
+        { name: '🎮 Gaming', value: '`/lfg` — Cerca gruppo per giocare\n`/music play` — Musica in vocale\n`/gamemeta` — Meta dei giochi\n`/leaderboard` — Classifica community', inline: false },
+        { name: '💬 Community', value: '`/suggest` — Proponi un suggerimento\n`/poll` — Crea un sondaggio\n`/remind` — Imposta un promemoria\n`/tag` — Guide rapide', inline: false },
+        { name: '📅 Diario', value: '`/daily` — Ricompensa giornaliera\n`/birthday set` — Imposta compleanno\n`/event` — Eventi community', inline: false },
+        { name: '❓ Aiuto', value: '`/help` — Lista completa di tutti i 61 comandi', inline: false },
+      )
+      .setFooter({ text: 'Bloods Hub · Benvenuto nella community · 61 comandi disponibili' });
 
     await member.send({ embeds: [dmEmbed] });
   } catch {
