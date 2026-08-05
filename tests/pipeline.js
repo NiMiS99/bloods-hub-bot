@@ -970,6 +970,114 @@ async function serviceTests() {
 }
 
 // ============================================================================
+// SUITE 5: ADDITIONAL SERVICE & COMMAND TESTS
+// ============================================================================
+async function additionalTests() {
+  // --- BackupScheduler ---
+  console.log('\nBackupScheduler:');
+  const { runBackup } = require('../src/services/backupScheduler');
+
+  test('runBackup is a function', () => {
+    assert.strictEqual(typeof runBackup, 'function');
+  });
+
+  test('backup creates a file in backups/', async () => {
+    const fs = require('fs');
+    const path = require('path');
+    const before = fs.existsSync('backups') ? fs.readdirSync('backups').length : 0;
+    runBackup();
+    await new Promise(r => setTimeout(r, 5000));
+    const after = fs.existsSync('backups') ? fs.readdirSync('backups').length : 0;
+    assert.ok(after > before, 'Backup should create a new file');
+  });
+
+  // --- Feedback model ---
+  console.log('\nFeedback model:');
+  const { Feedback } = require('../src/db');
+
+  test('Feedback model exists', () => {
+    assert.ok(Feedback, 'Feedback model should be defined');
+  });
+
+  test('Feedback model has expected fields', () => {
+    const attrs = Object.keys(Feedback.rawAttributes);
+    assert.ok(attrs.includes('guild_id'), 'Should have guild_id');
+    assert.ok(attrs.includes('status'), 'Should have status');
+    assert.ok(attrs.includes('priority'), 'Should have priority');
+    assert.ok(attrs.includes('category'), 'Should have category');
+  });
+
+  // --- Onboarding command ---
+  console.log('\nOnboarding command:');
+  const onboardingCmd = require('../src/commands/admin/onboarding');
+
+  test('onboarding command has data and execute', () => {
+    assert.ok(onboardingCmd.data, 'Should have data');
+    assert.ok(typeof onboardingCmd.execute === 'function', 'Should have execute');
+  });
+
+  test('onboarding command name is "onboarding"', () => {
+    assert.strictEqual(onboardingCmd.data.name, 'onboarding');
+  });
+
+  test('onboarding has post and dm subcommands', () => {
+    const subs = onboardingCmd.data.options.map(o => o.name);
+    assert.ok(subs.includes('post'), 'Should have post subcommand');
+    assert.ok(subs.includes('dm'), 'Should have dm subcommand');
+  });
+
+  // --- Config command ---
+  console.log('\nConfig command:');
+  const configCmd = require('../src/commands/admin/config');
+
+  test('config command has data and execute', () => {
+    assert.ok(configCmd.data);
+    assert.ok(typeof configCmd.execute === 'function');
+  });
+
+  test('config command name is "config"', () => {
+    assert.strictEqual(configCmd.data.name, 'config');
+  });
+
+  // --- Music service ---
+  console.log('\nMusic service:');
+  const musicService = require('../src/services/musicService');
+
+  test('musicService has expected exports', () => {
+    assert.ok(typeof musicService === 'object' || typeof musicService === 'function');
+  });
+
+  // --- Community route ---
+  console.log('\nCommunity route:');
+  const communityRoute = require('../src/server/routes/community');
+
+  test('community route is a function', () => {
+    assert.strictEqual(typeof communityRoute, 'function');
+  });
+
+  // --- Dashboard API methods ---
+  console.log('\nDashboard API methods:');
+  const fs = require('fs');
+  const apiContent = fs.readFileSync('dashboard/src/lib/api.js', 'utf8');
+
+  test('api.js has getBirthdays method', () => {
+    assert.ok(apiContent.includes('getBirthdays'), 'Should have getBirthdays');
+  });
+  test('api.js has getReminders method', () => {
+    assert.ok(apiContent.includes('getReminders'), 'Should have getReminders');
+  });
+  test('api.js has deleteReminder method', () => {
+    assert.ok(apiContent.includes('deleteReminder'), 'Should have deleteReminder');
+  });
+  test('api.js has getStarboard method', () => {
+    assert.ok(apiContent.includes('getStarboard'), 'Should have getStarboard');
+  });
+  test('api.js has getTags method', () => {
+    assert.ok(apiContent.includes('getTags'), 'Should have getTags');
+  });
+}
+
+// ============================================================================
 // MAIN RUNNER
 // ============================================================================
 async function main() {
@@ -984,6 +1092,7 @@ async function main() {
     await integrationTests();
     await e2eTests();
     await serviceTests();
+    await additionalTests();
   } catch (err) {
     console.error('\n\x1b[31mFATAL: Test suite crashed:\x1b[0m', err);
     process.exit(1);
