@@ -21,7 +21,7 @@ module.exports = function (client, jwtSecret) {
         limit: 100,
       });
       res.json({ tickets });
-    } catch (err) {
+    } catch {
       res.status(500).json({ error: 'Errore recupero feedback' });
     }
   });
@@ -35,7 +35,7 @@ module.exports = function (client, jwtSecret) {
       const resolved = await Feedback.count({ where: { guild_id: req.guild.id, status: 'resolved' } });
       const closed = await Feedback.count({ where: { guild_id: req.guild.id, status: 'closed' } });
       res.json({ total: open + approved + inProgress + resolved + closed, open, approved, inProgress, resolved, closed });
-    } catch (err) {
+    } catch {
       res.status(500).json({ error: 'Errore statistiche feedback' });
     }
   });
@@ -48,7 +48,7 @@ module.exports = function (client, jwtSecret) {
         return res.status(404).json({ error: 'Ticket non trovato' });
       }
       res.json({ ticket });
-    } catch (err) {
+    } catch {
       res.status(500).json({ error: 'Errore recupero ticket' });
     }
   });
@@ -72,7 +72,7 @@ module.exports = function (client, jwtSecret) {
       }
       await ticket.save();
       res.json({ ticket });
-    } catch (err) {
+    } catch {
       res.status(500).json({ error: 'Errore aggiornamento ticket' });
     }
   });

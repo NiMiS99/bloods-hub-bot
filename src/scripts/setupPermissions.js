@@ -212,7 +212,7 @@ async function setupCategory(guild, categoryId, config) {
     // This is critical: channels with custom overwrites DON'T inherit from category.
     // Without this, channels like "pubblica#1" keep their old broken permissions.
     let synced = 0;
-    for (const [channelId, channel] of category.children.cache) {
+    for (const [, channel] of category.children.cache) {
       try {
         // lockPermissions() makes the channel inherit from its parent category
         await channel.lockPermissions();
