@@ -5,6 +5,7 @@ const { successEmbed, errorEmbed } = require('../../utils/embed');
 const { isAdmin } = require('../../utils/permissions');
 const { recordAudit } = require('../../utils/auditLog');
 const { createNight, listNights, toggleNight, deleteNight } = require('../../services/gameNightService');
+const { fromFraktur } = require('../../utils/textFormatter');
 const { Game } = require('../../db');
 
 module.exports = {
@@ -52,7 +53,7 @@ module.exports = {
       }
 
       // Find LFG channel
-      const lfgChannel = interaction.guild.channels.cache.find((c) => c.name.toLowerCase().includes('lfg'));
+      const lfgChannel = interaction.guild.channels.cache.find((c) => c.name && fromFraktur(c.name).toLowerCase().includes('lfg'));
 
       const night = await createNight({
         guildId: interaction.guild.id,

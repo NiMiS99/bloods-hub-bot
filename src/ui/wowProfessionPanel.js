@@ -10,6 +10,7 @@ const {
 } = require('discord.js');
 const { Guild: _Guild } = require('../db');
 const { baseEmbed: _baseEmbed } = require('../utils/embed');
+const { fromFraktur } = require('../utils/textFormatter');
 const logger = require('../utils/logger');
 const config = require('../config');
 
@@ -152,9 +153,10 @@ async function postProfessionPanel(client) {
   const guild = client.guilds.cache.get(GUILD_ID);
   if (!guild) return;
 
-  // Find WoW category
+  // Find WoW category (names use Fraktur styling, so decode before matching)
   const wowCategory = [...guild.channels.cache.values()].find(
-    (c) => c.type === ChannelType.GuildCategory && c.name && c.name.toLowerCase().includes('wow')
+    (c) => c.type === ChannelType.GuildCategory && c.name &&
+      fromFraktur(c.name).toLowerCase().includes('wow')
   );
   if (!wowCategory) {
     logger.warn('WoW profession panel: WoW category not found');

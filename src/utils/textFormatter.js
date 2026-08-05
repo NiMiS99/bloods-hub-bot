@@ -44,4 +44,28 @@ function toFraktur(text) {
   );
 }
 
-module.exports = { toFraktur, SANS_UPPER, SANS_LOWER };
+// Reverse lookup maps (Sans-Serif -> ASCII)
+const SANS_UPPER_REV = {};
+for (const [ascii, sans] of Object.entries(SANS_UPPER)) {
+  SANS_UPPER_REV[sans] = ascii;
+}
+const SANS_LOWER_REV = {};
+for (const [ascii, sans] of Object.entries(SANS_LOWER)) {
+  SANS_LOWER_REV[sans] = ascii;
+}
+
+/**
+ * Convert a Sans-Serif-styled string back to standard ASCII.
+ * Useful for matching channel/category names that use Fraktur styling.
+ *
+ * @param {string} text - The Sans-Serif-styled string.
+ * @returns {string} The ASCII-decoded string.
+ */
+function fromFraktur(text) {
+  if (text == null) return text;
+  return String(text).replace(/[\u{1D5A0}-\u{1D5B9}\u{1D5BA}-\u{1D5D3}]/gu, (ch) =>
+    SANS_UPPER_REV[ch] || SANS_LOWER_REV[ch] || ch
+  );
+}
+
+module.exports = { toFraktur, fromFraktur, SANS_UPPER, SANS_LOWER };

@@ -2,6 +2,7 @@
 const AdvancedLogger = require('../services/advancedLogger');
 const { User } = require('../db');
 const { awardXp } = require('../services/xpService');
+const { fromFraktur } = require('../utils/textFormatter');
 const logger = require('../utils/logger');
 
 module.exports = {
@@ -27,7 +28,7 @@ module.exports = {
 
         // Send thank you message
         const thankChannel = newMember.guild.channels.cache.find(
-          (c) => c.name.toLowerCase().includes('benvenuto') || c.name.toLowerCase().includes('annunci')
+          (c) => c.name && (fromFraktur(c.name).toLowerCase().includes('benvenuto') || fromFraktur(c.name).toLowerCase().includes('annunci'))
         );
         if (thankChannel) {
           const { EmbedBuilder } = require('discord.js');

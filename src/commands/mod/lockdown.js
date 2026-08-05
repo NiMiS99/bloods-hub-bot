@@ -4,6 +4,7 @@ const { SlashCommandBuilder, PermissionFlagsBits, ChannelType, PermissionsBitFie
 const { successEmbed, errorEmbed, baseEmbed } = require('../../utils/embed');
 const { canModerate } = require('../../utils/permissions');
 const { recordAudit } = require('../../utils/auditLog');
+const { fromFraktur } = require('../../utils/textFormatter');
 const logger = require('../../utils/logger');
 
 const STAFF_ROLE_NAMES = ['Owner', 'Founder', 'Consigliere', 'Bloods Admin', 'Officer', 'Officer Reclutatore', 'Officer in Prova'];
@@ -88,7 +89,7 @@ module.exports = {
 
     // Also send to announcements channel if available
     if (lock) {
-      const announceChannel = interaction.guild.channels.cache.find((c) => c.name.toLowerCase().includes('annunci'));
+      const announceChannel = interaction.guild.channels.cache.find((c) => c.name && fromFraktur(c.name).toLowerCase().includes('annunci'));
       if (announceChannel) {
         await announceChannel.send({
           embeds: [baseEmbed({

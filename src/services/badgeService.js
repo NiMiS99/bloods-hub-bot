@@ -119,20 +119,20 @@ const BADGES = {
     check: async (user) => {
       if (!user.last_seen_at) return false;
       const { ActivityLog } = require('../db');
-      const { Op } = require('sequelize');
+      const { Op, fn } = require('sequelize');
       const sevenDaysAgo = new Date(Date.now() - 7 * 86400000);
       const days = await ActivityLog.findAll({
-        attributes: ['occurred_at'],
+        attributes: [[fn('DATE', require('sequelize').col('occurred_at')), 'day']],
         where: {
           user_id: user.user_id,
           guild_id: user.guild_id,
           occurred_at: { [Op.gte]: sevenDaysAgo },
         },
-        group: ['date(occurred_at)'],
+        group: [[fn('DATE', require('sequelize').col('occurred_at'))]],
         raw: true,
       });
       // Check 7 consecutive days
-      const dates = new Set(days.map((d) => new Date(d.created_at).toDateString()));
+      const dates = new Set(days.map((d) => new Date(d.day).toDateString()));
       for (let i = 0; i < 7; i++) {
         const d = new Date(Date.now() - i * 86400000).toDateString();
         if (!dates.has(d)) return false;

@@ -15,6 +15,7 @@ const {
 const fs = require('fs');
 const path = require('path');
 const logger = require('../utils/logger');
+const { fromFraktur } = require('../utils/textFormatter');
 const { Feedback } = require('../db');
 
 // === CONFIG ===
@@ -129,7 +130,8 @@ async function handleModalSubmit(interaction) {
   if (!channel) {
     // Create it
     const parent = interaction.guild.channels.cache.find(
-      (c) => c.type === ChannelType.GuildCategory && c.name.toLowerCase().includes('community')
+      (c) => c.type === ChannelType.GuildCategory && c.name &&
+        fromFraktur(c.name).toLowerCase().includes('community')
     );
     channel = await interaction.guild.channels.create({
       name: FEEDBACK_CHANNEL_NAME,

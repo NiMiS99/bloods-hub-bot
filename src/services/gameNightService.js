@@ -3,6 +3,7 @@
 const cron = require('node-cron');
 const { GameNight, Game } = require('../db');
 const { createSession } = require('./lfgService');
+const { fromFraktur } = require('../utils/textFormatter');
 const logger = require('../utils/logger');
 
 const _tasks = new Map(); // gameNightId -> cron task
@@ -85,7 +86,7 @@ async function _triggerNight(client, night) {
     // Find or use LFG channel
     const channel = night.text_channel_id
       ? guild.channels.cache.get(night.text_channel_id)
-      : guild.channels.cache.find((c) => c.name.toLowerCase().includes('lfg'));
+      : guild.channels.cache.find((c) => c.name && fromFraktur(c.name).toLowerCase().includes('lfg'));
 
     if (!channel) {
       logger.warn(`GameNight ${night.id}: no LFG channel found`);

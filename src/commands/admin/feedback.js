@@ -4,6 +4,7 @@ const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ButtonBuilder, B
 const feedbackService = require('../../services/feedbackService');
 const { Feedback } = require('../../db');
 const { baseEmbed } = require('../../utils/embed');
+const { fromFraktur } = require('../../utils/textFormatter');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -33,7 +34,8 @@ module.exports = {
       if (!channel) {
         // Create the channel
         let parent = interaction.guild.channels.cache.find(
-          (c) => c.type === 4 && c.name.toLowerCase().includes('community')
+          (c) => c.type === 4 && c.name &&
+            fromFraktur(c.name).toLowerCase().includes('community')
         );
         if (!parent) {
           parent = interaction.guild.channels.cache.find((c) => c.type === 4);
