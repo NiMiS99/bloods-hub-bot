@@ -5,7 +5,7 @@
 
 ---
 
-## 🏆 PUNTEGGIO GENERALE: 9.2/10
+## 🏆 PUNTEGGIO GENERALE: 9.4/10
 
 | Categoria | Punteggio | Status |
 |-----------|-----------|--------|
@@ -19,7 +19,7 @@
 | 📝 Docs | 9/10 | ✅ README + AGENTS + CHECKLIST + TEST |
 | 🎮 Discord | 9/10 | ✅ 65 comandi, 133 membri, 196 canali |
 | ⚡ Performance | 8/10 | ⚠️ 157MB memory, 1% CPU |
-| 🔧 Config | 9/10 | ⚠️ Battle.net API mancante |
+| 🔧 Config | 10/10 | ✅ Tutte le API configurate |
 
 ---
 
@@ -146,10 +146,10 @@ Activity log:       26.829 righe (indicizzato)
 ```
 **Valutazione**: Buona. Memory sotto controllo. activity_log cresce ma indicizzato.
 
-### 🔧 Config — 9/10
+### 🔧 Config — 10/10
 ```
 Variabili settate:  10/10
-Battle.net API:     ⚠️ MANCANTE
+Battle.net API:     ✅ FUNZIONANTE (verificato)
 Steam API:          ✅
 Riot API:           ✅
 ```
@@ -190,9 +190,8 @@ npm scripts:        13
 ## ⚠️ COSA MIGLIORARE
 
 ### Priorità alta
-1. **Battle.net API** — senza credenziali, `/raidreq` e `/raidstatus` non funzionano
-   - Fix: registrare app su [Battle.net Developer Portal](https://develop.battle.net/)
-   - Settare `BATTLE_NET_CLIENT_ID` e `BATTLE_NET_CLIENT_SECRET` in `.env`
+1. ~~**Battle.net API** — senza credenziali, `/raidreq` e `/raidstatus` non funzionano~~
+   - ✅ **VERIFICATO FUNZIONANTE** — credenziali già configurate, token ottenuto, character "Bäba-Pozzo dell'Eternità" recuperato (liv 90, ilvl 272)
 
 ### Priorità media
 2. **activity_log crescita** — 26.829 righe, cresce ~500/giorno
@@ -246,8 +245,8 @@ npm scripts:        13
 | Security | 3/3 | 9/10 |
 | .env | 10/10 | 9/10 |
 | Memory | 157MB | 8/10 |
-| Battle.net | MANCANTE | -1 |
-| **TOTALE** | | **9.2/10** |
+| Battle.net | ✅ FUNZIONANTE | 10/10 |
+| **TOTALE** | | **9.4/10** |
 
 ---
 
