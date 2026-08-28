@@ -56,6 +56,7 @@ const RaidSummaryService = require('./services/raidSummaryService');
 const TwitchAlertService = require('./services/twitchAlertService');
 const YouTubeService = require('./services/youtubeService');
 const TikTokService = require('./services/tiktokService');
+const SocialGrowthService = require('./services/socialGrowthService');
 const HealthServer = require('./server/healthServer');
 const DashboardServer = require('./server/dashboardServer');
 
@@ -203,6 +204,9 @@ async function main() {
   // TikTok auto-post new videos
   TikTokService.start(client);
 
+  // Social growth tracker (daily stats, weekly reports, content ideas, SEO audit)
+  SocialGrowthService.start(client);
+
   // Onboarding + ticket panels (post after ready)
   client.on('clientReady', async () => {
     try {
@@ -273,6 +277,7 @@ async function main() {
       TwitchAlertService.stop();
       YouTubeService.stop();
       TikTokService.stop();
+      SocialGrowthService.stop();
       // Stop interval-based services without explicit stop in shutdown
       try { require('./services/xpService').stop(); } catch {}
       try { require('./services/captchaService').stop(); } catch {}
