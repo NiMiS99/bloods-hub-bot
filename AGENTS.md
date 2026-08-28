@@ -101,6 +101,17 @@ pm2 save
 - `node_modules/` — dipendenze
 - `logs/` — log runtime
 - `backups/` — backup DB
+- `scripts/legacy/` — script one-shot già eseguiti, riferimento storico
+
+## Integrazioni WoW
+
+Il progetto si integra con diverse piattaforme WoW:
+- **Battle.net API** — roster, personaggi, ilvl, M+ (già implementato in `src/services/api/battleNetApi.js`)
+- **Warcraft Logs** — combat log, parse, progressione raid (config in `src/config/index.js`)
+- **Guilds of WoW** — piattaforma gilda con API roster/reclutamento (vedi `docs/GUILD_OF_WOW.md`)
+- **Raider.IO** — M+ score, raid progress (futuro)
+
+Per dettagli integrazione: `docs/GUILD_OF_WOW.md`
 
 ## Regole per AI agent
 

@@ -145,6 +145,17 @@ export default function UniscitiPage() {
             >
               Unisciti su Discord <ArrowRight size={18} />
             </a>
+            <p className="mt-4 text-xs text-dark-400">
+              Puoi anche candidarti tramite{' '}
+              <a
+                href="https://guildsofwow.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-bloods-400 hover:text-bloods-300 underline"
+              >
+                Guilds of WoW
+              </a>
+            </p>
           </div>
         </section>
       </div>

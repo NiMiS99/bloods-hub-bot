@@ -319,10 +319,13 @@ Il `docker-compose.yml` include:
 | File | Audience | Contenuto |
 |------|----------|-----------|
 | `AGENTS.md` | AI agent | Istruzioni per AI che lavorano sul progetto |
+| `CONTRIBUTING.md` | Contributor | Linee guida per contribuire al progetto |
+| `CHANGELOG.md` | Tutti | Storico versioni e cambiamenti |
 | `docs/DEV_GUIDE.md` | Sviluppatori | Struttura, convenzioni, API, DB, test, deploy |
 | `docs/ADMIN_GUIDE.md` | Staff Discord | Setup, gestione giochi, permessi, troubleshooting |
 | `docs/GUIDE_OFFICER.md` | Officer/RL | Colloqui, raid, BP, moderazione, dashboard admin |
 | `docs/GUIDE_GIOCATORI.md` | Membri gilda | Comandi, XP, BP, progressione, regole |
+| `docs/GUILD_OF_WOW.md` | Officer/Dev | Integrazione Guilds of WoW, Battle.net, WCL, Raider.IO |
 | `docs/DEPLOYMENT.md` | DevOps | Nginx, PM2, SSL, SEO, backup |
 
 ## Licenza

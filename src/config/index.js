@@ -42,6 +42,13 @@ const config = {
       clientSecret: process.env.BATTLE_NET_CLIENT_SECRET || null,
     },
     riot: process.env.RIOT_API_KEY || null,
+    warcraftLogs: {
+      clientId: process.env.WCL_CLIENT_ID || null,
+      clientSecret: process.env.WCL_CLIENT_SECRET || null,
+      guildName: process.env.WCL_GUILD_NAME || 'Bloods',
+      guildServer: process.env.WCL_GUILD_SERVER || "Pozzo dell'Eternità",
+      region: process.env.WCL_REGION || 'EU',
+    },
   },
   misc: {
     logLevel: process.env.LOG_LEVEL || 'info',

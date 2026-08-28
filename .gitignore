@@ -13,4 +13,9 @@ dashboard/out/
 dashboard/.next/
 _tmp_*
 _discord_audit.txt
+perms_audit.txt
+*.tmp
+*.bak
 docs/archive/
+.env.local
+.env.*.local
