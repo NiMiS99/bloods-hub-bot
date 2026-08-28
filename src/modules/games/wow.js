@@ -1,11 +1,63 @@
 // src/modules/games/wow.js
-// World of Warcraft — fetches news, patch notes and server status from Blizzard.
+// World of Warcraft — fetches news, patch notes and server status from Blizzard,
+// Wowhead (RSS) and Icy Veins (RSS).
 const axios = require('axios');
+
+const WOWHEAD_RSS_URL = 'https://www.wowhead.com/news&rss';
+const ICYVEINS_RSS_URL = 'https://www.icy-veins.com/rss';
+
+function stripHtml(text) {
+  return text.replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '').trim();
+}
+
+function parseRssItems(xml, sourceName, maxItems = 5) {
+  const items = [];
+  const itemRegex = /<item>([\s\S]*?)<\/item>/gi;
+  let match;
+  while ((match = itemRegex.exec(xml)) !== null && items.length < maxItems) {
+    const block = match[1];
+    const titleMatch = block.match(/<title>([\s\S]*?)<\/title>/i);
+    const linkMatch = block.match(/<link>([\s\S]*?)<\/link>/i);
+    const descMatch = block.match(/<description>([\s\S]*?)<\/description>/i);
+    const dateMatch = block.match(/<pubDate>([\s\S]*?)<\/pubDate>/i);
+
+    const title = stripHtml(titleMatch?.[1] || '');
+    const link = stripHtml(linkMatch?.[1] || '');
+    const desc = stripHtml(descMatch?.[1] || '').slice(0, 200);
+    const pubDate = dateMatch?.[1]?.trim() || '';
+
+    if (title && link) {
+      items.push({
+        kind: 'news',
+        title: `[${sourceName}] ${title}`,
+        body: desc ? `**${title}**\n${desc}${desc.length >= 200 ? '...' : ''}` : `**${title}**`,
+        url: link,
+        pubDate,
+      });
+    }
+  }
+  return items;
+}
+
+async function fetchRss(url, sourceName, maxItems = 5) {
+  try {
+    const { data } = await axios.get(url, {
+      timeout: 10000,
+      headers: { 'User-Agent': 'BloodsHubBot/1.0' },
+    });
+    if (data && typeof data === 'string') {
+      return parseRssItems(data, sourceName, maxItems);
+    }
+  } catch {
+    // soft-fail
+  }
+  return [];
+}
 
 async function fetchMeta() {
   const items = [];
 
-  // 1. WoW news
+  // 1. WoW official news (Blizzard)
   items.push({
     kind: 'news',
     title: 'WoW — Ultime Notizie',
@@ -38,7 +90,15 @@ async function fetchMeta() {
     // soft-fail
   }
 
-  // 3. Patch notes
+  // 3. Wowhead RSS feed
+  const wowheadItems = await fetchRss(WOWHEAD_RSS_URL, 'Wowhead', 5);
+  items.push(...wowheadItems);
+
+  // 4. Icy Veins RSS feed
+  const icyveinsItems = await fetchRss(ICYVEINS_RSS_URL, 'Icy Veins', 3);
+  items.push(...icyveinsItems);
+
+  // 5. Patch notes
   items.push({
     kind: 'patch',
     title: 'WoW — Patch Notes',
@@ -46,7 +106,7 @@ async function fetchMeta() {
     url: 'https://worldofwarcraft.blizzard.com/it-it/news/patch-notes',
   });
 
-  // 4. Server status
+  // 6. Server status
   items.push({
     kind: 'server_status',
     title: 'WoW — Stato Realm',
@@ -54,7 +114,7 @@ async function fetchMeta() {
     url: 'https://worldofwarcraft.blizzard.com/it-it/game/status',
   });
 
-  // 5. Raider.IO — mythic+ rankings
+  // 7. Raider.IO — mythic+ rankings
   items.push({
     kind: 'meta',
     title: 'WoW — Mythic+ Rankings (Raider.IO)',
@@ -62,7 +122,7 @@ async function fetchMeta() {
     url: 'https://raider.io/',
   });
 
-  // 6. Warcraft Logs — raid rankings
+  // 8. Warcraft Logs — raid rankings
   items.push({
     kind: 'meta',
     title: 'WoW — Raid Rankings (Warcraft Logs)',

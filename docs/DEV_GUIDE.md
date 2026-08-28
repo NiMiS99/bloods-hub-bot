@@ -291,6 +291,10 @@ Tutte le variabili in `.env` (vedi `.env.example`):
 | RIOT_API_KEY | No | API Riot |
 | WCL_CLIENT_ID/SECRET | No | Warcraft Logs API |
 | GOW_API_KEY | No | Guilds of WoW management API |
+| YOUTUBE_API_KEY | No | YouTube Data API v3 (auto-post video) |
+| YOUTUBE_CHANNEL_ID | No | ID canale YouTube Bloods |
+| TIKTOK_CLIENT_KEY/SECRET | No | TikTok Display API (OAuth2) |
+| TIKTOK_USERNAME | No | Username TikTok Bloods (scrape mode) |
 | ALERT_WEBHOOK_URL | No | Webhook alert Discord |
 
 ---
@@ -317,6 +321,8 @@ Il bot avvia automaticamente questi servizi in `src/index.js`:
 | **DynamicStatusService** | dynamicStatusService.js | 60s | Status bot dinamico |
 | **RaidSummaryService** | raidSummaryService.js | Giornaliero 23:59 | Riepilogo post-raid |
 | **TwitchAlertService** | twitchAlertService.js | 2min | Auto-announce stream membri |
+| **YouTubeService** | youtubeService.js | 15min | Auto-post nuovi video + stats canale |
+| **TikTokService** | tiktokService.js | 15min | Auto-post nuovi TikTok + engagement |
 | MilestoneService | milestoneService.js | Event-driven | Milestone membri |
 | WeeklyStatsService | weeklyStatsService.js | Domenica 18:00 | Stats settimanali |
 | GuildChallengeService | guildChallengeService.js | Event-driven | Challenge community |

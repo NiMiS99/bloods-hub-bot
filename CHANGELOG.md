@@ -20,6 +20,9 @@ Formato basato su [Keep a Changelog](https://keepachangelog.com/it/1.1.0/).
 - `src/services/gowService.js` — integrazione Guilds of WoW API (roster, reclutamento)
 - `src/services/api/raiderIoApi.js` — client Raider.IO (M+ score, raid progress, ilvl)
 - `src/services/twitchAlertService.js` — auto-announce stream Twitch membri
+- `src/services/youtubeService.js` — auto-post nuovi video YouTube + statistiche canale
+- `src/services/tiktokService.js` — auto-post nuovi TikTok + tracking engagement
+- `src/modules/games/wow.js` — integrazione RSS Wowhead + Icy Veins (news automatiche)
 - `scripts/crypto-vault.js` — vault credenziali criptato AES-256-GCM
 - `docs/VAULT.md` — guida uso vault credenziali
 - Canali Discord creati: `#loot-bloods-points` (PvE), `#meme-screenshot` (Community Hub)

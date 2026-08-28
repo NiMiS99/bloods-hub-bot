@@ -54,6 +54,8 @@ const FeedbackService = require('./services/feedbackService');
 const DynamicStatusService = require('./services/dynamicStatusService');
 const RaidSummaryService = require('./services/raidSummaryService');
 const TwitchAlertService = require('./services/twitchAlertService');
+const YouTubeService = require('./services/youtubeService');
+const TikTokService = require('./services/tiktokService');
 const HealthServer = require('./server/healthServer');
 const DashboardServer = require('./server/dashboardServer');
 
@@ -195,6 +197,12 @@ async function main() {
   // Twitch stream alerts (checks every 2min for members streaming)
   TwitchAlertService.start(client);
 
+  // YouTube auto-post new videos + channel stats
+  YouTubeService.start(client);
+
+  // TikTok auto-post new videos
+  TikTokService.start(client);
+
   // Onboarding + ticket panels (post after ready)
   client.on('clientReady', async () => {
     try {
@@ -263,6 +271,8 @@ async function main() {
       DynamicStatusService.stop();
       RaidSummaryService.stop();
       TwitchAlertService.stop();
+      YouTubeService.stop();
+      TikTokService.stop();
       // Stop interval-based services without explicit stop in shutdown
       try { require('./services/xpService').stop(); } catch {}
       try { require('./services/captchaService').stop(); } catch {}

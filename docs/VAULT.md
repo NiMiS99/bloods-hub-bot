@@ -58,6 +58,11 @@ node scripts/crypto-vault.js delete
 | `WCL_CLIENT_ID` | Warcraft Logs client ID | warcraftlogs.com/api/clients |
 | `WCL_CLIENT_SECRET` | Warcraft Logs secret | warcraftlogs.com/api/clients |
 | `GOW_API_KEY` | Guilds of WoW API key | guildsofwow.com/bloods → Manage → API |
+| `YOUTUBE_API_KEY` | YouTube Data API v3 key | Google Cloud Console → abilita YouTube Data API v3 |
+| `YOUTUBE_CHANNEL_ID` | ID canale YouTube Bloods | YouTube Studio → Impostazioni → Avanzate |
+| `TIKTOK_CLIENT_KEY` | TikTok Display API key | TikTok for Developers → crea app |
+| `TIKTOK_CLIENT_SECRET` | TikTok Display API secret | TikTok for Developers → crea app |
+| `TIKTOK_USERNAME` | Username TikTok Bloods | URL profilo TikTok |
 | `STEAM_API_KEY` | Steam API key | steamcommunity.com/dev/apikey |
 | `RIOT_API_KEY` | Riot API key | developer.riotgames.com |
 | `ALERT_WEBHOOK_URL` | Webhook alert Discord | Discord channel → Integrazioni → Webhook |
