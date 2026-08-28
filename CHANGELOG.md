@@ -19,6 +19,9 @@ Formato basato su [Keep a Changelog](https://keepachangelog.com/it/1.1.0/).
 - `src/services/raidSummaryService.js` — riepilogo automatico post-raid (23:59)
 - `src/services/gowService.js` — integrazione Guilds of WoW API (roster, reclutamento)
 - `src/services/api/raiderIoApi.js` — client Raider.IO (M+ score, raid progress, ilvl)
+- `src/services/twitchAlertService.js` — auto-announce stream Twitch membri
+- `scripts/crypto-vault.js` — vault credenziali criptato AES-256-GCM
+- `docs/VAULT.md` — guida uso vault credenziali
 - Canali Discord creati: `#loot-bloods-points` (PvE), `#meme-screenshot` (Community Hub)
 
 ### Cambiato

@@ -316,6 +316,7 @@ Il bot avvia automaticamente questi servizi in `src/index.js`:
 | BirthdayService | birthdayService.js | Giornaliero 09:00 | Auguri compleanno |
 | **DynamicStatusService** | dynamicStatusService.js | 60s | Status bot dinamico |
 | **RaidSummaryService** | raidSummaryService.js | Giornaliero 23:59 | Riepilogo post-raid |
+| **TwitchAlertService** | twitchAlertService.js | 2min | Auto-announce stream membri |
 | MilestoneService | milestoneService.js | Event-driven | Milestone membri |
 | WeeklyStatsService | weeklyStatsService.js | Domenica 18:00 | Stats settimanali |
 | GuildChallengeService | guildChallengeService.js | Event-driven | Challenge community |

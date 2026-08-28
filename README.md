@@ -326,6 +326,7 @@ Il `docker-compose.yml` include:
 | `docs/GUIDE_OFFICER.md` | Officer/RL | Colloqui, raid, BP, moderazione, dashboard admin |
 | `docs/GUIDE_GIOCATORI.md` | Membri gilda | Comandi, XP, BP, progressione, regole |
 | `docs/GUILD_OF_WOW.md` | Officer/Dev | Integrazione Guilds of WoW, Battle.net, WCL, Raider.IO |
+| `docs/VAULT.md` | DevOps | Guida vault credenziali criptate |
 | `docs/DEPLOYMENT.md` | DevOps | Nginx, PM2, SSL, SEO, backup |
 
 ## Licenza

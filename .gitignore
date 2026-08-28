@@ -14,8 +14,13 @@ dashboard/.next/
 _tmp_*
 _discord_audit.txt
 perms_audit.txt
+# Temp files
 *.tmp
 *.bak
+
+# Encrypted credentials vault
+.vault.enc
+.vault.salt
 docs/archive/
 .env.local
 .env.*.local

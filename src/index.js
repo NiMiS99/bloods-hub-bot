@@ -53,6 +53,7 @@ const MusicService = require('./services/musicService');
 const FeedbackService = require('./services/feedbackService');
 const DynamicStatusService = require('./services/dynamicStatusService');
 const RaidSummaryService = require('./services/raidSummaryService');
+const TwitchAlertService = require('./services/twitchAlertService');
 const HealthServer = require('./server/healthServer');
 const DashboardServer = require('./server/dashboardServer');
 
@@ -191,6 +192,9 @@ async function main() {
   // Raid summary auto-post (daily at 23:59, only if raid happened)
   RaidSummaryService.start(client);
 
+  // Twitch stream alerts (checks every 2min for members streaming)
+  TwitchAlertService.start(client);
+
   // Onboarding + ticket panels (post after ready)
   client.on('clientReady', async () => {
     try {
@@ -258,6 +262,7 @@ async function main() {
       FeedbackService.stopWatcher();
       DynamicStatusService.stop();
       RaidSummaryService.stop();
+      TwitchAlertService.stop();
       // Stop interval-based services without explicit stop in shutdown
       try { require('./services/xpService').stop(); } catch {}
       try { require('./services/captchaService').stop(); } catch {}
