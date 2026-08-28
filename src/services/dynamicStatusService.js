@@ -50,6 +50,7 @@ async function getStatuses(client) {
 
 async function rotate(client) {
   try {
+    if (!client?.user) return;
     const statuses = await getStatuses(client);
     const status = statuses[_index % statuses.length];
     _index++;
@@ -61,7 +62,7 @@ async function rotate(client) {
 
 function start(client) {
   _interval = setInterval(() => rotate(client).catch(() => {}), ROTATION_INTERVAL_MS);
-  rotate(client).catch(() => {});
+  setTimeout(() => rotate(client).catch(() => {}), 10000);
   logger.info('DynamicStatusService: started (rotation every 60s).');
 }
 

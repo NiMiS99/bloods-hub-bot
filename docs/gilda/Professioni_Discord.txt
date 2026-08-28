@@ -1,0 +1,23 @@
+-Crafting
+
+Alchemy (Alchimia)
+
+Blacksmithing (Forgiatura)
+
+Engineering (Ingegneria)
+
+Inscription (Runografia)
+
+Jewelcrafting (Oreficeria)
+
+Leatherworking (Conciatura)
+
+Tailoring (Sartoria)
+
+-Gathering
+
+Herbalism (Erbalismo)
+
+Mining (Estrazione)
+
+Skinning (Scuoiatura)

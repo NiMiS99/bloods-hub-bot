@@ -48,3 +48,6 @@ social-media/instagram/posts/*
 !social-media/instagram/posts/.gitkeep
 social-media/instagram/stories/*
 !social-media/instagram/stories/.gitkeep
+
+# Escludi PDF pesanti dai docs gilda
+docs/gilda/*.pdf

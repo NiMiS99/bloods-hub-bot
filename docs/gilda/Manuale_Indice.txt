@@ -1,0 +1,20 @@
+1- Regolamento
+2- Chi siamo
+3- Higlights
+4- Classifica di Gilda
+5- PVP
+6- Housing  
+7- Professioni
+8- Organigramma
+9- Uso del Discord
+10- Ruoli Discord
+11- Tutorial Classe-Specializzazione
+12- Tutorial Prenotazione Raid
+13- Tutorial Prenotazione Spedizione
+14- Tutorial Raid
+15- Tutorial Spedizioni
+16- Tutorial Housing
+17- Tutorial Professioni
+18- Tutorial Arene-Bg (PVP)
+19- Tutorial Bot Discord (Bloods Bot)
+20- Tutorial Ruoli Discord Automatici
