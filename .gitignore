@@ -24,3 +24,27 @@ perms_audit.txt
 docs/archive/
 .env.local
 .env.*.local
+
+# Social media — escludi file pesanti, mantieni struttura
+social-media/raw/*
+!social-media/raw/.gitkeep
+social-media/**/*.mp4
+social-media/**/*.mov
+social-media/**/*.avi
+social-media/**/*.mkv
+social-media/**/*.webm
+social-media/**/*.gif
+social-media/**/*.psd
+social-media/**/*.ai
+social-media/youtube/videos/*
+!social-media/youtube/videos/.gitkeep
+social-media/youtube/shorts/*
+!social-media/youtube/shorts/.gitkeep
+social-media/tiktok/clips/*
+!social-media/tiktok/clips/.gitkeep
+social-media/instagram/reels/*
+!social-media/instagram/reels/.gitkeep
+social-media/instagram/posts/*
+!social-media/instagram/posts/.gitkeep
+social-media/instagram/stories/*
+!social-media/instagram/stories/.gitkeep
