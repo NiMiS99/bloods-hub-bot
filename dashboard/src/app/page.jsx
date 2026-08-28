@@ -15,22 +15,22 @@ const FEATURES = [
   {
     icon: Swords,
     title: 'Raid & Progress',
-    text: 'Roster organizzati, sign-up tramite bot e tracciamento del progress con Warcraft Logs.',
+    text: 'Roster mitico a 20, loot con Bloods Points, tracking presenze e Warcraft Logs. Soft-progress: serio ma senza flame.',
   },
   {
     icon: Gamepad2,
-    title: 'Multi-gioco',
-    text: 'Non solo WoW: sessioni LFG, tornei e game night su tutti i titoli della community.',
+    title: 'Community 360°',
+    text: 'M+, PvP (RBG/arena), social, alt, eventi cross-game. Tag @Social per chi vuole giocare senza obblighi di roster.',
   },
   {
     icon: Bot,
     title: 'Bloods Hub Bot',
-    text: 'Livelli, XP, giveaway, sondaggi, moderazione automatica e pannelli self-service.',
+    text: '71 comandi slash: XP, BP/DKP, loot roll, raid management, moderazione, music, giveaway e pannelli self-service.',
   },
   {
     icon: Shield,
-    title: 'Community sicura',
-    text: 'Staff attivo, automod e sistemi anti-raid per un ambiente sempre sereno.',
+    title: 'Mentorship & Onboarding',
+    text: 'Colloquio standardizzato, mentor 1-to-1, progressione chiara: Membro → Raider → Raider Mitico. Nessuno lasciato indietro.',
   },
 ];
 
@@ -307,9 +307,9 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-r from-bloods-950/80 via-dark-900 to-bloods-950/80" />
         <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-20 text-center">
           <Sparkles className="mx-auto mb-5 text-gold-400" size={32} />
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">Il tuo posto nel raid ti aspetta</h2>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">Il tuo posto nei Bloods ti aspetta</h2>
           <p className="mt-4 text-dark-300 max-w-xl mx-auto">
-            Cerchiamo giocatori motivati per raid, mitiche+ e serate in compagnia. Entra nel Discord e presentati!
+            Cerchiamo player per roster mitico, M+, PvP e social. Apri un ticket su Discord e inizia il tuo percorso!
           </p>
           <a
             href={siteConfig.discordInvite}

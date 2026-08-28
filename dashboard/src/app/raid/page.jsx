@@ -227,6 +227,78 @@ export default function RaidPage() {
             </a>
           </div>
         </section>
+
+        {/* Bloods Points System */}
+        <section className="rounded-2xl border border-dark-800 bg-dark-900/60 p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-white mb-6 inline-flex items-center gap-2">
+            <Shield className="text-gold-400" size={22} /> Bloods Points (BP) System
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-xl border border-dark-800 bg-dark-950/60 p-4">
+              <p className="text-sm font-bold text-gold-300 mb-2">Come si ottengono i BP</p>
+              <ul className="text-xs text-dark-300 space-y-1">
+                <li>• Presenza raid + puntualità (online 15 min prima)</li>
+                <li>• Kill boss e first kill (progress)</li>
+                <li>• Partecipazione M+ gilda</li>
+                <li>• Eventi PvP gilda (RBG/arena)</li>
+              </ul>
+            </div>
+            <div className="rounded-xl border border-dark-800 bg-dark-950/60 p-4">
+              <p className="text-sm font-bold text-gold-300 mb-2">Come funziona il loot</p>
+              <ul className="text-xs text-dark-300 space-y-1">
+                <li>• Roll 1-100 + bid BP (score = roll × (1 + bid/50))</li>
+                <li>• Vince lo score più alto</li>
+                <li>• Il vincitore paga la bid</li>
+                <li>• Saldo consultabile con <code className="text-gold-300">/bp balance</code></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Raider Mitico Progressione */}
+        <section className="rounded-2xl border border-dark-800 bg-dark-900/60 p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-white mb-6 inline-flex items-center gap-2">
+            <Swords className="text-gold-400" size={22} /> Progressione Raider Mitico
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-3 mb-6">
+            <div className="rounded-xl border border-dark-800 bg-dark-950/60 p-4 text-center">
+              <p className="text-sm font-bold text-dark-300">Membro / @Social</p>
+              <p className="mt-1 text-xs text-dark-500">Punto di partenza</p>
+            </div>
+            <div className="rounded-xl border border-dark-800 bg-dark-950/60 p-4 text-center">
+              <p className="text-sm font-bold text-bloods-300">Raider</p>
+              <p className="mt-1 text-xs text-dark-500">Raid heroic, 4+ sett, 60% presenza</p>
+            </div>
+            <div className="rounded-xl border border-dark-800 bg-dark-950/60 p-4 text-center">
+              <p className="text-sm font-bold text-gold-300">Raider Mitico</p>
+              <p className="mt-1 text-xs text-dark-500">Roster 20, 75% presenza, tutti i requisiti</p>
+            </div>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border border-dark-800 bg-dark-950/60 p-4">
+              <p className="text-xs font-bold text-gold-300 mb-2">Requisiti Raider Mitico</p>
+              <ul className="text-xs text-dark-400 space-y-1">
+                <li>• Discord + mic obbligatori</li>
+                <li>• Online 15 min prima</li>
+                <li>• Consumabili: fiala, cibo, runa, pozioni, gemme, enchant</li>
+                <li>• Addon: DBM/BigWigs, WA, Details</li>
+                <li>• Presenza 75% (6/8 raid al mese)</li>
+                <li>• M+ settimanale: key +6/+8</li>
+                <li>• Warcraft Logs attivi</li>
+              </ul>
+            </div>
+            <div className="rounded-xl border border-dark-800 bg-dark-950/60 p-4">
+              <p className="text-xs font-bold text-gold-300 mb-2">Mentorship</p>
+              <ul className="text-xs text-dark-400 space-y-1">
+                <li>• @Social può salire a Raider con mentor dedicato</li>
+                <li>• Raider può puntare al Mitico con supporto RL</li>
+                <li>• Comunicazione trasparente sulla selezione</li>
+                <li>• Piano di sviluppo personalizzato</li>
+                <li>• Nessuno si sente &quot;scartato&quot;</li>
+              </ul>
+            </div>
+          </div>
+        </section>
       </div>
     </SiteShell>
   );

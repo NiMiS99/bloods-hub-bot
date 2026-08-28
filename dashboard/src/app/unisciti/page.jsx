@@ -2,7 +2,7 @@
 
 import {
   UserPlus, MessageCircle, ScrollText, Swords, HeartHandshake,
-  CheckCircle2, ArrowRight, Shield, Sparkles
+  CheckCircle2, ArrowRight, Shield, Sparkles, CalendarDays
 } from 'lucide-react';
 import SiteShell, { PageHeader } from '@/components/site/SiteShell';
 import { siteConfig } from '@/lib/siteConfig';
@@ -11,37 +11,40 @@ const STEPS = [
   {
     icon: MessageCircle,
     title: 'Entra nel Discord',
-    text: 'Clicca sul link d\'invito e accedi al server Bloods. Leggi il canale regole e accettale per sbloccare i canali.',
+    text: 'Clicca sul link d\'invito e accedi al server Bloods. Il bot ti assegna @Guest e ti invita ad aprire un ticket.',
   },
   {
     icon: ScrollText,
-    title: 'Presentati',
-    text: 'Scrivi nel canale presentazioni: classe, ruolo, esperienza di gioco e cosa cerchi dalla gilda.',
+    title: 'Apri un ticket',
+    text: 'Usa il canale #apri-ticket e scegli: Reclutamento Raider, Reclutamento PvP, Reclutamento Social o Supporto.',
   },
   {
     icon: UserPlus,
-    title: 'Parla con un officer',
-    text: 'Un officer ti contatterà per una breve chiacchierata e ti assegnerà i ruoli giusti tramite il pannello del bot.',
+    title: 'Colloquio (10 min)',
+    text: 'Un Officer ti fa un breve colloquio: esperienza, ruolo, disponibilità, obiettivi. Al termine ti assegna il tag giusto (@Raider, @PvP, @Social).',
   },
   {
     icon: Swords,
-    title: 'Firma per il primo raid',
-    text: 'Usa i pannelli di sign-up del bot per iscriverti al prossimo raid o alla prossima serata mitiche+.',
+    title: 'Inizia a giocare',
+    text: 'Nickname normalizzato, presentazione in #presentazioni, mentor assegnato se vuoi salire al roster raid. Benvenuto nei Bloods!',
   },
 ];
 
 const SEEKING = [
-  { role: 'Healer', desc: 'Priorità alta per il roster raid' },
-  { role: 'Tank', desc: 'Posti limitati, esperienza richiesta' },
-  { role: 'DPS Ranged', desc: 'Sempre benvenuti' },
-  { role: 'DPS Melee', desc: 'Sempre benvenuti' },
+  { role: 'Tank (2-3)', desc: 'Main + off-tank per roster mitico' },
+  { role: 'Healer (4-5)', desc: 'Main + off per roster mitico' },
+  { role: 'DPS (12-14)', desc: 'Melee/ranged bilanciati per mitico' },
+  { role: 'PvP Player', desc: 'RBG 1800+ e arena 2v2/3v3' },
+  { role: 'Social / Returning', desc: 'M+, eventi, alt, community. Senza obblighi roster' },
 ];
 
 const VALUES = [
-  'Rispetto e zero tossicità: si gioca per divertirsi insieme.',
-  'Presenza ai raid confermata tramite i pannelli del bot.',
-  'Aiutare i nuovi membri è parte del DNA della gilda.',
-  'Progress sereno: niente obblighi assurdi, ma impegno costante.',
+  'Soft-progress: impegno costante nei raid, ma senza obblighi assurdi. La vita reale viene prima.',
+  'Rispetto reciproco sempre obbligatorio: zero flame, zero tossicità (regolamento v3.0).',
+  'Discord + microfono obbligatori per tutte le attività di gilda.',
+  'Sistema loot trasparente con Bloods Points (bot Discord).',
+  'Mentorship 1-to-1: @Social può salire a Raider con supporto dedicato.',
+  'Policy "no silent kick": contatto personale prima di qualsiasi rimozione per inattività.',
 ];
 
 export default function UniscitiPage() {
@@ -53,6 +56,26 @@ export default function UniscitiPage() {
       />
 
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pb-24 space-y-16">
+        {/* Schedule */}
+        <section className="rounded-2xl border border-dark-800 bg-dark-900/60 p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-white mb-6 inline-flex items-center gap-2">
+            <CalendarDays className="text-gold-400" size={22} /> Schedule settimanale
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="rounded-xl border border-dark-800 bg-dark-950/60 p-4 text-center">
+              <p className="text-sm font-bold text-bloods-300">Raid Mitico</p>
+              <p className="mt-1 text-xs text-dark-400">{siteConfig.schedule.mythic}</p>
+            </div>
+            <div className="rounded-xl border border-dark-800 bg-dark-950/60 p-4 text-center">
+              <p className="text-sm font-bold text-gold-300">Raid Social/Alt</p>
+              <p className="mt-1 text-xs text-dark-400">{siteConfig.schedule.social}</p>
+            </div>
+            <div className="rounded-xl border border-dark-800 bg-dark-950/60 p-4 text-center">
+              <p className="text-sm font-bold text-blue-300">PvP Night</p>
+              <p className="mt-1 text-xs text-dark-400">{siteConfig.schedule.pvp}</p>
+            </div>
+          </div>
+        </section>
         {/* Steps */}
         <section>
           <h2 className="text-2xl font-bold text-white mb-8 text-center">Come entrare</h2>

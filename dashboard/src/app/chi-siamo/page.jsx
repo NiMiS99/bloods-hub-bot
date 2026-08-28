@@ -5,23 +5,23 @@ import SiteShell, { PageHeader } from '@/components/site/SiteShell';
 import { siteConfig } from '@/lib/siteConfig';
 
 const HISTORY = [
-  { year: 'Fondazione', text: 'Bloods nasce come gilda italiana su Pozzo dell\'Eternità, con l\'obiettivo di unire progress e amicizia.' },
-  { year: 'Crescita', text: 'La community si espande oltre WoW: tornei, game night e sezioni dedicate ad altri titoli.' },
-  { year: 'Oggi', text: 'Una gilda strutturata con sistemi automatizzati (Bloods Hub Bot), raid organizzati e un Discord attivo 24/7.' },
+  { year: '20/09/2025', text: 'Bloods nasce su Pozzo dell\'Eternità (Orda) come gilda italiana soft-progress, con l\'obiettivo di unire progress raid e amicizia, senza i limiti delle gilde hardcore.' },
+  { year: 'Crescita', text: 'La community si espande: bot Bloods Points per il loot, sistema XP, dashboard web, tracciamento presenze raid e integrazione Warcraft Logs.' },
+  { year: 'Rilancio Midnight', text: 'Con l\'arrivo di Midnight, la gilda si rilancia con regolamento v3.0, roster mitico a 20, braccio PvP strutturato (RBG + arena) e programma mentorship per Social.' },
 ];
 
 const VALUES = [
-  { icon: Heart, title: 'Rispetto', text: 'Zero tossicità. Si gioca per divertirsi insieme, non per flame.' },
-  { icon: Swords, title: 'Progress', text: 'Impegno costante nei raid, ma senza obblighi assurdi. La vita reale viene prima.' },
-  { icon: Users, title: 'Community', text: 'Aiutare i nuovi membri è parte del nostro DNA. Nessuno viene lasciato indietro.' },
-  { icon: Shield, title: 'Organizzazione', text: 'Sistemi automatizzati, roster gestiti, presenze tracciate. Tutto trasparente.' },
+  { icon: Heart, title: 'Rispetto', text: 'Zero tossicità, zero flame sui wipe. Il rispetto reciproco è SEMPRE obbligatorio (regolamento c1-c6).' },
+  { icon: Swords, title: 'Soft-Progress', text: 'Mentalità rivolta al progress, ma con approccio tollerante. La chiusura del raid non è obiettivo principale, ma auspicabile.' },
+  { icon: Users, title: 'Community 360°', text: 'Accogliamo social, returning e casual con tag @Social. Mentorship 1-to-1 per chi vuole salire al roster raid.' },
+  { icon: Shield, title: 'Organizzazione', text: 'Discord strutturato, bot Bloods Points, presenze tracciate, Warcraft Logs, regolamento v3.0. Tutto trasparente.' },
 ];
 
 const FEATURES = [
-  { icon: Bot, title: 'Bloods Hub Bot', text: 'Bot custom con 43+ comandi: livelli XP, BP/DKP, raid management, moderazione, giveaway e altro.' },
-  { icon: Swords, title: 'Raid System', text: 'Eligibilità automatica, tracking presenze, integrazione Warcraft Logs, assegnazione BP.' },
-  { icon: Trophy, title: 'Classifiche', text: 'XP, messaggi, ore vocali e BP: tutto tracciato e visibile sul sito.' },
-  { icon: Gamepad2, title: 'Multi-gioco', text: 'Non solo WoW: LFG, tornei e game night su tutti i titoli della community.' },
+  { icon: Bot, title: 'Bloods Hub Bot', text: '71 comandi slash: XP, BP/DKP, raid management, loot roll, moderazione, giveaway, music e altro.' },
+  { icon: Swords, title: 'Raid & BP System', text: 'Eligibilità automatica, tracking presenze, loot con Bloods Points (roll + bid DKP), integrazione Warcraft Logs.' },
+  { icon: Trophy, title: 'Classifiche', text: 'XP, messaggi, ore vocali e BP: tutto tracciato e visibile sul sito web.' },
+  { icon: Gamepad2, title: 'Multi-gioco 360°', text: 'Raid mitico, M+, PvP (RBG/arena), social, alt, eventi cross-game. C\'è posto per tutti.' },
 ];
 
 export default function ChiSiamoPage() {
@@ -29,7 +29,7 @@ export default function ChiSiamoPage() {
     <SiteShell>
       <PageHeader
         title="Chi siamo"
-        subtitle={`La storia, i valori e gli strumenti della gilda Bloods — ${siteConfig.realm} (${siteConfig.region})`}
+        subtitle={`Gilda IT soft-progress · Fondata il ${siteConfig.founded} — ${siteConfig.realm} (${siteConfig.region}) · ${siteConfig.faction}`}
       />
 
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pb-24 space-y-16">
@@ -89,6 +89,31 @@ export default function ChiSiamoPage() {
           </div>
         </section>
 
+        {/* Gradi gilda */}
+        <section>
+          <h2 className="text-2xl font-bold text-white mb-8 text-center">Gradi della gilda</h2>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { grade: 'Owner', desc: 'Decisioni finali, espulsioni' },
+              { grade: 'Founder', desc: 'Co-fondatori, proposte modifiche' },
+              { grade: 'Consigliere', desc: 'Coordina Officer, espulsioni' },
+              { grade: 'Officer', desc: 'Convivenza, segnala problemi' },
+              { grade: 'Officer Reclutamento', desc: 'Reclutamento dedicato' },
+              { grade: 'Raid Leader', desc: 'Gestisce raid e tattiche' },
+              { grade: 'Raider', desc: 'Partecipa ai raid settimanali' },
+              { grade: 'Membro', desc: 'Grado di partenza' },
+            ].map((g) => (
+              <div key={g.grade} className="rounded-xl border border-dark-800 bg-dark-900/60 p-4">
+                <p className="font-bold text-gold-300 text-sm">{g.grade}</p>
+                <p className="mt-1 text-xs text-dark-400">{g.desc}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 text-center text-xs text-dark-500">
+            Tag trasversali: @Tank / @Healer / @DPS · @Raider Mitico · @PvP · @Social · @Mentor
+          </p>
+        </section>
+
         {/* CTA */}
         <section className="relative overflow-hidden rounded-3xl border border-bloods-900 text-center">
           <div className="absolute inset-0 bg-gradient-to-r from-bloods-950 via-dark-900 to-bloods-950" />
@@ -96,7 +121,7 @@ export default function ChiSiamoPage() {
             <Sparkles className="mx-auto mb-4 text-gold-400" size={30} />
             <h2 className="text-3xl font-extrabold text-white">Vuoi far parte della storia?</h2>
             <p className="mt-3 text-dark-300 max-w-lg mx-auto">
-              Cerchiamo giocatori motivati. Entra nel Discord e presentati.
+              Cerchiamo player per roster mitico, M+, PvP e social. Entra nel Discord e apri un ticket reclutamento.
             </p>
             <a
               href={siteConfig.discordInvite}
