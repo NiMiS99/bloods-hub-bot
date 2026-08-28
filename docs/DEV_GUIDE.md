@@ -1,127 +1,184 @@
 # DEV_GUIDE — Bloods Hub Bot
 
-Audience: **developers** maintaining the bot, adding game APIs, evolving the schema, and deploying updates.
+Audience: **sviluppatori** che mantengono il bot, aggiungono feature, evolvono lo schema e deployano aggiornamenti.
 
 ---
 
-## 1. Project layout
+## 1. Struttura del progetto
 
 ```
 bloods-hub-bot/
-├── db/
-│   ├── 00_schema.sql          # full MySQL DDL (idempotent)
-│   └── 01_seed_games.sql      # default games catalog
-├── deploy/
-│   ├── Dockerfile
-│   ├── docker-compose.yml
-│   ├── ecosystem.config.cjs   # PM2
-│   └── VPS_DEPLOY.md
-├── docs/
-│   ├── ADMIN_GUIDE.md
-│   └── DEV_GUIDE.md           # this file
 ├── src/
-│   ├── index.js               # entry point
-│   ├── config/index.js        # env-var loader
-│   ├── commands/              # slash commands (auto-loaded, recursive)
-│   │   ├── admin/
-│   │   │   ├── game.js
-│   │   │   ├── rolepanel.js
-│   │   │   └── setup.js
-│   │   ├── leaderboard.js
-│   │   ├── profile.js
-│   │   ├── link.js
-│   │   ├── refreshstats.js
-│   │   ├── gamemeta.js
-│   │   ├── stats.js
-│   │   └── ping.js
-│   ├── events/                # Discord gateway event listeners (auto-loaded)
-│   ├── handlers/
-│   │   ├── commandHandler.js
-│   │   └── eventHandler.js
-│   ├── services/
-│   │   ├── activityTracker.js
-│   │   ├── leaderboardScheduler.js
-│   │   ├── metaScheduler.js
-│   │   └── api/
-│   │       ├── baseApi.js
-│   │       ├── steamApi.js
-│   │       ├── battleNetApi.js
-│   │       ├── riotApi.js
-│   │       └── index.js       # provider registry
-│   ├── modules/games/         # per-game meta fetchers (one file per game code)
-│   ├── ui/
-│   │   ├── roleSelection.js
-│   │   └── roleSelectionInteractions.js
-│   ├── db/
-│   │   ├── index.js           # sequelize instance + associations
-│   │   └── models/            # one Sequelize model per table
-│   ├── scripts/
-│   │   ├── deploy-commands.js
-│   │   ├── migrate.js
-│   │   └── seed.js
-│   └── utils/
-│       ├── logger.js
-│       ├── embed.js
-│       └── format.js
-└── package.json
+│   ├── index.js               # Entry point: avvia bot + dashboard server
+│   ├── config/index.js        # Loader variabili d'ambiente (.env)
+│   ├── commands/              # 71 comandi slash (auto-load ricorsivo)
+│   │   ├── admin/             # 20 comandi admin (setup, game, giveaway, ...)
+│   │   ├── mod/               # 9 comandi moderazione (mute, warn, purge, ...)
+│   │   └── *.js               # 42 comandi pubblici (bp, raid, lfg, music, ...)
+│   ├── events/                # 12 event handler Discord (auto-load)
+│   ├── handlers/              # Command + event handler
+│   ├── services/              # 50+ servizi
+│   │   ├── api/               # Provider API esterne (Steam, Battle.net, Riot)
+│   │   ├── xpService.js       # Sistema XP con curva quadratica
+│   │   ├── raidEligibilityChecker.js
+│   │   ├── raidAttendanceService.js
+│   │   ├── automodService.js
+│   │   ├── musicService.js    # @discordjs/voice + play-dl
+│   │   └── ...
+│   ├── server/                # Express API
+│   │   ├── dashboardServer.js # Server principale (port 4567)
+│   │   ├── healthServer.js    # Health check separato (port 3001)
+│   │   ├── middleware/        # auth.js (JWT), validate.js (input)
+│   │   └── routes/            # 21 file route (tutte protette tranne public.js)
+│   ├── db/                    # Sequelize ORM
+│   │   ├── index.js           # Istanza + associazioni
+│   │   ├── migrations/        # 4 migrazioni
+│   │   └── models/            # 40 modelli Sequelize
+│   ├── modules/games/         # 9 game meta fetcher (wow, lol, valorant, ...)
+│   ├── ui/                    # Interazioni componenti Discord
+│   └── utils/                 # logger, embed, format, permissions, audit
+├── dashboard/                 # Next.js 14 (static export)
+│   └── src/
+│       ├── app/               # 7 pagine pubbliche + 30+ admin
+│       ├── components/        # Componenti React condivisi
+│       └── lib/               # siteConfig, utils, API client
+├── tests/                     # 5 suite test (293 assertions)
+│   ├── pipeline.js            # 217 assertions (logica servizi)
+│   ├── unit.test.js           # 37 assertions (XP, BP, RaidService)
+│   ├── api.test.js            # 16 assertions (API integration)
+│   ├── e2e.test.js            # 23 assertions (E2E smoke)
+│   └── smoke.test.js          # Smoke test build
+├── scripts/                   # Script utility (audit, backup, migrate)
+├── docs/                      # Documentazione
+├── Dockerfile                 # Container build
+├── docker-compose.yml         # Bot + MySQL
+├── ecosystem.config.js        # PM2 config
+├── eslint.config.js           # Linting config
+└── .env.example               # Template variabili
 ```
 
-### Conventions
+### Convenzioni
 
-- **CommonJS** (`require`/`module.exports`) — no ESM config headaches on Windows/Linux.
-- Slash commands are auto-discovered from `src/commands/**/<file>.js`. Each must export `{ data: SlashCommandBuilder, execute }` (and optionally `autocomplete`).
-- Events are auto-discovered from `src/events/<file>.js`. Each exports `{ name, once?, execute }`.
-- DB access goes through the Sequelize models exported from `src/db`. Never use raw SQL in commands except for performance-critical aggregations (see `leaderboardScheduler._upsert`).
-- All embeds use the helpers in `src/utils/embed.js` for consistent branding.
+- **CommonJS** ovunque (`require`/`module.exports`) — niente ESM
+- Comandi: auto-discovery da `src/commands/**/`. Ogni file esporta `{ data: SlashCommandBuilder, execute }`
+- Eventi: auto-discovery da `src/events/`. Ogni file esporta `{ name, once?, execute }`
+- DB: Sequelize models in `src/db/models/`, uno per tabella. Mai SQL raw tranne aggregazioni critiche
+- Embed: usa helper `src/utils/embed.js` per branding coerente
+- UI: tutti i testi in italiano, codice in inglese
 
 ---
 
-## 2. Local development
+## 2. Sviluppo locale
 
 ```bash
-cp .env.example .env          # fill in DISCORD_TOKEN, DB creds, API keys
+cp .env.example .env          # riempi DISCORD_TOKEN, DB, API keys
 npm install
-npm run migrate               # creates tables (idempotent)
-npm run seed                  # inserts default games catalog
-npm run deploy:commands       # registers slash commands (guild-scoped if GUILD_ID set)
-npm run dev                   # nodemon — auto-restart on file changes
+npm run db:migrate             # crea/aggiorna tabelle (idempotente)
+npm run seed                   # inserisce giochi di default
+npm run deploy:commands        # registra slash command su Discord
+npm run dev                    # nodemon — auto-restart
 ```
 
-Recommended: use a local MySQL (or `docker compose up db` to run only the DB container).
+Per la dashboard:
+```bash
+cd dashboard && npm install && npm run dev    # dev server Next.js
+npm run dashboard:build                        # build static export
+```
 
 ---
 
-## 3. Database schema
+## 3. Database
 
-See `db/00_schema.sql` for the canonical DDL. Sequelize models in `src/db/models` mirror it 1:1 and are kept in sync via `sequelize.sync({ alter: false })` at startup (creates missing tables only — never drops).
+### Modelli principali (40 tabelle)
 
-### Tables
+| Modello | Tabella | Scopo |
+|---------|---------|-------|
+| Guild | guilds | Config per-server (channel IDs, settings JSON) |
+| User | users | Profilo membro (XP, livello, messaggi, voice) |
+| Game | games | Catalogo giochi (role_id, category_id, api_provider) |
+| UserGame | user_games | Membership molti-a-molti (self-role panel) |
+| BpUser | bp_users | Saldo Bloods Points per utente |
+| BpLootHistory | bp_loot_history | Storico loot assegnati |
+| BpActiveRoll | bp_active_rolls | Roll attivi per loot in corso |
+| BpRaidRoster | bp_raid_roster | Roster raid mitico (20 player) |
+| RaidConfig | raid_configs | Config raid (giorni, orari, requisiti) |
+| RaidEligibility | raid_eligibilities | Check eligibilità per utente |
+| RaidAttendance | raid_attendances | Presenze per sessione raid |
+| ActivityLog | activity_logs | Log eventi voice/message |
+| AuditLog | audit_logs | Trail azioni admin |
+| CommunityEvent | community_events | Eventi community |
+| Giveaway | giveaways | Giveaway attivi/passati |
+| Tournament | tournaments | Tornei |
+| Warning | warnings | Warn moderazione |
+| Suggestion | suggestions | Suggerimenti membri |
+| Feedback | feedbacks | Feedback membri |
 
-| Table | Purpose |
-|-------|---------|
-| `guilds` | Per-server config (channel ids, everyone role, settings JSON). |
-| `users` | Discord member profile, server-scoped (composite PK `user_id, guild_id`). Carries `legacy_wow_member` / `legacy_wow_rank`. |
-| `games` | Catalog of supported games. `role_id` & `category_id` link to Discord. `api_provider` selects the integration. |
-| `user_games` | Many-to-many membership (self-assigned via role panel). |
-| `external_accounts` | Links Discord users to SteamID64 / BattleTag / Riot PUUID. |
-| `game_stats` | Flexible per-user-per-game metrics (`metric` + `value_num`/`value_str`). |
-| `activity_log` | Raw voice/message event log for analytics. |
-| `leaderboard_cache` | Cached leaderboard snapshots (refreshed every 5 min by the scheduler). |
-| `game_meta` | Cached patch/meta/server-status entries per game. |
-| `audit_log` | Staff action audit trail. |
+### Aggiungere una colonna/tabella
 
-### Adding a column / table
-
-1. Add the column to `db/00_schema.sql` (use `ALTER TABLE ... ADD COLUMN IF NOT EXISTS` for idempotency, or write a new `db/02_*.sql` migration file).
-2. Update the corresponding Sequelize model in `src/db/models/<Model>.js`.
-3. Re-run `npm run migrate`.
-4. If the change is breaking, bump the migration file number and document it here.
+1. Crea migrazione in `src/db/migrations/` con timestamp
+2. Aggiorna il modello Sequelize in `src/db/models/`
+3. Esegui `npm run db:migrate`
+4. Aggiorna test se necessario
 
 ---
 
-## 4. Adding a new game API
+## 4. Aggiungere un nuovo comando slash
 
-The provider abstraction lives in `src/services/api/`. Each provider extends `BaseGameApi` and implements:
+1. Crea `src/commands/<name>.js` (o `src/commands/<category>/<name>.js`)
+2. Esporta:
+```js
+const { SlashCommandBuilder } = require('discord.js');
+module.exports = {
+  data: new SlashCommandBuilder().setName('foo').setDescription('…'),
+  async execute(interaction, client) { /* … */ },
+  // optional: async autocomplete(interaction) { … }
+};
+```
+3. Restart del bot (auto-load) + `npm run deploy:commands`
+
+### Routing interazioni
+
+`src/events/interactionCreate.js` smista:
+- `isChatInputCommand` → `client.commands.get(name).execute`
+- `isButton` / `isStringSelectMenu` → routing per prefix customId (`role:`, `ticket:`, `event:`, `lfg:`, `spedizione:`)
+- `isAutocomplete` → `command.autocomplete`
+
+---
+
+## 5. API REST
+
+### Route protette (admin)
+Tutte le route in `src/server/routes/` (tranne `public.js`) usano:
+```
+requireAuth(jwtSecret) → requireGuildMember(client) → requireAdmin()
+```
+
+### Route pubbliche (no auth)
+`src/server/routes/public.js` espone endpoint read-only cached 60s:
+- `GET /api/public/info` — stats gilda
+- `GET /api/public/leaderboard` — classifiche
+- `GET /api/public/events` — eventi attivi
+- `GET /api/public/raid` — config + roster raid
+- `GET /api/public/bp/leaderboard` — classifica BP
+- `GET /api/public/bp/loot` — loot recente
+- `GET /api/public/giveaways` — giveaway attivi
+- `GET /api/public/tournaments` — tornei attivi
+- `GET /api/public/hall-of-fame` — hall of fame
+- `GET /api/public/discord-widget` — widget Discord
+- `GET /api/public/docs` — endpoint docs
+
+### Aggiungere una nuova route API
+
+1. Crea `src/server/routes/<name>.js`
+2. Esporta funzione che riceve `(client, jwtSecret)` e restituisce `express.Router()`
+3. Proteggi con `requireAuth` + `requireGuildMember` + `requireAdmin`
+4. Registra in `src/server/dashboardServer.js`
+
+---
+
+## 6. Aggiungere una nuova game API
+
+Il provider abstraction vive in `src/services/api/`. Ogni provider estende `BaseGameApi`:
 
 ```js
 async fetchProfile(externalId, region?)   // -> normalized profile object
@@ -129,122 +186,120 @@ async fetchStats(externalId, region?)     // -> [{ metric, valueNum?, valueStr? 
 async refreshForUser(models, user, account)  // inherited — upserts into game_stats
 ```
 
-### Step-by-step: add a new provider (e.g. "epic")
+### Step: aggiungere un nuovo provider
 
-1. **Create the client** — `src/services/api/epicApi.js`:
-   ```js
-   const BaseGameApi = require('./baseApi');
-   class EpicApi extends BaseGameApi {
-     constructor(gameCode) { super({ provider: 'epic', gameCode }); }
-     get enabled() { return Boolean(process.env.EPIC_API_KEY); }
-     async fetchStats(accountId, region) {
-       // call Epic API, return [{ metric: 'wins', valueNum: 12 }, ...]
-     }
-   }
-   module.exports = EpicApi;
-   ```
-2. **Register it** — in `src/services/api/index.js` add a `case 'epic'` and `register('epic', '<gameCode>')` for each game using it.
-3. **Add env var** — `EPIC_API_KEY` to `.env.example` and `src/config/index.js`.
-4. **Add the game** — either via `/game add` (sets `api_provider=epic`) or insert a row into `games` directly.
-5. **Test** — `/link epic <accountId>` then `/refreshstats`.
+1. Crea `src/services/api/<provider>Api.js` estendendo `BaseGameApi`
+2. Registra in `src/services/api/index.js` con `case '<provider>'`
+3. Aggiungi env var in `.env.example` e `src/config/index.js`
+4. Aggiungi il gioco via `/game add` o `seed.js`
+5. Test: `/link <provider> <accountId>` + `/refreshstats`
 
-### Adding a new game to an existing provider
+### Meta fetcher per gioco
 
-Just `register('<provider>', '<newGameCode>')` in `src/services/api/index.js` and add a row to the `games` table (via `/game add` or `seed.js`). No other code changes needed if the provider already supports the game's endpoints.
-
-### Per-game meta fetchers
-
-For patch notes / meta / server status that don't come from a stats API, add a file `src/modules/games/<gameCode>.js` exporting `fetchMeta()` returning `[{ kind, title, body?, url? }]`. The `MetaScheduler` will pick it up automatically every 6 hours. See `src/modules/games/wow.js` and `_template.js`.
+Per patch note/meta/server status: crea `src/modules/games/<gameCode>.js` con `fetchMeta()` che restituisce `[{ kind, title, body?, url? }]`. Il `MetaScheduler` lo esegue ogni 6 ore.
 
 ---
 
-## 5. Adding a new slash command
+## 7. Activity tracking & leaderboards
 
-1. Create `src/commands/<name>.js` (or `src/commands/<category>/<name>.js`).
-2. Export:
-   ```js
-   const { SlashCommandBuilder } = require('discord.js');
-   module.exports = {
-     data: new SlashCommandBuilder().setName('foo').setDescription('…'),
-     async execute(interaction, client) { /* … */ },
-     // optional: async autocomplete(interaction) { … }
-   };
-   ```
-3. Restart the bot (auto-loads) and run `npm run deploy:commands` to register with Discord.
-
-### Interaction routing
-
-`src/events/interactionCreate.js` routes:
-- `isChatInputCommand` → `client.commands.get(name).execute`
-- `isButton` / `isStringSelectMenu` → customId prefix `role:` → `src/ui/roleSelectionInteractions.js`. To add new component groups, extend the prefix routing there (e.g. `vote:`, `ticket:`).
-- `isAutocomplete` → `command.autocomplete`.
+- **Voice**: `ActivityTracker` ticka ogni 60s, calcola secondi in vocale, incrementa `users.total_voice_seconds`
+- **Messaggi**: `messageCreate` incrementa `users.total_messages` e logga in `activity_logs`
+- **Stats esterne**: `/refreshstats` chiama i provider API che upsertano `game_stats`
+- **Leaderboard cache**: `LeaderboardScheduler` ogni 5 min ricostruisce `leaderboard_cache`
 
 ---
 
-## 6. Activity tracking & leaderboards
+## 8. Sicurezza
 
-- **Voice time**: `ActivityTracker` (`src/services/activityTracker.js`) ticks every `ACTIVITY_TRACK_INTERVAL_MS` (default 60s), computes elapsed seconds per connected member, increments `users.total_voice_seconds`, and writes `activity_log` rows of type `voice_seconds`.
-- **Messages**: `messageCreate` event increments `users.total_messages` and writes `activity_log` rows of type `message`.
-- **External stats**: `refreshstats` command calls each provider's `refreshForUser`, which upserts `game_stats` rows.
-- **Leaderboard cache**: `LeaderboardScheduler` runs every 5 min (cron) and rebuilds `leaderboard_cache` rows for every (guild, game, metric) combination it finds, plus the two Discord-activity metrics. `/leaderboard` reads from cache and falls back to a live query if no cache row exists yet.
-
-To add a new leaderboard metric, just write `game_stats` rows with that `metric` value — the scheduler will pick it up automatically.
-
----
-
-## 7. Configuration & environment
-
-All config is read in `src/config/index.js` from `.env`. Required vars throw at startup; optional ones default sensibly. See `.env.example` for the full list.
-
-API keys are optional per provider — if a key is missing, `provider.enabled` returns `false` and `refreshForUser` soft-fails (logged at warn level) rather than crashing.
+- **JWT**: cookie httpOnly + secure + sameSite=lax, 7 giorni
+- **CORS**: environment-aware (`bloodswow.it` in prod, `localhost` in dev)
+- **Rate limiting**: 100 req/15min API, 5 req/15min auth, 60 req/15min pubbliche
+- **Helmet**: HSTS preload, X-Frame-Options, X-Content-Type-Options, Referrer-Policy
+- **Body sanitizer**: strip HTML tags + max 5000 char (anti-XSS)
+- **Input validation**: middleware `requireBodyFields`, `validateString`, `isValidDiscordId`, `isValidCron`
+- **Audit log**: ogni azione admin nel DB
+- **Music service**: graceful error handling per servizi non disponibili
+- Il bot non logga mai token o API key
 
 ---
 
-## 8. Deployment
+## 9. Test
 
-Two supported paths, both documented in `deploy/`:
+```bash
+npm run test:all      # 293 assertions totali
+npm run test:pipeline # 217 assertions — logica servizi
+npm run test:unit     # 37 assertions — XP, BP, RaidService
+npm run test:api      # 16 assertions — API integration (mock)
+npm run test:e2e      # 23 assertions — E2E smoke (dashboard + sito)
+```
 
-- **Docker** — `deploy/docker-compose.yml` runs MySQL + the bot together. `docker compose --env-file .env up -d --build`. The schema is auto-loaded from `db/` via MySQL's `docker-entrypoint-initdb.d`.
-- **Bare-metal / PM2** — see `deploy/VPS_DEPLOY.md` and `deploy/ecosystem.config.cjs`.
+CI/CD: GitHub Actions esegue lint, smoke, pipeline, unit, API, E2E, e dashboard build.
 
-### Updating a production deployment
+---
 
+## 10. Deploy
+
+### PM2 (produzione attuale)
+```bash
+npm run dashboard:build         # build frontend
+pm2 restart bloods-hub-bot --update-env
+pm2 save
+```
+
+### Docker
+```bash
+docker compose up -d --build    # bot + MySQL con healthcheck e log rotation
+```
+
+### Update produzione
 ```bash
 git pull
 npm ci --omit=dev
-npm run migrate           # idempotent — safe to run any time
-npm run deploy:commands   # re-register slash commands
-pm2 restart bloods-hub-bot   # or: docker compose up -d --build
+npm run db:migrate
+npm run deploy:commands
+npm run dashboard:build
+pm2 restart bloods-hub-bot --update-env
+pm2 save
 ```
 
 ---
 
-## 9. Logging & observability
+## 11. Logging
 
-- Winston logger (`src/utils/logger.js`) writes to console + daily-rotating files in `logs/` (`bot-YYYY-MM-DD.log`, `error-YYYY-MM-DD.log`, 14/30 day retention).
-- Set `LOG_LEVEL=debug` for verbose output, `DB_LOGGING=true` to log every SQL query.
-- PM2/Docker both capture stdout/stderr.
-
----
-
-## 10. Security notes
-
-- The bot DB user should be a **dedicated low-privilege user** with grants only on the `bloods_hub` database.
-- `.env` is gitignored — never commit real tokens. Use Discord's developer portal to rotate the token if it leaks.
-- External account IDs (SteamID64, BattleTag, PUUID) are stored in `external_accounts`. They are not sensitive on their own but treat them as PII — do not expose them in public channels. `/profile` only shows them to the user themselves.
-- The bot never logs full tokens or API keys; Winston is configured to not serialize `Authorization` headers.
+- Winston logger (`src/utils/logger.js`)
+- Log giornalieri rotanti in `logs/` (14 giorni retention, 30gg errori)
+- `LOG_LEVEL=debug` per output verbose
+- `DB_LOGGING=true` per log ogni query SQL
 
 ---
 
-## 11. Testing checklist before a release
+## 12. Configuration
 
-- [ ] `npm run migrate` runs clean on a fresh DB.
-- [ ] `npm run seed` inserts the default games without duplicates.
-- [ ] `npm run deploy:commands` registers all commands (check Discord).
-- [ ] `/setup run` on a test guild: creates the 3 public channels, locks `@everyone`, preserves a fake "legacy WoW" category.
-- [ ] `/game add` creates role + private category; `/rolepanel` lists the new game.
-- [ ] Self-role menu grants and removes the role; `user_games` rows match.
-- [ ] `/link steam <id>` + `/refreshstats` populates `game_stats` (if Steam key set).
-- [ ] `/leaderboard` returns cached rows after the scheduler ticks.
-- [ ] Voice accrual: join a voice channel, wait 2 ticks, check `users.total_voice_seconds` increased.
-- [ ] Graceful shutdown: `pm2 stop` / `docker compose down` — bot logs "Shutdown complete." with no unhandled rejections.
+Tutte le variabili in `.env` (vedi `.env.example`):
+
+| Variabile | Obbligatoria | Descrizione |
+|-----------|-------------|-------------|
+| DISCORD_TOKEN | Sì | Token bot Discord |
+| DISCORD_CLIENT_ID | Sì | Client ID applicazione |
+| GUILD_ID | Sì | ID server principale |
+| DB_HOST/PORT/NAME/USER/PASSWORD | Sì | Credenziali MySQL |
+| JWT_SECRET | Sì | Secret JWT (min 32 char) |
+| DISCORD_CLIENT_SECRET | Sì | OAuth2 client secret |
+| DASHBOARD_URL | Sì | URL dashboard (https://bloodswow.it) |
+| STEAM_API_KEY | No | API Steam |
+| BATTLE_NET_CLIENT_ID/SECRET | No | API Battle.net |
+| RIOT_API_KEY | No | API Riot |
+| WCL_CLIENT_ID/SECRET | No | Warcraft Logs API |
+| ALERT_WEBHOOK_URL | No | Webhook alert Discord |
+
+---
+
+## 13. Testing checklist before a release
+
+- [ ] `npm run db:migrate` runs clean
+- [ ] `npm run deploy:commands` registers all commands
+- [ ] `npm run test:all` — 293 assertions pass
+- [ ] `npm run dashboard:build` — build senza errori
+- [ ] Pagine pubbliche: homepage, chi-siamo, raid, unisciti, classifiche, eventi, hall-of-fame (200 OK)
+- [ ] Dashboard admin: login OAuth → pagine accessibili → dati caricati
+- [ ] Graceful shutdown: `pm2 stop` — bot logga "Shutdown complete."

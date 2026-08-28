@@ -314,6 +314,17 @@ Il `docker-compose.yml` include:
 2. **Bing**: https://www.bing.com/webmasters → aggiungi sito → invia sitemap
 3. **DuckDuckGo**: indicizza automaticamente da Bing
 
+## Documentazione
+
+| File | Audience | Contenuto |
+|------|----------|-----------|
+| `AGENTS.md` | AI agent | Istruzioni per AI che lavorano sul progetto |
+| `docs/DEV_GUIDE.md` | Sviluppatori | Struttura, convenzioni, API, DB, test, deploy |
+| `docs/ADMIN_GUIDE.md` | Staff Discord | Setup, gestione giochi, permessi, troubleshooting |
+| `docs/GUIDE_OFFICER.md` | Officer/RL | Colloqui, raid, BP, moderazione, dashboard admin |
+| `docs/GUIDE_GIOCATORI.md` | Membri gilda | Comandi, XP, BP, progressione, regole |
+| `docs/DEPLOYMENT.md` | DevOps | Nginx, PM2, SSL, SEO, backup |
+
 ## Licenza
 
 Proprietario — © Bloods Guild. Tutti i diritti riservati.
