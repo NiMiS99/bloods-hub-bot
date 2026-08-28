@@ -51,6 +51,8 @@ const _ReputationService = require('./services/reputationService');
 const GameNightService = require('./services/gameNightService');
 const MusicService = require('./services/musicService');
 const FeedbackService = require('./services/feedbackService');
+const DynamicStatusService = require('./services/dynamicStatusService');
+const RaidSummaryService = require('./services/raidSummaryService');
 const HealthServer = require('./server/healthServer');
 const DashboardServer = require('./server/dashboardServer');
 
@@ -183,6 +185,12 @@ async function main() {
   // Feedback watcher — checks pending-fixes.json for completed fixes (every 30s)
   FeedbackService.startWatcher(client);
 
+  // Dynamic bot status (rotates every 60s with member count, raid status, etc.)
+  DynamicStatusService.start(client);
+
+  // Raid summary auto-post (daily at 23:59, only if raid happened)
+  RaidSummaryService.start(client);
+
   // Onboarding + ticket panels (post after ready)
   client.on('clientReady', async () => {
     try {
@@ -248,6 +256,8 @@ async function main() {
       GameNightService.stop();
       MusicService.stopAll();
       FeedbackService.stopWatcher();
+      DynamicStatusService.stop();
+      RaidSummaryService.stop();
       // Stop interval-based services without explicit stop in shutdown
       try { require('./services/xpService').stop(); } catch {}
       try { require('./services/captchaService').stop(); } catch {}

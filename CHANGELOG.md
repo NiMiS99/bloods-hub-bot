@@ -15,6 +15,11 @@ Formato basato su [Keep a Changelog](https://keepachangelog.com/it/1.1.0/).
 - `.nvmrc` — versione Node.js richiesta (20)
 - `.editorconfig` — standard formattazione editor
 - Config WCL (Warcraft Logs) in `src/config/index.js`
+- `src/services/dynamicStatusService.js` — status bot dinamico (membri, online, raid, vocale)
+- `src/services/raidSummaryService.js` — riepilogo automatico post-raid (23:59)
+- `src/services/gowService.js` — integrazione Guilds of WoW API (roster, reclutamento)
+- `src/services/api/raiderIoApi.js` — client Raider.IO (M+ score, raid progress, ilvl)
+- Canali Discord creati: `#loot-bloods-points` (PvE), `#meme-screenshot` (Community Hub)
 
 ### Cambiato
 - `docs/DEV_GUIDE.md` — riscritto con struttura attuale (71 comandi, 40 modelli, 50+ servizi)

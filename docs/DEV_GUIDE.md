@@ -290,11 +290,62 @@ Tutte le variabili in `.env` (vedi `.env.example`):
 | BATTLE_NET_CLIENT_ID/SECRET | No | API Battle.net |
 | RIOT_API_KEY | No | API Riot |
 | WCL_CLIENT_ID/SECRET | No | Warcraft Logs API |
+| GOW_API_KEY | No | Guilds of WoW management API |
 | ALERT_WEBHOOK_URL | No | Webhook alert Discord |
 
 ---
 
-## 13. Testing checklist before a release
+## 13. Servizi background (55+)
+
+Il bot avvia automaticamente questi servizi in `src/index.js`:
+
+| Servizio | File | Frequenza | Scopo |
+|----------|------|-----------|-------|
+| ActivityTracker | activityTracker.js | 60s | Voice time + XP |
+| LeaderboardScheduler | leaderboardScheduler.js | 5min | Cache classifiche |
+| MetaScheduler | metaScheduler.js | 6h | Patch note/meta per gioco |
+| NewsPoster | newsPoster.js | 30min | Auto-post news WoW |
+| RaidScheduler | raidScheduler.js | 1h | Promemoria pre-raid |
+| WarcraftLogsService | warcraftLogsService.js | 5min | Auto-post nuovi WCL |
+| AffixScheduler | affixScheduler.js | Martedì 10:05 | Affix M+ settimanali |
+| WeeklyKeysPoster | weeklyKeysPoster.js | Lunedì 20:00 | Recap key M+ |
+| PatchAlertService | patchAlertService.js | 6h | Alert nuovo patch WoW |
+| AttendanceFlagService | attendanceFlagService.js | Lunedì 09:00 | Flag <50% attendance |
+| RaidAttendanceService | raidAttendanceService.js | Event-driven | BP da presenze |
+| MemberCounterService | memberCounterService.js | 5min | Counter vocale membri |
+| BirthdayService | birthdayService.js | Giornaliero 09:00 | Auguri compleanno |
+| **DynamicStatusService** | dynamicStatusService.js | 60s | Status bot dinamico |
+| **RaidSummaryService** | raidSummaryService.js | Giornaliero 23:59 | Riepilogo post-raid |
+| MilestoneService | milestoneService.js | Event-driven | Milestone membri |
+| WeeklyStatsService | weeklyStatsService.js | Domenica 18:00 | Stats settimanali |
+| GuildChallengeService | guildChallengeService.js | Event-driven | Challenge community |
+| AutomodService | automodService.js | Event-driven | Filtro parole/spam |
+| AntiRaidService | antiRaidService.js | Event-driven | Anti-raid |
+| WelcomeService | welcomeService.js | Event-driven | Welcome nuovi membri |
+| StarboardService | starboardService.js | Event-driven | Starboard |
+| LfgService | lfgService.js | 5min | Scadenza sessioni LFG |
+| ChallengeService | challengeService.js | 1h | Scadenza challenge |
+| GameNightService | gameNightService.js | 10min | Game night scheduling |
+| FeedbackService | feedbackService.js | 30s | Watcher fix completati |
+| GiveawayService | giveawayService.js | 30s | Sorteggi giveaway |
+| ScheduledMessageService | scheduledMessageService.js | Cron | Messaggi programmati |
+| ReminderService | reminderService.js | 30s | Promemoria utenti |
+| AlertService | alertService.js | Event-driven | Alert memoria/errori |
+| BackupScheduler | backupScheduler.js | Giornaliero | Backup DB |
+| CleanupScheduler | cleanupScheduler.js | Settimanale | Pulizia dati vecchi |
+
+### Integrazioni WoW esterne
+
+| Servizio | File | API | Stato |
+|----------|------|-----|-------|
+| Battle.net API | api/battleNetApi.js | Blizzard OAuth | Attivo |
+| Warcraft Logs | warcraftLogsService.js | WCL v2 API | Attivo (richiede WCL_CLIENT_ID/SECRET) |
+| **Guilds of WoW** | **gowService.js** | GoW v1 API | Pronto (richiede GOW_API_KEY) |
+| **Raider.IO** | **api/raiderIoApi.js** | Raider.IO v1 | Pronto (pubblica, no key) |
+
+---
+
+## 14. Testing checklist before a release
 
 - [ ] `npm run db:migrate` runs clean
 - [ ] `npm run deploy:commands` registers all commands
