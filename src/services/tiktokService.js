@@ -169,6 +169,7 @@ async function fetchLatestVideo() {
   if (isApiMode()) {
     const apiResult = await fetchLatestVideoApi();
     if (apiResult) return apiResult;
+    logger.info('TikTokService: API mode failed, falling back to scrape mode.');
   }
   return fetchLatestVideoScrape();
 }
@@ -234,7 +235,8 @@ function start(client) {
     return;
   }
   _task = cron.schedule(CHECK_INTERVAL, () => checkNewVideo(client).catch(() => {}));
-  logger.info(`TikTokService: started (checking every 15min, mode: ${isApiMode() ? 'API' : 'scrape'}).`);
+  const mode = isApiMode() ? 'API (OAuth user flow required for video access)' : 'scrape (may be limited by login wall)';
+  logger.info(`TikTokService: started (checking every 15min, mode: ${mode}).`);
   setTimeout(() => checkNewVideo(client).catch(() => {}), 45000);
 }
 
@@ -244,4 +246,4 @@ function stop() {
   logger.info('TikTokService: stopped.');
 }
 
-module.exports = { start, stop, fetchLatestVideo, isEnabled, isApiMode };
+module.exports = { start, stop, fetchLatestVideo, fetchLatestVideoScrape, isEnabled, isApiMode };
