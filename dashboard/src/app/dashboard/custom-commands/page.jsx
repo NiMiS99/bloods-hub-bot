@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { TerminalSquare, Plus, Trash2, X } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 export default function CustomCommandsPage() {
   const { guild } = useGuild();
   const [commands, setCommands] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [form, setForm] = useState({ name: '', response: '', embedTitle: '', embedImage: '' });
 

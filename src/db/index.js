@@ -71,6 +71,7 @@ const TournamentParticipantModel = require('./models/TournamentParticipant');
 const GameNightModel = require('./models/GameNight');
 const TagModel = require('./models/Tag');
 const FeedbackModel = require('./models/Feedback');
+const RecruitModel = require('./models/Recruit');
 
 // Initialize
 const Guild = GuildModel(sequelize, DataTypes);
@@ -120,6 +121,7 @@ const TournamentParticipant = TournamentParticipantModel(sequelize, DataTypes);
 const GameNight = GameNightModel(sequelize, DataTypes);
 const Tag = TagModel(sequelize, DataTypes);
 const Feedback = FeedbackModel(sequelize, DataTypes);
+const Recruit = RecruitModel(sequelize, DataTypes);
 
 // Associations
 Guild.hasMany(User, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
@@ -284,6 +286,10 @@ GameNight.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
 Guild.hasMany(Tag, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
 Tag.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
 
+// Recruit (recruiting pipeline) associations
+Guild.hasMany(Recruit, { foreignKey: 'guild_id', sourceKey: 'guild_id' });
+Recruit.belongsTo(Guild, { foreignKey: 'guild_id', targetKey: 'guild_id' });
+
 async function connectDB() {
   try {
     await sequelize.authenticate();
@@ -347,4 +353,5 @@ module.exports = {
   GameNight,
   Tag,
   Feedback,
+  Recruit,
 };

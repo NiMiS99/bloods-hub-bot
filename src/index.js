@@ -17,6 +17,12 @@ const CleanupScheduler = require('./services/cleanupScheduler');
 const BackupScheduler = require('./services/backupScheduler');
 const StatRefreshScheduler = require('./services/statRefreshScheduler');
 const RaidScheduler = require('./services/raidScheduler');
+const WarcraftLogsService = require('./services/warcraftLogsService');
+const AffixScheduler = require('./services/affixScheduler');
+const WeeklyKeysPoster = require('./services/weeklyKeysPoster');
+const PatchAlertService = require('./services/patchAlertService');
+const AttendanceFlagService = require('./services/attendanceFlagService');
+const { init: initRaidAttendance } = require('./services/raidAttendanceService');
 const OnboardingService = require('./services/onboardingService');
 const TicketService = require('./services/ticketService');
 const _AdvancedLogger = require('./services/advancedLogger');
@@ -57,11 +63,11 @@ async function main() {
     intents: [
       GatewayIntentBits.Guilds,
       GatewayIntentBits.GuildMembers,
+      GatewayIntentBits.GuildPresences,
       GatewayIntentBits.GuildMessages,
       GatewayIntentBits.GuildVoiceStates,
       GatewayIntentBits.MessageContent,
       GatewayIntentBits.GuildMessageReactions,
-      GatewayIntentBits.GuildMembers,
     ],
     partials: [Partials.Channel, Partials.GuildMember, Partials.Message, Partials.Reaction, Partials.User],
   });
@@ -103,6 +109,29 @@ async function main() {
 
   client.raidScheduler = new RaidScheduler(client);
   client.raidScheduler.start();
+
+  // Warcraft Logs auto-post (new reports to #raid-log)
+  client.warcraftLogsService = new WarcraftLogsService(client);
+  client.warcraftLogsService.start();
+
+  // Affix M+ auto-post (every Tuesday 10:05 AM to #keys-settimanali)
+  client.affixScheduler = new AffixScheduler(client);
+  client.affixScheduler.start();
+
+  // Raid attendance service (BP from attendance)
+  client.raidAttendanceService = initRaidAttendance(client);
+
+  // Weekly M+ keys recap (Monday 20:00)
+  client.weeklyKeysPoster = new WeeklyKeysPoster(client);
+  client.weeklyKeysPoster.start();
+
+  // Patch day alert (checks every 6h for new WoW patch)
+  client.patchAlertService = new PatchAlertService(client);
+  client.patchAlertService.start();
+
+  // Attendance flagging (Monday 09:00 — flags raiders <50% attendance)
+  client.attendanceFlagService = new AttendanceFlagService(client);
+  client.attendanceFlagService.start();
 
   // Member counter (voice channel live update)
   MemberCounterService.start(client);
@@ -167,7 +196,10 @@ async function main() {
         await GameModeService.postGameModePanel(client);
         const WowProfessionPanel = require('./ui/wowProfessionPanel');
         await WowProfessionPanel.postProfessionPanel(client);
-        logger.info('Onboarding + ticket + admin + rules + gamemode + wowprof panels posted.');
+        // Info panels for new channels (Tattiche, Banca, Presentazioni, FAQ, LFG, Eventi)
+        const { postAllPanels: postChannelInfoPanels } = require('./services/channelInfoPanels');
+        await postChannelInfoPanels(client);
+        logger.info('Onboarding + ticket + admin + rules + gamemode + wowprof + channel-info panels posted.');
       }
     } catch (e) {
       logger.warn(`Onboarding setup failed: ${e.message}`);
@@ -199,6 +231,11 @@ async function main() {
       BackupScheduler.stop();
       client.statRefreshScheduler?.stop();
       client.raidScheduler?.stop();
+      client.warcraftLogsService?.stop();
+      client.affixScheduler?.stop();
+      client.weeklyKeysPoster?.stop();
+      client.patchAlertService?.stop();
+      client.attendanceFlagService?.stop();
       MemberCounterService?.stop();
       GiveawayService?.stop();
       ScheduledMessageService?.stop();

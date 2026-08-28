@@ -5,11 +5,13 @@ import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { formatDateTime, timeAgo } from '@/lib/utils';
 import { Calendar, Plus, Trash2, Users, X } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 export default function EventsPage() {
   const { guild } = useGuild();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [form, setForm] = useState({ name: '', description: '', scheduledAt: '', durationMinutes: 60, gameCode: '' });
 

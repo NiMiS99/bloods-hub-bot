@@ -5,6 +5,7 @@ import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { timeAgo } from '@/lib/utils';
 import { Shield, AlertTriangle, Mic, MicOff, UserX, Ban, Plus, X } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 export default function ModerationPage() {
   const { guild } = useGuild();
@@ -13,6 +14,7 @@ export default function ModerationPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [action, setAction] = useState(null);
   const [form, setForm] = useState({ userId: '', reason: '', severity: 'low', durationMinutes: 60 });

@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { Clock, Plus, Trash2, X, Check, Zap } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 export default function ScheduledMessagesPage() {
   const { guild } = useGuild();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [form, setForm] = useState({ channelId: '', content: '', embedTitle: '', embedImage: '', cronExpr: '' });
 

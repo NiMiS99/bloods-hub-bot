@@ -5,6 +5,7 @@ import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { formatNumber, formatDuration } from '@/lib/utils';
 import { Trophy } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 const METRICS = [
   { value: 'xp', label: 'XP' },
@@ -17,6 +18,7 @@ export default function LeaderboardPage() {
   const [metric, setMetric] = useState('xp');
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!guild) return;

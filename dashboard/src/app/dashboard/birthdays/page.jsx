@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { Cake } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 const MONTHS = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'];
 
@@ -11,6 +12,7 @@ export default function BirthdaysPage() {
   const { guild } = useGuild();
   const [birthdays, setBirthdays] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => { if (guild) load(); }, [guild]);
 

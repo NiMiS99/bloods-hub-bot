@@ -5,20 +5,28 @@ import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { formatNumber } from '@/lib/utils';
 import { Gamepad2, Plus, Trash2, Edit, X } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 export default function GamesPage() {
   const { guild } = useGuild();
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [newGame, setNewGame] = useState({ code: '', name: '', apiProvider: 'manual', colorHex: '' });
 
   useEffect(() => { if (guild) loadGames(); }, [guild]);
 
   async function loadGames() {
-    const { games } = await api.getGames(guild.id);
-    setGames(games);
-    setLoading(false);
+    try {
+      setError(false);
+      const { games } = await api.getGames(guild.id);
+      setGames(games);
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function addGame() {
@@ -41,6 +49,22 @@ export default function GamesPage() {
   }
 
   if (loading) return <div className="flex justify-center py-20"><div className="spinner" /></div>;
+  if (error) return <ApiError onRetry={loadGames} />;
+  if (games.length === 0) return (
+    <div className="space-y-6 animate-fade-in">
+      <div className="flex items-center justify-between">
+        <p className="text-dark-400">0 giochi registrati</p>
+        <button onClick={() => setShowAdd(!showAdd)} className="btn-primary flex items-center gap-2">
+          <Plus size={18} /> Aggiungi gioco
+        </button>
+      </div>
+      <div className="card p-12 text-center">
+        <Gamepad2 size={40} className="mx-auto mb-3 text-dark-600" />
+        <p className="text-dark-400">Nessun gioco registrato. Aggiungi il primo gioco con il pulsante sopra.</p>
+      </div>
+      {showAdd && null}
+    </div>
+  );
 
   return (
     <div className="space-y-6 animate-fade-in">

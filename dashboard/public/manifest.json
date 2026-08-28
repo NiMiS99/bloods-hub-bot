@@ -1,0 +1,27 @@
+{
+  "name": "Bloods — WoW Guild",
+  "short_name": "Bloods",
+  "description": "Sito ufficiale della gilda Bloods — World of Warcraft. Raid, mitiche+, eventi, classifiche BP/DKP e community Discord.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a12",
+  "theme_color": "#8b0000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "social"],
+  "lang": "it",
+  "dir": "ltr"
+}

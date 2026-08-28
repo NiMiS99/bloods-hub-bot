@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { TerminalSquare, Search } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 export default function CommandsPage() {
   const { guild } = useGuild();
   const [commands, setCommands] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [filter, setFilter] = useState('');
   const [category, setCategory] = useState('all');
 

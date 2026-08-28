@@ -7,6 +7,7 @@ import { api } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { GuildContext } from '@/lib/guildContext';
 import { SearchBar } from './SearchBar';
+import { NotificationBell } from './NotificationBell';
 import {
   LayoutDashboard, Gamepad2, Users, Shield, Calendar, Trophy,
   BarChart3, Award, ScrollText, Settings, LogOut, Menu, X,
@@ -143,9 +144,7 @@ export default function DashboardLayout({ children, params }) {
       )}>
         {/* Logo */}
         <div className="flex items-center gap-3 px-6 py-5 border-b border-dark-800">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-bloods-700 to-bloods-900 flex items-center justify-center text-white font-bold text-lg">
-            B
-          </div>
+          <img src="/logo.png" alt="Bloods" className="w-10 h-10 rounded-xl" />
           <div>
             <h1 className="font-bold text-white text-sm">Bloods Hub</h1>
             <p className="text-xs text-dark-400">Dashboard Admin</p>
@@ -277,10 +276,7 @@ export default function DashboardLayout({ children, params }) {
             >
               {theme === 'dark' ? <Sun size={18} className="text-dark-300" /> : <Moon size={18} className="text-dark-300" />}
             </button>
-            <button className="relative p-2 rounded-lg hover:bg-dark-800 transition-colors">
-              <Bell size={18} className="text-dark-300" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-bloods-600 rounded-full" />
-            </button>
+            <NotificationBell guildId={selectedGuild?.id} />
           </div>
         </header>
 

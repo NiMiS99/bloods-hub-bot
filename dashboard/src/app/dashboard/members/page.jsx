@@ -5,6 +5,7 @@ import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { formatNumber, formatDuration, timeAgo } from '@/lib/utils';
 import { Search, ChevronLeft, ChevronRight, Shield, Award, MessageSquare, Mic, X } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 export default function MembersPage() {
   const { guild } = useGuild();
@@ -14,6 +15,7 @@ export default function MembersPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {

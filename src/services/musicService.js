@@ -136,7 +136,10 @@ async function playCommand(interaction, query) {
     }
   } catch (err) {
     logger.error(`Music play error: ${err.message}`);
-    await interaction.editReply({ content: `❌ Errore: ${err.message}` });
+    const msg = err.message?.includes('Unable to extract') || err.message?.includes('Could not')
+      ? '❌ Impossibile recuperare l\'audio. Il servizio potrebbe non essere disponibile al momento.'
+      : `❌ Errore: ${err.message}`;
+    await interaction.editReply({ content: msg });
   }
 }
 

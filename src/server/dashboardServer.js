@@ -7,12 +7,14 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const compression = require('compression');
 const path = require('path');
 const fs = require('fs');
 const _axios = require('axios');
 const logger = require('../utils/logger');
 const _config = require('../config');
 const { recordAudit: _recordAudit } = require('../utils/auditLog');
+const { sanitizeBody } = require('./middleware/validate');
 
 // API routes
 const authRoutes = require('./routes/auth');
@@ -35,6 +37,8 @@ const scheduledMessageRoutes = require('./routes/scheduledMessages');
 const customCommandRoutes = require('./routes/customCommands');
 const communityRoutes = require('./routes/community');
 const feedbackRoutes = require('./routes/feedback');
+const publicRoutes = require('./routes/public');
+const memberAreaRoutes = require('./routes/memberArea');
 
 class DashboardServer {
   constructor(client) {
@@ -51,9 +55,22 @@ class DashboardServer {
   start() {
     // Security middleware
     this.app.use(helmet({
-      contentSecurityPolicy: false, // Disable CSP for dashboard SPA
+      contentSecurityPolicy: false,
       crossOriginEmbedderPolicy: false,
+      referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+      hsts: {
+        maxAge: 31536000,
+        includeSubDomains: true,
+        preload: true,
+      },
     }));
+
+    // Compress all responses (gzip/deflate)
+    this.app.use(compression({ threshold: 256 }));
+
+    // Sanitize all POST/PUT body input (strip HTML, enforce max length)
+    this.app.use(express.json({ limit: '1mb' }));
+    this.app.use(sanitizeBody());
 
     // Rate limiting: general API (100 req / 15 min per IP)
     const apiLimiter = rateLimit({
@@ -107,14 +124,49 @@ class DashboardServer {
     });
     this.app.use('/api/guilds/:gid/settings', settingsLimiter);
 
+    // Rate limiting: public website endpoints (60 req / 15 min per IP)
+    const publicLimiter = rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 60,
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: { error: 'Troppe richieste. Riprova tra qualche minuto.' },
+    });
+    this.app.use('/api/public/', publicLimiter);
+
     // Standard middleware
-    this.app.use(cors({ origin: true, credentials: true }));
-    this.app.use(express.json({ limit: '1mb' })); // Limit body size
+    const isProd = process.env.NODE_ENV === 'production';
+    const allowedOrigins = isProd
+      ? ['https://bloodswow.it']
+      : ['https://bloodswow.it', 'http://localhost:3000', 'http://127.0.0.1:3000'];
+    this.app.use(cors({
+      origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+        return callback(null, false);
+      },
+      credentials: true,
+    }));
     this.app.use(express.urlencoded({ extended: true, limit: '1mb' }));
     this.app.use(cookieParser());
 
     // Trust proxy (for reverse proxy behind nginx)
     this.app.set('trust proxy', 1);
+
+    // Protect /dashboard/* and /area/* — redirect to /login if no valid JWT
+    const protectRoute = (req, res, next) => {
+      if (req.method !== 'GET') return next();
+      const token = req.cookies?.token;
+      if (!token) return res.redirect(302, '/login/?next=' + encodeURIComponent(req.originalUrl));
+      try {
+        _jwt.verify(token, this.jwtSecret);
+        next();
+      } catch {
+        res.clearCookie('token');
+        res.redirect(302, '/login/?next=' + encodeURIComponent(req.originalUrl));
+      }
+    };
+    this.app.use('/dashboard', protectRoute);
+    this.app.use('/area', protectRoute);
 
     // API routes
     try {
@@ -138,8 +190,11 @@ class DashboardServer {
       this.app.use('/api/guilds', customCommandRoutes(this.client, this.jwtSecret));
       this.app.use('/api/guilds', communityRoutes(this.client, this.jwtSecret));
       this.app.use('/api/guilds', feedbackRoutes(this.client, this.jwtSecret));
+      this.app.use('/api/public', publicRoutes(this.client));
+      this.app.use('/api/guilds', memberAreaRoutes(this.client, this.jwtSecret));
     } catch (err) {
-      logger.error('Failed to register API routes:', err.message);
+      logger.error('Failed to register API routes:', JSON.stringify(err), err?.message, err?.stack);
+      console.error('ROUTE REGISTRATION ERROR:', err);
     }
 
     // Health check
@@ -165,12 +220,27 @@ class DashboardServer {
     // Serve static frontend (built Next.js / React app)
     const dashboardDist = path.join(__dirname, '..', '..', 'dashboard', 'out');
     if (fs.existsSync(dashboardDist)) {
-      this.app.use(express.static(dashboardDist));
-      // SPA fallback — serve index.html for all non-API routes
+      this.app.use(express.static(dashboardDist, {
+        maxAge: '30d',
+        setHeaders: (res, filePath) => {
+          if (filePath.endsWith('.html')) {
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+          }
+        },
+      }));
+      // Valid SPA routes (must match dashboard/out/ directories with index.html)
+      const validRoutes = new Set(['/', '/raid', '/classifiche', '/eventi', '/hall-of-fame', '/chi-siamo', '/unisciti', '/login', '/area', '/dashboard']);
+      // SPA fallback — serve index.html only for known routes, 404 otherwise
       this.app.get('*', (req, res) => {
-        if (!req.path.startsWith('/api')) {
-          res.sendFile(path.join(dashboardDist, 'index.html'));
+        if (req.path.startsWith('/api')) return;
+        if (path.extname(req.path)) {
+          return res.status(404).end();
         }
+        const normalized = req.path.replace(/\/+$/, '') || '/';
+        if (validRoutes.has(normalized) || normalized.startsWith('/dashboard/') || normalized.startsWith('/area/')) {
+          return res.sendFile(path.join(dashboardDist, 'index.html'));
+        }
+        res.status(404).sendFile(path.join(dashboardDist, '404.html'));
       });
       logger.info(`Dashboard frontend served from ${dashboardDist}`);
     } else {

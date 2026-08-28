@@ -21,7 +21,13 @@ class EventHandler {
           logger.warn(`Skipping invalid event file: ${file}`);
           continue;
         }
-        const handler = (...args) => event.execute(...args, this.client);
+        const handler = async (...args) => {
+          try {
+            await event.execute(...args, this.client);
+          } catch (err) {
+            logger.error(`Event "${event.name}" error:`, err);
+          }
+        };
         if (event.once) this.client.once(event.name, handler);
         else this.client.on(event.name, handler);
       } catch (err) {

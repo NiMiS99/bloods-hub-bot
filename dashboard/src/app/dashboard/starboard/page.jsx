@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { Star } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 export default function StarboardPage() {
   const { guild } = useGuild();
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => { if (guild) load(); }, [guild]);
 

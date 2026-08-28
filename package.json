@@ -10,10 +10,14 @@
     "migrate": "node src/scripts/migrate.js",
     "seed": "node src/scripts/seed.js",
     "test": "node tests/pipeline.js",
+    "test:unit": "node tests/unit.test.js",
+    "test:api": "node tests/api.test.js",
+    "test:e2e": "node tests/e2e.test.js",
     "test:smoke": "node tests/smoke.test.js",
+    "test:all": "node tests/pipeline.js && node tests/unit.test.js && node tests/api.test.js && node tests/e2e.test.js",
     "backup": "node scripts/backup_db.js",
     "dev": "nodemon src/index.js",
-    "dashboard:build": "cd dashboard && npm run build",
+    "dashboard:build": "cd dashboard && npm run build && cd .. && node scripts/generate-sitemap.js",
     "dashboard:dev": "cd dashboard && npm run dev",
     "lint": "eslint src/ --ext .js",
     "lint:fix": "eslint src/ --ext .js --fix",
@@ -26,6 +30,7 @@
     "@discordjs/voice": "^0.19.2",
     "@napi-rs/canvas": "^1.0.2",
     "axios": "^1.18.1",
+    "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "discord.js": "^14.14.1",
@@ -47,6 +52,8 @@
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^9.1.2",
     "nodemon": "^3.1.4",
-    "sequelize-cli": "^6.6.2"
+    "sequelize-cli": "^6.6.2",
+    "sharp": "^0.35.4",
+    "supertest": "^7.2.2"
   }
 }

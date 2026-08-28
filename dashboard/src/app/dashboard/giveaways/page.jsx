@@ -5,11 +5,13 @@ import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { formatDateTime, timeAgo } from '@/lib/utils';
 import { PartyPopper, Plus, Trophy, X, Users, Clock } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 export default function GiveawaysPage() {
   const { guild } = useGuild();
   const [giveaways, setGiveaways] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [form, setForm] = useState({ channelId: '', prize: '', title: '', description: '', durationMinutes: 60, winnerCount: 1, requiredRoleId: '' });
 

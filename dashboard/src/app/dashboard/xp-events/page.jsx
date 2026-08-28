@@ -6,22 +6,30 @@ import { useGuild } from '@/lib/guildContext';
 import { formatDateTime } from '@/lib/utils';
 import { Zap, Play, Square, Plus } from 'lucide-react';
 import { UserMention } from '@/lib/useUsers';
+import ApiError from '@/components/dashboard/ApiError';
 
 export default function XpEventsPage() {
   const { guild } = useGuild();
   const [events, setEvents] = useState([]);
   const [activeEvent, setActiveEvent] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [form, setForm] = useState({ multiplier: 2, durationHours: 24 });
 
   useEffect(() => { if (guild) load(); }, [guild]);
 
   async function load() {
-    const { events, active } = await api.getXpEvents(guild.id);
-    setEvents(events || []);
-    setActiveEvent(active);
-    setLoading(false);
+    try {
+      setError(false);
+      const { events, active } = await api.getXpEvents(guild.id);
+      setEvents(events || []);
+      setActiveEvent(active);
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function startEvent() {
@@ -37,6 +45,7 @@ export default function XpEventsPage() {
   }
 
   if (loading) return <div className="flex justify-center py-20"><div className="spinner" /></div>;
+  if (error) return <ApiError onRetry={load} />;
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -79,6 +88,13 @@ export default function XpEventsPage() {
       )}
 
       <p className="text-dark-400">{events.length} eventi storici</p>
+
+      {events.length === 0 && !activeEvent && (
+        <div className="card p-12 text-center">
+          <Zap size={40} className="mx-auto mb-3 text-dark-600" />
+          <p className="text-dark-400">Nessun evento XP registrato. Avvia il primo evento con il pulsante sopra.</p>
+        </div>
+      )}
 
       {events.length > 0 && (
         <div className="space-y-2">

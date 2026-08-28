@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { Bell, Trash2 } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 export default function RemindersPage() {
   const { guild } = useGuild();
   const [reminders, setReminders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => { if (guild) load(); }, [guild]);
 

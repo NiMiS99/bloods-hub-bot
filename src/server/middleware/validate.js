@@ -70,10 +70,29 @@ function isValidCron(expr) {
   return true;
 }
 
+/**
+ * Global body sanitizer — strips HTML tags from string fields and enforces max length.
+ * Apply globally before routes to prevent XSS via stored input.
+ */
+function sanitizeBody(maxLen = 5000) {
+  return (req, res, next) => {
+    if (req.body && typeof req.body === 'object' && !Buffer.isBuffer(req.body)) {
+      for (const key of Object.keys(req.body)) {
+        const val = req.body[key];
+        if (typeof val === 'string') {
+          req.body[key] = val.slice(0, maxLen).replace(/<[^>]*>/g, '');
+        }
+      }
+    }
+    next();
+  };
+}
+
 module.exports = {
   validatePagination,
   requireBodyFields,
   validateString,
+  sanitizeBody,
   isValidDiscordId,
   isValidCron,
 };

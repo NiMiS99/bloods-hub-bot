@@ -13,7 +13,4 @@ dashboard/out/
 dashboard/.next/
 _tmp_*
 _discord_audit.txt
-MEGA_REPORT.md
-PROJECT_ANALYSIS.md
-ADMIN_CHECKLIST.md
-DISCORD_CONCEPTUAL_MAP.md
+docs/archive/

@@ -8,6 +8,7 @@ import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
+import ApiError from '@/components/dashboard/ApiError';
 
 const COLORS = ['#8b0000', '#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7', '#ec4899'];
 
@@ -16,14 +17,16 @@ export default function AnalyticsPage() {
   const [data, setData] = useState(null);
   const [days, setDays] = useState(30);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!guild) return;
     setLoading(true);
-    api.getAnalytics(guild.id, days).then(setData).finally(() => setLoading(false));
+    api.getAnalytics(guild.id, days).then(setData).catch(() => setError(true)).finally(() => setLoading(false));
   }, [guild, days]);
 
   if (loading) return <div className="flex justify-center py-20"><div className="spinner" /></div>;
+  if (error) return <ApiError />;
   if (!data) return null;
 
   return (

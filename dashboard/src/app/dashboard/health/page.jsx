@@ -33,6 +33,13 @@ export default function HealthPage() {
       <XCircle size={48} className="text-red-400 mx-auto mb-4" />
       <h2 className="text-xl font-bold text-white mb-2">Errore connessione</h2>
       <p className="text-dark-300">{error}</p>
+      <p className="text-dark-500 text-sm mt-2">Il server potrebbe essere offline o in riavvio.</p>
+    </div>
+  );
+  if (!health) return (
+    <div className="card p-12 text-center">
+      <Activity size={40} className="mx-auto mb-3 text-dark-600" />
+      <p className="text-dark-400">Nessun dato di health check disponibile.</p>
     </div>
   );
 

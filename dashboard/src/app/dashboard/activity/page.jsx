@@ -4,23 +4,33 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { Activity, TrendingUp, MessageSquare, Mic } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 export default function ActivityPage() {
   const { guild } = useGuild();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [days, setDays] = useState(30);
 
   useEffect(() => { if (guild) load(); }, [guild, days]);
 
   async function load() {
-    const d = await api.getAnalytics(guild.id, days);
-    setData(d);
-    setLoading(false);
+    try {
+      setError(false);
+      const d = await api.getAnalytics(guild.id, days);
+      setData(d);
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   }
 
   if (loading) return <div className="text-zinc-400">Caricamento...</div>;
+  if (error) return <ApiError onRetry={load} />;
 
+  if (!data) return null;
   const activity = data.activity || [];
   const maxMsg = Math.max(...activity.map(a => a.messages || 0), 1);
   const maxVoice = Math.max(...activity.map(a => a.voice || 0), 1);
@@ -59,6 +69,12 @@ export default function ActivityPage() {
         <h2 className="text-white font-semibold mb-4 flex items-center gap-2">
           <TrendingUp className="w-5 h-5" /> Attività giornaliera
         </h2>
+        {activity.length === 0 ? (
+          <div className="text-center py-8">
+            <Activity size={32} className="mx-auto mb-2 text-zinc-600" />
+            <p className="text-zinc-500 text-sm">Nessun dato di attività disponibile per il periodo selezionato.</p>
+          </div>
+        ) : (
         <div className="space-y-1">
           {activity.slice(-30).map((a, i) => (
             <div key={i} className="flex items-center gap-2 text-xs">
@@ -76,6 +92,7 @@ export default function ActivityPage() {
             </div>
           ))}
         </div>
+        )}
         <div className="flex gap-4 mt-4 text-xs text-zinc-400">
           <span className="flex items-center gap-1"><span className="w-3 h-3 bg-blue-500 rounded"></span> Messaggi</span>
           <span className="flex items-center gap-1"><span className="w-3 h-3 bg-green-500 rounded"></span> Secondi vocali</span>

@@ -5,6 +5,7 @@ import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { formatDateTime, timeAgo } from '@/lib/utils';
 import { Gamepad2, Users, Clock } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 const STATUS_COLORS = {
   open: 'bg-green-500/20 text-green-400',
@@ -17,6 +18,7 @@ export default function LfgPage() {
   const { guild } = useGuild();
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => { if (guild) load(); }, [guild]);
 

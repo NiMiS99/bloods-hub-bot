@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { Tag as TagIcon } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 export default function TagsPage() {
   const { guild } = useGuild();
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => { if (guild) load(); }, [guild]);
 

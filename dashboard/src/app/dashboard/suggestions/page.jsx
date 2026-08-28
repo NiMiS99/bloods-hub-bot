@@ -6,6 +6,7 @@ import { useGuild } from '@/lib/guildContext';
 import { formatDateTime } from '@/lib/utils';
 import { Lightbulb, ThumbsUp, ThumbsDown, Check, X } from 'lucide-react';
 import { UserMention } from '@/lib/useUsers';
+import ApiError from '@/components/dashboard/ApiError';
 
 const STATUS_COLORS = {
   open: 'bg-blue-500/20 text-blue-400',
@@ -18,6 +19,7 @@ export default function SuggestionsPage() {
   const { guild } = useGuild();
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [filter, setFilter] = useState('all');
 
   useEffect(() => { if (guild) load(); }, [guild, filter]);

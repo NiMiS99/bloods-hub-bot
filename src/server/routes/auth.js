@@ -27,11 +27,16 @@ module.exports = function (client, jwtSecret) {
   }
 
   // GET /api/auth/discord — redirect to Discord OAuth2
+  // Optional ?next=/path — internal path to redirect to after login (stored in a short-lived cookie)
   router.get('/discord', (req, res) => {
     const { clientId, redirectUri } = getOAuthConfig();
     if (!clientId || !process.env.DISCORD_CLIENT_SECRET) {
       return res.status(500).json({ error: 'OAuth2 non configurato. Imposta DISCORD_CLIENT_SECRET nel .env' });
     }
+    const next = typeof req.query.next === 'string' && req.query.next.startsWith('/') && !req.query.next.startsWith('//')
+      ? req.query.next
+      : '/';
+    res.cookie('login_next', next, { httpOnly: true, sameSite: 'lax', maxAge: 10 * 60 * 1000 });
     const params = new URLSearchParams({
       client_id: clientId,
       redirect_uri: redirectUri,
@@ -108,8 +113,12 @@ module.exports = function (client, jwtSecret) {
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
 
-      logger.info(`OAuth2 login success: user=${user.username} (${user.id}), redirecting to /`);
-      res.redirect('/');
+      const next = typeof req.cookies?.login_next === 'string' && req.cookies.login_next.startsWith('/') && !req.cookies.login_next.startsWith('//')
+        ? req.cookies.login_next
+        : '/';
+      res.clearCookie('login_next');
+      logger.info(`OAuth2 login success: user=${user.username} (${user.id}), redirecting to ${next}`);
+      res.redirect(next);
     } catch (err) {
       logger.error('OAuth2 callback error:', err.response?.data || err.message);
       res.status(500).send('Errore durante il login Discord. Controlla i log.');

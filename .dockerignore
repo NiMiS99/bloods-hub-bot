@@ -1,0 +1,10 @@
+node_modules
+dashboard/node_modules
+dashboard/.next
+dashboard/out
+logs
+backups
+*.sqlite
+.git
+.idea
+.vscode

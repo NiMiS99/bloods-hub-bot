@@ -5,6 +5,7 @@ import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { formatDateTime } from '@/lib/utils';
 import { ScrollText, ChevronLeft, ChevronRight } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 const ACTION_LABELS = {
   'dashboard.game.add': 'Gioco aggiunto',
@@ -37,6 +38,7 @@ export default function AuditLogPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!guild) return;

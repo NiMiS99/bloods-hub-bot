@@ -5,11 +5,13 @@ import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { formatDateTime } from '@/lib/utils';
 import { BarChart3, Clock, CheckCircle, XCircle } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 export default function PollsPage() {
   const { guild } = useGuild();
   const [polls, setPolls] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => { if (guild) load(); }, [guild]);
 

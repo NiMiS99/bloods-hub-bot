@@ -5,18 +5,21 @@ import { api } from '@/lib/api';
 import { useGuild } from '@/lib/guildContext';
 import { timeAgo } from '@/lib/utils';
 import { Award } from 'lucide-react';
+import ApiError from '@/components/dashboard/ApiError';
 
 export default function BadgesPage() {
   const { guild } = useGuild();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!guild) return;
-    api.getBadges(guild.id).then(setData).finally(() => setLoading(false));
+    api.getBadges(guild.id).then(setData).catch(() => setError(true)).finally(() => setLoading(false));
   }, [guild]);
 
   if (loading) return <div className="flex justify-center py-20"><div className="spinner" /></div>;
+  if (error) return <ApiError />;
   if (!data) return null;
 
   return (
