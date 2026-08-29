@@ -13,6 +13,8 @@ const LINKS = [
   { href: '/hall-of-fame', label: 'Hall of Fame' },
   { href: '/eventi', label: 'Eventi' },
   { href: '/chi-siamo', label: 'Chi siamo' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/youtube', label: 'YouTube' },
   { href: '/unisciti', label: 'Unisciti' },
 ];
 

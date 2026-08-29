@@ -645,6 +645,61 @@ module.exports = function (client) {
     }
   });
 
+  // GET /api/public/youtube — latest videos + channel stats
+  router.get('/youtube', async (req, res) => {
+    try {
+      const youtubeService = require('../../services/youtubeService');
+      const maxResults = Math.min(parseInt(req.query.limit) || 6, 12);
+
+      const [stats, videos] = await Promise.all([
+        youtubeService.fetchChannelStats(),
+        (async () => {
+          if (!youtubeService.isEnabled()) return [];
+          const axios = require('axios');
+          const API_BASE = 'https://www.googleapis.com/youtube/v3';
+          const apiKey = process.env.YOUTUBE_API_KEY;
+          const channelId = process.env.YOUTUBE_CHANNEL_ID;
+          try {
+            const chRes = await axios.get(`${API_BASE}/channels`, {
+              params: { part: 'contentDetails', id: channelId, key: apiKey },
+              timeout: 10000,
+            });
+            const uploadsId = chRes.data?.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
+            if (!uploadsId) return [];
+            const plRes = await axios.get(`${API_BASE}/playlistItems`, {
+              params: { part: 'snippet', playlistId: uploadsId, maxResults, key: apiKey },
+              timeout: 10000,
+            });
+            return (plRes.data?.items || []).map((item) => {
+              const sn = item.snippet;
+              return {
+                videoId: sn.resourceId?.videoId,
+                title: sn.title,
+                description: (sn.description || '').slice(0, 200),
+                thumbnail: sn.thumbnails?.medium?.url || sn.thumbnails?.default?.url,
+                publishedAt: sn.publishedAt,
+                channelTitle: sn.channelTitle,
+              };
+            });
+          } catch { return []; }
+        })(),
+      ]);
+
+      res.json({
+        channel: stats ? {
+          title: stats.title,
+          subscriberCount: stats.subscriberCount,
+          viewCount: stats.viewCount,
+          videoCount: stats.videoCount,
+        } : null,
+        videos,
+      });
+    } catch (err) {
+      console.error('[public] youtube error:', err);
+      res.json({ channel: null, videos: [] });
+    }
+  });
+
   // GET /api/public/docs — API documentation
   router.get('/docs', (req, res) => {
     res.json({
@@ -664,6 +719,7 @@ module.exports = function (client) {
         { method: 'GET', path: '/giveaways', description: 'Giveaway attivi' },
         { method: 'GET', path: '/tournaments', description: 'Tornei attivi' },
         { method: 'GET', path: '/discord-widget', description: 'Membri online + canali vocali live' },
+        { method: 'GET', path: '/youtube?limit=6', description: 'Ultimi video YouTube + statistiche canale' },
         { method: 'GET', path: '/docs', description: 'Questa documentazione' },
       ],
       rateLimit: '100 req / 15 min per IP',

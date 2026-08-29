@@ -13,6 +13,8 @@ const PAGES = [
   { path: '/eventi/', changefreq: 'daily', priority: '0.8' },
   { path: '/hall-of-fame/', changefreq: 'weekly', priority: '0.8' },
   { path: '/chi-siamo/', changefreq: 'monthly', priority: '0.7' },
+  { path: '/youtube/', changefreq: 'weekly', priority: '0.8' },
+  { path: '/blog/', changefreq: 'weekly', priority: '0.9' },
   { path: '/unisciti/', changefreq: 'monthly', priority: '0.7' },
 ];
 

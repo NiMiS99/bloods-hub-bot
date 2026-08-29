@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { MessageCircle, Trophy, Calendar, UserPlus, Swords, Info, Users, Mail, ExternalLink } from 'lucide-react';
+import { MessageCircle, Trophy, Calendar, UserPlus, Swords, Info, Users, Mail, ExternalLink, Youtube, Music, Newspaper } from 'lucide-react';
 import { siteConfig } from '@/lib/siteConfig';
 
 export default function Footer() {
@@ -26,6 +26,8 @@ export default function Footer() {
               <li><Link href="/hall-of-fame" className="text-dark-300 hover:text-white transition-colors inline-flex items-center gap-2"><Trophy size={14} /> Hall of Fame</Link></li>
               <li><Link href="/eventi" className="text-dark-300 hover:text-white transition-colors inline-flex items-center gap-2"><Calendar size={14} /> Eventi</Link></li>
               <li><Link href="/chi-siamo" className="text-dark-300 hover:text-white transition-colors inline-flex items-center gap-2"><Info size={14} /> Chi siamo</Link></li>
+              <li><Link href="/blog" className="text-dark-300 hover:text-white transition-colors inline-flex items-center gap-2"><Newspaper size={14} /> Blog</Link></li>
+              <li><Link href="/youtube" className="text-dark-300 hover:text-white transition-colors inline-flex items-center gap-2"><Youtube size={14} /> YouTube</Link></li>
               <li><Link href="/unisciti" className="text-dark-300 hover:text-white transition-colors inline-flex items-center gap-2"><UserPlus size={14} /> Unisciti a noi</Link></li>
               <li><Link href="/dashboard" className="text-dark-300 hover:text-white transition-colors inline-flex items-center gap-2"><MessageCircle size={14} /> Dashboard membri</Link></li>
             </ul>
@@ -42,6 +44,16 @@ export default function Footer() {
               <li>
                 <a href={siteConfig.discordInvite} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-dark-300 hover:text-white transition-colors">
                   <ExternalLink size={14} className="text-gold-400" /> Discord
+                </a>
+              </li>
+              <li>
+                <a href="https://www.youtube.com/@bloods" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-dark-300 hover:text-white transition-colors">
+                  <Youtube size={14} className="text-bloods-500" /> YouTube
+                </a>
+              </li>
+              <li>
+                <a href="https://www.tiktok.com/@bloodswow" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-dark-300 hover:text-white transition-colors">
+                  <Music size={14} className="text-gold-400" /> TikTok
                 </a>
               </li>
               <li className="pt-2 border-t border-dark-800/50 text-xs text-dark-500">
