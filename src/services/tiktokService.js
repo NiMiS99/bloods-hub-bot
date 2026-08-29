@@ -224,7 +224,7 @@ async function checkNewVideo(client) {
   await channel.send({
     content: '@everyone Nuovo TikTok pubblicato!',
     embeds: [embed],
-  }).catch(() => {});
+  }).catch((err) => logger.warn(`TikTokService: failed to post new video announcement: ${err.message}`));
 
   logger.info(`TikTokService: announced new video "${video.description?.slice(0, 50)}"`);
 }
@@ -234,10 +234,10 @@ function start(client) {
     logger.info('TikTokService: TIKTOK_USERNAME not set, skipping.');
     return;
   }
-  _task = cron.schedule(CHECK_INTERVAL, () => checkNewVideo(client).catch(() => {}));
+  _task = cron.schedule(CHECK_INTERVAL, () => checkNewVideo(client).catch((err) => logger.warn(`TikTokService: checkNewVideo error: ${err.message}`)));
   const mode = isApiMode() ? 'API (OAuth user flow required for video access)' : 'scrape (may be limited by login wall)';
   logger.info(`TikTokService: started (checking every 15min, mode: ${mode}).`);
-  setTimeout(() => checkNewVideo(client).catch(() => {}), 45000);
+  setTimeout(() => checkNewVideo(client).catch((err) => logger.warn(`TikTokService: initial check error: ${err.message}`)), 45000);
 }
 
 function stop() {

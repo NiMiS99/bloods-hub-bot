@@ -159,8 +159,7 @@ async function postWeeklyGrowthReport(client) {
     .setFooter({ text: 'Bloods Hub • Social Growth Report' })
     .setTimestamp();
 
-  await channel.send({ embeds: [embed] }).catch(() => {});
-  logger.info('SocialGrowthService: posted weekly growth report.');
+  await channel.send({ embeds: [embed] }).catch((err) => logger.warn(`SocialGrowthService: failed to post weekly report: ${err.message}`));
 }
 
 /**
@@ -199,7 +198,7 @@ async function postContentIdeas(client) {
     .setFooter({ text: 'Bloods Hub • Content Ideas' })
     .setTimestamp();
 
-  await channel.send({ embeds: [embed] }).catch(() => {});
+  await channel.send({ embeds: [embed] }).catch((err) => logger.warn(`SocialGrowthService: failed to post content ideas: ${err.message}`));
   logger.info('SocialGrowthService: posted daily content ideas.');
 }
 
@@ -264,7 +263,7 @@ async function generateOptimizationReport(client) {
         .setColor(0x00ff00)
         .setDescription('Tutti i video e il canale sono ottimizzati. Continua così!')
         .setTimestamp();
-      await channel.send({ embeds: [ok] }).catch(() => {});
+      await channel.send({ embeds: [ok] }).catch((err) => logger.warn(`SocialGrowthService: failed to post SEO ok: ${err.message}`));
       return;
     }
 
@@ -282,7 +281,7 @@ async function generateOptimizationReport(client) {
       .setFooter({ text: 'Bloods Hub • SEO Audit' })
       .setTimestamp();
 
-    await channel.send({ content: '<@&1529875116039606274>', embeds: [embed] }).catch(() => {});
+    await channel.send({ content: '<@&1529875116039606274>', embeds: [embed] }).catch((err) => logger.warn(`SocialGrowthService: failed to post SEO audit: ${err.message}`));
     logger.info('SocialGrowthService: posted SEO optimization report.');
   } catch (err) {
     logger.error(`SocialGrowthService SEO audit failed: ${err.message}`);
@@ -291,21 +290,21 @@ async function generateOptimizationReport(client) {
 
 function start(client) {
   // Daily stats tracking at 00:01
-  _task = cron.schedule('1 0 * * *', () => trackDailyStats().catch(() => {}));
+  _task = cron.schedule('1 0 * * *', () => trackDailyStats().catch((err) => logger.warn(`SocialGrowthService: daily stats error: ${err.message}`)));
 
   // Weekly growth report on Sundays at 18:00
-  cron.schedule('0 18 * * 0', () => postWeeklyGrowthReport(client).catch(() => {}));
+  cron.schedule('0 18 * * 0', () => postWeeklyGrowthReport(client).catch((err) => logger.warn(`SocialGrowthService: weekly report error: ${err.message}`)));
 
   // Content ideas every 2 days at 12:00
-  cron.schedule('0 12 */2 * *', () => postContentIdeas(client).catch(() => {}));
+  cron.schedule('0 12 */2 * *', () => postContentIdeas(client).catch((err) => logger.warn(`SocialGrowthService: content ideas error: ${err.message}`)));
 
   // SEO audit weekly on Mondays at 10:00
-  cron.schedule('0 10 * * 1', () => generateOptimizationReport(client).catch(() => {}));
+  cron.schedule('0 10 * * 1', () => generateOptimizationReport(client).catch((err) => logger.warn(`SocialGrowthService: SEO audit error: ${err.message}`)));
 
   // Initial tracking
   setTimeout(() => {
-    trackDailyStats().catch(() => {});
-    fetchTrendingWoWTopics().catch(() => {});
+    trackDailyStats().catch((err) => logger.warn(`SocialGrowthService: initial stats error: ${err.message}`));
+    fetchTrendingWoWTopics().catch((err) => logger.warn(`SocialGrowthService: initial trending error: ${err.message}`));
   }, 20000);
 
   logger.info('SocialGrowthService: started (daily tracking, weekly reports, bi-daily content ideas, weekly SEO audit).');

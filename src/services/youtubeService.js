@@ -152,7 +152,7 @@ async function checkNewVideo(client) {
   await channel.send({
     content: '@everyone Nuovo video sul canale YouTube!',
     embeds: [embed],
-  }).catch(() => {});
+  }).catch((err) => logger.warn(`YouTubeService: failed to post new video announcement: ${err.message}`));
 
   logger.info(`YouTubeService: announced new video "${video.title}"`);
 }
@@ -186,7 +186,7 @@ async function postWeeklyStats(client) {
     .setFooter({ text: 'Bloods Hub • YouTube Stats' })
     .setTimestamp();
 
-  await channel.send({ embeds: [embed] }).catch(() => {});
+  await channel.send({ embeds: [embed] }).catch((err) => logger.warn(`YouTubeService: failed to post weekly stats: ${err.message}`));
   logger.info('YouTubeService: posted weekly stats.');
 }
 
@@ -195,10 +195,10 @@ function start(client) {
     logger.info('YouTubeService: YOUTUBE_API_KEY or YOUTUBE_CHANNEL_ID not set, skipping.');
     return;
   }
-  _task = cron.schedule(CHECK_INTERVAL, () => checkNewVideo(client).catch(() => {}));
+  _task = cron.schedule(CHECK_INTERVAL, () => checkNewVideo(client).catch((err) => logger.warn(`YouTubeService: checkNewVideo error: ${err.message}`)));
   logger.info('YouTubeService: started (checking every 15min).');
   // Initial check after 30s
-  setTimeout(() => checkNewVideo(client).catch(() => {}), 30000);
+  setTimeout(() => checkNewVideo(client).catch((err) => logger.warn(`YouTubeService: initial check error: ${err.message}`)), 30000);
 }
 
 function stop() {

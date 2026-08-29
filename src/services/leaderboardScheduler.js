@@ -84,9 +84,8 @@ class LeaderboardScheduler {
       scope: 'guild',
       payload,
       generated_at: new Date(),
-    }).catch(() => {});
+    }).catch((err) => logger.warn(`LeaderboardScheduler: failed to create cache entry: ${err.message}`));
     // Keep only the latest 3 snapshots per (guild, game, metric, scope).
-    // Use Sequelize to find and delete old entries instead of raw SQL hack.
     const oldEntries = await LeaderboardCache.findAll({
       where: {
         guild_id: guildId,
@@ -98,11 +97,11 @@ class LeaderboardScheduler {
       offset: 3,
       limit: 100,
       attributes: ['id'],
-    }).catch(() => []);
+    }).catch((err) => { logger.warn(`LeaderboardScheduler: findAll old entries failed: ${err.message}`); return []; });
     if (oldEntries.length > 0) {
       await LeaderboardCache.destroy({
         where: { id: { [Op.in]: oldEntries.map((e) => e.id) } },
-      }).catch(() => {});
+      }).catch((err) => logger.warn(`LeaderboardScheduler: destroy old entries failed: ${err.message}`));
     }
   }
 }

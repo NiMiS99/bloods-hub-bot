@@ -82,6 +82,8 @@ const COMMAND_GROUPS = [
       { name: '/ping', desc: 'Verifica che il bot sia online.' },
       { name: '/help [categoria]', desc: 'Mostra questo messaggio o una categoria specifica.' },
       { name: '/dashboard', desc: 'Link e info sulla dashboard web.' },
+      { name: '/social', desc: 'Mostra statistiche YouTube e TikTok della gilda.' },
+      { name: '/content-idea', desc: 'Genera idee contenuti basate su trend WoW.' },
     ],
   },
   {
