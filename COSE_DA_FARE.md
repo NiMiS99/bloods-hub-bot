@@ -79,22 +79,22 @@
 ## 🟡 Priorità Media — Miglioramenti tecnici bot
 
 ### Bug & Issue noti
+- [x] **Gestione errori globale**: fixato — tutti i `.catch(() => {})` nei servizi social ora loggano errori
+- [x] **TODO stale in leaderboardScheduler.js**: rimosso — era gia implementato con Sequelize
+- [x] **Dashboard build**: verificato — builda correttamente con 7 pagine e sitemap
 - [ ] **eslint non installato in produzione**: `npm install --omit=dev` non installa eslint. Per il lint serve `npm install` completo
 - [ ] **TikTok scrape non funziona**: TikTok serve login wall. Soluzioni: OAuth user flow, proxy terzo, o attendere approvazione app
-- [ ] **Dashboard Next.js**: `dashboard/src/app` ha 0 file `page.tsx`. Il dashboard e servito come statico da `dashboard/out/`. Verificare `npm run dashboard:build`
-- [ ] **1 TODO nel codice**: `src/services/cleanupScheduler.js:89` — "Use Sequelize instead of raw SQL hack"
 - [ ] **Test coverage**: 217 test passano ma solo 5 file di test. Molti servizi non hanno test dedicati
 
 ### Miglioramenti architettura
-- [ ] **Gestione errori globale**: alcuni servizi usano `.catch(() => {})` che nasconde errori. Aggiungere logging
 - [ ] **Health check espanso**: monitorare piu servizi (YouTube, TikTok, RSS) con status dettagliato
 - [ ] **Rate limiting Discord**: alcuni servizi postano con `@everyone`. Considerare rate limiting
 - [ ] **Cache API esterne**: YouTube API quota 192 unità/giorno su 10.000. Da monitorare
 - [ ] **DB migrations**: non ci sono migrazioni SQL esplicite. Le tabelle sono create da Sequelize `sync()`
 
 ### Funzionalità da aggiungere
-- [ ] **Comando /social**: slash command che mostra statistiche YouTube + TikTok in Discord
-- [ ] **Comando /content-idea**: slash command che genera idee contenuti basate su trend WoW
+- [x] **Comando /social**: creato — mostra stats YouTube + TikTok + crescita
+- [x] **Comando /content-idea**: creato — genera idee contenuti basate su trend WoW
 - [ ] **Auto-thumbnail YouTube**: generare thumbnail con canvas (@napi-rs/canvas gia installato)
 - [ ] **Cross-post automatico**: quando un video YouTube viene pubblicato, postare anche in TikTok/Short
 - [ ] **Discord server template**: esportare template del server per replicazione
@@ -119,7 +119,7 @@
 
 | Metrica | Valore |
 |---------|--------|
-| Slash commands | 71 |
+| Slash commands | 73 |
 | Servizi | 61 |
 | Modelli DB | 48 |
 | Route API | 22 |
@@ -168,14 +168,83 @@
 
 ---
 
-## 📝 Note
+## � Piano Lavoro Manuale — Domani (30/08/2026)
+
+### Mattina (1-2 ore)
+
+1. **YouTube Studio** (10 min)
+   - Vai su https://studio.youtube.com → Impostazioni → Avanzate
+   - Aggiungi keyword: `WoW, World of Warcraft, gilda italiana, Pozzo dell'Eternità, raid, M+, Midnight, Bloods, WoW Italia, MMORPG`
+   - Carica banner da `social-media/graphics/banners/banner-main.png`
+   - Carica logo da `social-media/graphics/logo/logo.png`
+
+2. **Ottimizza i 5 video esistenti** (30 min)
+   - Per ogni video: modifica titolo, aggiungi descrizione con link Discord + sito, aggiungi tag
+   - Video 1 "Ce l'abbiamo fatta!" → "PRIMO KILL — Bloods Guild raid mitico WoW"
+   - Video 2 "Soulbinder" → "Soulbinder BOSS KILL — Bloods Guild Pozzo dell'Eternità"
+   - Video 3 "Come un film di orrore" → "WIPE FESTIVAL — Raid WoW che fa paura 😱 Bloods"
+   - Video 4 "Ride bene chi ride ultimo" → "MOMENTI DIVERTENTI — Raid WoW Bloods Guild"
+   - Video 5 "Vai campione" → "CLUTCH EPICO — Bloods Guild WoW Highlight"
+   - Descrizione tipo: `Bloods Guild — Gilda WoW Pozzo dell'Eternità EU (Orda)\nDiscord: https://discord.gg/DrGMeEMxF6\nSito: https://bloodswow.it\n\n#WoW #WorldOfWarcraft #Bloods #Raid #GildaItaliana`
+
+3. **Crea playlist YouTube** (10 min)
+   - "Raid Recap" — sposta i 5 video qui
+   - "Guide WoW" — vuota, per futuri contenuti
+   - "Community Moments" — vuota
+
+4. **TikTok app** (15 min)
+   - Apri TikTok, vai su profilo @bloodswow
+   - Aggiorna bio: "Gilda WoW IT 🛡️ Raid · M+ · PvP · Discord → link in bio"
+   - Aggiungi link: bloodswow.it
+   - Carica logo da `social-media/graphics/logo/logo.png`
+
+5. **TikTok for Developers** (10 min)
+   - Vai su https://developers.tiktok.com → Manage apps
+   - Verifica stato app (awi34l04hto3o607)
+   - Se non approvata, richiedi review
+
+### Pomeriggio (1-2 ore)
+
+6. **Pubblica primi 3 TikTok** (30 min)
+   - Usa i video meme in `social-media/raw/` o registra clip WoW nuove
+   - Hashtag: #wow #worldofwarcraft #wowitalia #guild #raid #bloodswow
+   - Cross-posta ogni TikTok come YouTube Short
+
+7. **Google Search Console** (15 min)
+   - Vai su https://search.google.com/search-console
+   - Aggiungi proprietà: bloodswow.it
+   - Verifica (DNS o HTML tag)
+   - Invia sitemap: https://bloodswow.it/sitemap.xml
+
+8. **Inizializza crypto vault** (5 min)
+   - Esegui: `node scripts/crypto-vault.js init`
+   - Inserisci password sicura (min 8 caratteri)
+   - Salva le credenziali principali
+
+9. **Testa i nuovi comandi Discord** (10 min)
+   - Usa `/social` in Discord per vedere le statistiche
+   - Usa `/content-idea` per generare idee contenuti
+   - Verifica che i bot postino correttamente
+
+### Sera (opzionale)
+
+10. **Registra primo video YouTube** (1 ora)
+    - Usa il copione in `social-media/scripts/001-presentazione-gilda.md`
+    - 30-60 secondi, mostra sito + Discord + community
+    - Carica su YouTube con titolo SEO-friendly
+
+---
+
+## �📝 Note
 
 - **TikTok**: account accessibile, API limitata. Per auto-post completo serve OAuth user flow o approvazione app
 - **YouTube**: canale operativo, 24 iscritti. Bot rileva nuovi video e posta in `#youtube` automaticamente
 - **YouTube API quota**: 192 unità/giorno su 10.000 disponibili. Sicuri
 - **Wowhead/Icy Veins RSS**: attivi, auto-post nel canale news WoW
 - **Twitch alerts**: attivo, rileva membri in streaming via Discord presence
-- **Vault criptato**: da inizializzare con `node scripts/crypto-vault.js init`
+- **Vault criptato**: da inizializzare con `node scripts/crypto-vault.js init` (richiede password interattiva)
 - **GOW_API_KEY**: management key in .env. Public key disponibile per future operazioni read-only
-- **Dashboard**: 59 file sorgenti in `dashboard/src/`, build da verificare
+- **Dashboard**: 59 file sorgenti, build verificato (7 pagine + sitemap)
 - **eslint**: non installato in produzione (dev-only). Lint da eseguire in ambiente dev
+- **Comandi nuovi**: `/social` e `/content-idea` deployati e operativi (73 totali)
+- **Error logging**: tutti i servizi social ora loggano errori invece di ingoiarli silenziosamente
