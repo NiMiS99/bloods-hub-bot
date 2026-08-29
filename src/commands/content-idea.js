@@ -20,7 +20,7 @@ module.exports = {
         .setDescription(
           'Nessun trend trovato al momento. Ecco idee evergreen Bloods:\n\n' +
           '1. **Raid recap Mer+Gio** — highlight kill, wipe divertenti, momenti voice\n' +
-          '2. **"Se sei nabbo ti insegniamo"** — mini-guide 30s: addon, meccaniche, rotation\n' +
+          '2. **Mini-guide 30s** — addon, meccaniche, rotation per nuovi membri\n' +
           '3. **M+ clutch** — key tese, timer che scade, salvataggi epici tank/healer\n' +
           '4. **POV: sei nei Bloods** — meme WoW verticale per TikTok, family vibe\n' +
           '5. **Cross-game** — DayZ survival, Metin2 grind, LoL clutch con brand Bloods\n' +

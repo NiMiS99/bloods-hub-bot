@@ -21,7 +21,7 @@
 - Testo pop-up: "150 membri · 80+ attivi · 4 giochi"
 
 ### 15-25s — COSA OFFRIAMO
-**Voce off**: "Sistema loot Bloods Points, bot Discord con 73 comandi, tracking Warcraft Logs, classifiche M+, mentor 1-to-1. Se sei nabbo ti insegniamo. Se non capisci, andiamo avanti con il prossimo."
+**Voce off**: "Sistema loot Bloods Points, bot Discord con 73 comandi, tracking Warcraft Logs, classifiche M+, mentor 1-to-1. Famiglia prima di tutto, progress con criterio."
 **Visual":
 - Screen comando /bp in azione
 - Screen classifica M+ dashboard

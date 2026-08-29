@@ -151,7 +151,7 @@ async function postWeeklyGrowthReport(client) {
       value: [
         '• **Raid recap (Mer+Gio)**: Fabio/Costanza registrano, highlight kill e wipe divertenti',
         '• **M+ key run**: clip delle key piu tese, timer che scade, clutch heal/tank',
-        '• **"Se sei nabbo ti insegniamo"**: mini-guide 30s su addon, meccaniche, rotation',
+        '• **Mini-guide 30s**: addon, meccaniche, rotation per nuovi membri',
         '• **YouTube Shorts/TikTok**: clip verticali 30-60s, cross-post su entrambe le piattaforme',
         '• **Community vibe**: momenti Discord, voice chat divertenti, meme gilda',
         '• **DayZ/Metin2/LoL**: contenuti cross-game con brand Bloods unificato',

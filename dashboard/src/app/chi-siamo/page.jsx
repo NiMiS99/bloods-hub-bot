@@ -7,7 +7,7 @@ import { siteConfig } from '@/lib/siteConfig';
 const HISTORY = [
   { year: '20/09/2025', text: 'Bloods nasce su Pozzo dell\'Eternità (Orda) come gilda italiana soft-progress, con l\'obiettivo di unire progress raid e amicizia, senza i limiti delle gilde hardcore.' },
   { year: 'Crescita', text: 'La community si espande a 150 membri tra WoW, DayZ con server privato, Metin2 con brand affiliato, LoL. Bot Bloods Points per il loot, sistema XP, dashboard web, tracciamento presenze raid e Warcraft Logs.' },
-  { year: 'Midnight Season 2', text: 'Raid Mer+Gio 21:00-24:00, roster mitico, braccio PvP strutturato (RBG + arena) e programma mentorship per Social. Famiglia + progress: se sei nabbo ti insegniamo.' },
+  { year: 'Midnight Season 2', text: 'Raid Mer+Gio 21:00-24:00, roster mitico, braccio PvP strutturato (RBG + arena) e programma mentorship per Social. Famiglia + progress.' },
 ];
 
 const VALUES = [

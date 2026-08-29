@@ -30,7 +30,7 @@ const FEATURES = [
   {
     icon: Shield,
     title: 'Mentorship & Onboarding',
-    text: 'Colloquio standardizzato, mentor 1-to-1, progressione chiara: Membro → Raider → Raider Mitico. Se sei nabbo ti insegniamo. Nessuno lasciato indietro.',
+    text: 'Colloquio standardizzato, mentor 1-to-1, progressione chiara: Membro → Raider → Raider Mitico. Nessuno lasciato indietro.',
   },
 ];
 
