@@ -2,9 +2,9 @@
 // Modifica questi valori per personalizzare il sito.
 export const siteConfig = {
   guildName: 'Bloods',
-  tagline: 'Gilda IT Soft-Progress · WoW Midnight',
+  tagline: 'Multigioco IT · WoW Midnight · DayZ · Metin2 · LoL',
   description:
-    'Bloods è una gilda italiana di World of Warcraft su Pozzo dell\'Eternità, fondata il 20/09/2025. Soft-progress con focus raid mitico, M+, PvP e community 360°: raid, social, returning player e PvP benvenuti.',
+    'Bloods Community — multigioco italiano con base WoW su Pozzo dell\'Eternità EU (Orda). Midnight Season 2, raid Mer+Gio, M+, PvP, DayZ, Metin2, LoL. 150 membri, 80+ attivi. Famiglia + progress.',
   // Inserisci qui il link d'invito Discord della gilda
   discordInvite: 'https://discord.gg/DrGMeEMxF6',
   realm: "Pozzo dell'Eternità",
@@ -15,7 +15,7 @@ export const siteConfig = {
   email: 'info@bloodswow.it',
   founded: '20/09/2025',
   schedule: {
-    mythic: 'Mar + Gio 21:00-24:00',
+    mythic: 'Mer + Gio 21:00-24:00',
     social: 'Dom 21:00-23:00',
     pvp: 'Mer 21:00-23:00',
   },

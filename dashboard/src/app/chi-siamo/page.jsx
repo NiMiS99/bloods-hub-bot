@@ -6,22 +6,22 @@ import { siteConfig } from '@/lib/siteConfig';
 
 const HISTORY = [
   { year: '20/09/2025', text: 'Bloods nasce su Pozzo dell\'Eternità (Orda) come gilda italiana soft-progress, con l\'obiettivo di unire progress raid e amicizia, senza i limiti delle gilde hardcore.' },
-  { year: 'Crescita', text: 'La community si espande: bot Bloods Points per il loot, sistema XP, dashboard web, tracciamento presenze raid e integrazione Warcraft Logs.' },
-  { year: 'Rilancio Midnight', text: 'Con l\'arrivo di Midnight, la gilda si rilancia con regolamento v3.0, roster mitico a 20, braccio PvP strutturato (RBG + arena) e programma mentorship per Social.' },
+  { year: 'Crescita', text: 'La community si espande a 150 membri tra WoW, DayZ con server privato, Metin2 con brand affiliato, LoL. Bot Bloods Points per il loot, sistema XP, dashboard web, tracciamento presenze raid e Warcraft Logs.' },
+  { year: 'Midnight Season 2', text: 'Raid Mer+Gio 21:00-24:00, roster mitico, braccio PvP strutturato (RBG + arena) e programma mentorship per Social. Famiglia + progress: se sei nabbo ti insegniamo.' },
 ];
 
 const VALUES = [
   { icon: Heart, title: 'Rispetto', text: 'Zero tossicità, zero flame sui wipe. Il rispetto reciproco è SEMPRE obbligatorio (regolamento c1-c6).' },
   { icon: Swords, title: 'Soft-Progress', text: 'Mentalità rivolta al progress, ma con approccio tollerante. La chiusura del raid non è obiettivo principale, ma auspicabile.' },
-  { icon: Users, title: 'Community 360°', text: 'Accogliamo social, returning e casual con tag @Social. Mentorship 1-to-1 per chi vuole salire al roster raid.' },
+  { icon: Users, title: 'Community Multigioco', text: '150 membri, 80+ attivi. WoW, DayZ con server, Metin2, LoL. Accogliamo social, returning e casual con tag @Social. Mentorship 1-to-1 per chi vuole salire al roster raid.' },
   { icon: Shield, title: 'Organizzazione', text: 'Discord strutturato, bot Bloods Points, presenze tracciate, Warcraft Logs, regolamento v3.0. Tutto trasparente.' },
 ];
 
 const FEATURES = [
-  { icon: Bot, title: 'Bloods Hub Bot', text: '71 comandi slash: XP, BP/DKP, raid management, loot roll, moderazione, giveaway, music e altro.' },
+  { icon: Bot, title: 'Bloods Hub Bot', text: '73 comandi slash: XP, BP/DKP, raid management, loot roll, moderazione, giveaway, music, social stats e altro.' },
   { icon: Swords, title: 'Raid & BP System', text: 'Eligibilità automatica, tracking presenze, loot con Bloods Points (roll + bid DKP), integrazione Warcraft Logs.' },
   { icon: Trophy, title: 'Classifiche', text: 'XP, messaggi, ore vocali e BP: tutto tracciato e visibile sul sito web.' },
-  { icon: Gamepad2, title: 'Multi-gioco 360°', text: 'Raid mitico, M+, PvP (RBG/arena), social, alt, eventi cross-game. C\'è posto per tutti.' },
+  { icon: Gamepad2, title: 'Multi-gioco 360°', text: 'WoW raid mitico, M+, PvP (RBG/arena), social, alt. DayZ con server privato. Metin2 con brand affiliato. LoL con il capogilda in prima linea. C\'è posto per tutti.' },
 ];
 
 export default function ChiSiamoPage() {

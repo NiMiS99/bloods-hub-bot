@@ -15,22 +15,22 @@ const FEATURES = [
   {
     icon: Swords,
     title: 'Raid & Progress',
-    text: 'Roster mitico a 20, loot con Bloods Points, tracking presenze e Warcraft Logs. Soft-progress: serio ma senza flame.',
+    text: 'Roster mitico, loot con Bloods Points, tracking presenze e Warcraft Logs. Raid Mer+Gio 21:00-24:00. Soft-progress: serio ma senza flame.',
   },
   {
     icon: Gamepad2,
     title: 'Community 360°',
-    text: 'M+, PvP (RBG/arena), social, alt, eventi cross-game. Tag @Social per chi vuole giocare senza obblighi di roster.',
+    text: 'M+, PvP (RBG/arena), social, alt, eventi cross-game. DayZ con server privato, Metin2, LoL. Tag @Social per chi vuole giocare senza obblighi di roster.',
   },
   {
     icon: Bot,
     title: 'Bloods Hub Bot',
-    text: '71 comandi slash: XP, BP/DKP, loot roll, raid management, moderazione, music, giveaway e pannelli self-service.',
+    text: '73 comandi slash: XP, BP/DKP, loot roll, raid management, moderazione, music, giveaway, social stats e pannelli self-service.',
   },
   {
     icon: Shield,
     title: 'Mentorship & Onboarding',
-    text: 'Colloquio standardizzato, mentor 1-to-1, progressione chiara: Membro → Raider → Raider Mitico. Nessuno lasciato indietro.',
+    text: 'Colloquio standardizzato, mentor 1-to-1, progressione chiara: Membro → Raider → Raider Mitico. Se sei nabbo ti insegniamo. Nessuno lasciato indietro.',
   },
 ];
 

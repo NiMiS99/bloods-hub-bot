@@ -1,35 +1,42 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Bloods — WoW Guild | Pozzo dell\'Eternità EU',
-  description: 'Sito ufficiale della gilda Bloods — World of Warcraft. Raid, mitiche+, eventi, classifiche BP/DKP e community Discord.',
-  keywords: ['Bloods', 'WoW', 'World of Warcraft', 'gilda italiana', 'Pozzo dell\'Eternità', 'raid', 'DKP', 'Bloods Points', 'Discord'],
-  authors: [{ name: 'Bloods Guild', url: 'https://bloodswow.it' }],
-  creator: 'Bloods Guild',
-  publisher: 'Bloods Guild',
+  title: 'Bloods Community — Gilda WoW IT | Pozzo dell\'Eternità EU · Midnight',
+  description: 'Bloods Community: multigioco italiano con base WoW su Pozzo dell\'Eternità EU (Orda). Midnight Season 2, raid Mer+Gio, M+, PvP, DayZ, Metin2, LoL. 150 membri, 80+ attivi. Famiglia + progress.',
+  keywords: ['Bloods', 'Bloods Community', 'WoW', 'World of Warcraft', 'Midnight', 'Midnight Season 2', 'Ulatek', 'gilda italiana', 'Pozzo dell\'Eternità', 'raid', 'mythic plus', 'M+', 'PvP', 'Orda', 'EU', 'Bloods Points', 'DKP', 'Discord', 'DayZ', 'Metin2', 'LoL', 'multigioco', 'soft progress', 'family guild', 'WoW Italia', 'MMORPG', 'gilda WoW'],
+  authors: [{ name: 'Bloods Community', url: 'https://bloodswow.it' }],
+  creator: 'Bloods Community',
+  publisher: 'Bloods Community',
   contact: { email: 'info@bloodswow.it' },
   metadataBase: new URL('https://bloodswow.it'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'Bloods — WoW Guild | Pozzo dell\'Eternità EU',
-    description: 'Gilda italiana di World of Warcraft: raid, mitiche+, PvP e community attiva su Discord.',
+    title: 'Bloods Community — Gilda WoW IT | Pozzo dell\'Eternità EU · Midnight',
+    description: 'Multigioco italiano con base WoW: raid Mer+Gio, M+, PvP, DayZ, Metin2, LoL. 150 membri, 80+ attivi. Famiglia + progress.',
     url: 'https://bloodswow.it',
-    siteName: 'Bloods',
+    siteName: 'Bloods Community',
     locale: 'it_IT',
     type: 'website',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Bloods — WoW Guild' }],
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Bloods Community — Gilda WoW IT | Pozzo dell\'Eternità EU' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Bloods — WoW Guild',
-    description: 'Gilda italiana di World of Warcraft su Pozzo dell\'Eternità EU.',
+    title: 'Bloods Community — Gilda WoW IT',
+    description: 'Multigioco italiano con base WoW su Pozzo dell\'Eternità EU. Midnight, raid Mer+Gio, M+, PvP, DayZ, Metin2, LoL.',
     images: ['/og-image.png'],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-snippet': -1,
+      'max-image-preview': 'large',
+      'max-video-preview': -1,
+    },
   },
 };
 
@@ -55,12 +62,19 @@ export default function RootLayout({ children }) {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'Organization',
-          name: 'Bloods',
+          name: 'Bloods Community',
+          alternateName: 'Bloods',
           url: 'https://bloodswow.it',
           logo: 'https://bloodswow.it/logo.png',
-          description: 'Gilda italiana di World of Warcraft: raid, mitiche+, PvP e community attiva su Discord.',
+          description: 'Community multigioco italiana con base WoW su Pozzo dell\'Eternità EU (Orda). Midnight Season 2, raid Mer+Gio, M+, PvP, DayZ, Metin2, LoL. 150 membri, 80+ attivi.',
           email: 'info@bloodswow.it',
-          sameAs: ['https://discord.gg/DrGMeEMxF6'],
+          foundingDate: '2025-09-20',
+          sameAs: [
+            'https://discord.gg/DrGMeEMxF6',
+            'https://www.youtube.com/@bloods',
+            'https://www.tiktok.com/@bloodswow',
+            'https://guildsofwow.com/bloods',
+          ],
           foundingLocation: {
             '@type': 'Place',
             name: 'Pozzo dell\'Eternità EU',
@@ -69,7 +83,7 @@ export default function RootLayout({ children }) {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'WebSite',
-          name: 'Bloods — WoW Guild',
+          name: 'Bloods Community — Gilda WoW IT',
           url: 'https://bloodswow.it',
           inLanguage: 'it-IT',
           potentialAction: {
@@ -77,6 +91,27 @@ export default function RootLayout({ children }) {
             target: 'https://bloodswow.it/classifiche?q={search_term_string}',
             'query-input': 'required name=search_term_string',
           },
+        })}} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'VideoGame',
+          name: 'World of Warcraft',
+          gamePlatform: 'PC',
+          operatingSystem: 'Windows, macOS',
+          applicationCategory: 'Game',
+          genre: ['MMORPG', 'Raid', 'PvP', 'PvE'],
+          publisher: { '@type': 'Organization', name: 'Blizzard Entertainment' },
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR', description: 'Free to play fino al livello 20' },
+        })}} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bloodswow.it/' },
+            { '@type': 'ListItem', position: 2, name: 'Raid', item: 'https://bloodswow.it/raid/' },
+            { '@type': 'ListItem', position: 3, name: 'Classifiche', item: 'https://bloodswow.it/classifiche/' },
+            { '@type': 'ListItem', position: 4, name: 'Unisciti', item: 'https://bloodswow.it/unisciti/' },
+          ],
         })}} />
       </head>
       <body>{children}</body>
