@@ -147,13 +147,14 @@ async function postWeeklyGrowthReport(client) {
         : 'Nessun dato trending disponibile.')
     )
     .addFields({
-      name: '💡 Suggerimenti contenuti',
+      name: '💡 Suggerimenti contenuti Bloods',
       value: [
-        '• **Raid recap**: registra il prossimo raid e crea un highlight video',
-        '• **M+ gameplay**: clip delle tue migliori key M+ con commentary',
-        '• **Guide rapide**: "Come configurare DBM/WeakAuras in 60 secondi"',
-        '• **YouTube Shorts**: clip verticali 30-60s per massima reach',
-        '• **Cross-posting**: ogni TikTok diventa anche uno YouTube Short',
+        '• **Raid recap (Mer+Gio)**: Fabio/Costanza registrano, highlight kill e wipe divertenti',
+        '• **M+ key run**: clip delle key piu tese, timer che scade, clutch heal/tank',
+        '• **"Se sei nabbo ti insegniamo"**: mini-guide 30s su addon, meccaniche, rotation',
+        '• **YouTube Shorts/TikTok**: clip verticali 30-60s, cross-post su entrambe le piattaforme',
+        '• **Community vibe**: momenti Discord, voice chat divertenti, meme gilda',
+        '• **DayZ/Metin2/LoL**: contenuti cross-game con brand Bloods unificato',
       ].join('\n'),
     })
     .setFooter({ text: 'Bloods Hub • Social Growth Report' })
@@ -184,7 +185,7 @@ async function postContentIdeas(client) {
     .setTitle('💡 Idee Contenuti di Oggi')
     .setColor(0x00ff88)
     .setDescription(
-      'Contenuti WoW trending su YouTube che potresti ricreare per il canale Bloods:\n\n' +
+      'Contenuti WoW trending su YouTube che i Bloods possono ricreare con la loro voce:\n\n' +
       shuffled.map((t, i) =>
         `${i + 1}. **${t.title.substring(0, 70)}**\n` +
         `   Canale: ${t.channel}\n` +
@@ -193,7 +194,7 @@ async function postContentIdeas(client) {
     )
     .addFields({
       name: '🎯 Azione consigliata',
-      value: 'Scegli uno di questi topic, crea una versione italiana/versione Bloods e pubblicala entro 48h per cavalcare l\'onda trending.',
+      value: 'Scegli un topic, crea una versione Bloods (famiglia + progress) e pubblicala entro 48h. Cross-posta su TikTok e YouTube Shorts. Se raidi con criterio, mostra il criterio.',
     })
     .setFooter({ text: 'Bloods Hub • Content Ideas' })
     .setTimestamp();
@@ -276,7 +277,11 @@ async function generateOptimizationReport(client) {
       )
       .addFields({
         name: '📝 Tag SEO consigliati per ogni video',
-        value: '`WoW, World of Warcraft, gilda italiana, Pozzo dell\'Eternità, raid, mythic plus, PvP, Orda, EU, Midnight, soft progress, Bloods, WoW Italia, WoW Italian, MMORPG`',
+        value: '`WoW, World of Warcraft, Midnight, Midnight Season 2, Ulatek, gilda italiana, Pozzo dell\'Eternità, raid, mythic plus, M+, PvP, Orda, EU, Bloods, Bloods Community, WoW Italia, WoW Italian, MMORPG, soft progress, family guild, DayZ, Metin2, LoL, multigioco`',
+      })
+      .addFields({
+        name: '🔗 Link da includere in ogni descrizione',
+        value: '`Discord: https://discord.gg/DrGMeEMxF6 | Sito: https://bloodswow.it`',
       })
       .setFooter({ text: 'Bloods Hub • SEO Audit' })
       .setTimestamp();

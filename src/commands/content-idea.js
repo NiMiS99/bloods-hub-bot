@@ -18,12 +18,13 @@ module.exports = {
         .setTitle('💡 Idee Contenuti')
         .setColor(0x8b0000)
         .setDescription(
-          'Nessun trend trovato al momento. Ecco idee evergreen:\n\n' +
-          '1. **Raid recap** — highlight delle kill piu recenti\n' +
-          '2. **Guida M+** — come fare +15 in 30 minuti\n' +
-          '3. **POV: sei nei Bloods** — meme WoW verticale per TikTok\n' +
-          '4. **Tutorial onboarding** — come unirsi alla gilda passo per passo\n' +
-          '5. **Bloods Points spiegati** — come funziona il sistema loot'
+          'Nessun trend trovato al momento. Ecco idee evergreen Bloods:\n\n' +
+          '1. **Raid recap Mer+Gio** — highlight kill, wipe divertenti, momenti voice\n' +
+          '2. **"Se sei nabbo ti insegniamo"** — mini-guide 30s: addon, meccaniche, rotation\n' +
+          '3. **M+ clutch** — key tese, timer che scade, salvataggi epici tank/healer\n' +
+          '4. **POV: sei nei Bloods** — meme WoW verticale per TikTok, family vibe\n' +
+          '5. **Cross-game** — DayZ survival, Metin2 grind, LoL clutch con brand Bloods\n' +
+          '6. **Come unirsi** — tutorial onboarding: ticket → colloquio → tag → mentor'
         )
         .setFooter({ text: 'Bloods Hub • /content-idea' })
         .setTimestamp();
