@@ -51,7 +51,7 @@ function buildEventEmbed(evt, signups) {
 
 function buildClassMenu(eventId) {
   const menu = new StringSelectMenuBuilder()
-    .setCustomId(`${PX}_class:${eventId}`)
+    .setCustomId(`${PX}:class:${eventId}`)
     .setPlaceholder('Seleziona la tua classe…')
     .addOptions(CLASSES.map((c) => ({ label: c.name, value: c.key })));
   return new ActionRowBuilder().addComponents(menu);
@@ -59,7 +59,7 @@ function buildClassMenu(eventId) {
 
 function buildUnsubButton(eventId, disabled) {
   const btn = new ButtonBuilder()
-    .setCustomId(`${PX}_unsub:${eventId}`)
+    .setCustomId(`${PX}:unsub:${eventId}`)
     .setLabel('Rimuovi iscrizione')
     .setStyle(ButtonStyle.Secondary)
     .setDisabled(Boolean(disabled));
@@ -70,7 +70,7 @@ function buildSpecMenu(eventId, classKey) {
   const c = findClassByKey(classKey);
   if (!c) return null;
   const menu = new StringSelectMenuBuilder()
-    .setCustomId(`${PX}_spec:${eventId}:${classKey}`)
+    .setCustomId(`${PX}:spec:${eventId}:${classKey}`)
     .setPlaceholder(`Spec per ${c.name}…`)
     .addOptions(c.specs.map((s) => ({ label: s, value: s })));
   return new ActionRowBuilder().addComponents(menu);

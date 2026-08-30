@@ -29,7 +29,6 @@ async function checkRaidEligibility(guildId, userId) {
 }
 
 async function handleSelectMenu(interaction, client, action, payload) {
-  // action = "class" | "spec"
   if (action === 'class') {
     const eventId = payload[0];
     const classKey = interaction.values?.[0];
@@ -76,18 +75,9 @@ async function handleSelectMenu(interaction, client, action, payload) {
       return;
     }
 
-    // Raid eligibility check — block signup if not eligible
-    const elig = await checkRaidEligibility(interaction.guildId, userId);
-    if (!elig.eligible) {
-      const reasons = elig.reasons.length > 0 ? '\n' + elig.reasons.map((r) => `• ${r}`).join('\n') : '';
-      await interaction.reply({
-        content:
-          `:x: **Non sei idoneo al raid.** Non puoi iscriverti.\n` +
-          `Usa \`/raidstatus me\` per verificare i tuoi requisiti.${reasons}`,
-        flags: 64,
-      });
-      return;
-    }
+    // Raid eligibility check — skip for now (Normal raid, tutti possono iscriversi)
+    // const elig = await checkRaidEligibility(interaction.guildId, userId);
+    // if (!elig.eligible) { ... }
 
     // Check cap + upsert in transaction (anti race condition)
     const t = await sequelize.transaction();
