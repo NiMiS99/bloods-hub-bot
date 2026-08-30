@@ -116,6 +116,9 @@ async function main() {
   client.raidScheduler = new RaidScheduler(client);
   client.raidScheduler.start();
 
+  const RaidBookingScheduler = require('./services/raidBookingScheduler');
+  RaidBookingScheduler.start(client);
+
   // Warcraft Logs auto-post (new reports to #raid-log)
   client.warcraftLogsService = new WarcraftLogsService(client);
   client.warcraftLogsService.start();

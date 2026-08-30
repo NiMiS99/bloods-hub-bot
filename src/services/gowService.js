@@ -21,8 +21,10 @@ function isEnabled() {
 
 function headers() {
   return {
-    Authorization: `Bearer ${getApiKey()}`,
-    'User-Agent': 'BloodsHubBot/1.0',
+    'X-API-Key': getApiKey(),
+    'Authorization': `Bearer ${getApiKey()}`,
+    'Accept': 'application/json',
+    'User-Agent': 'BloodsHubBot/1.0 (https://bloodswow.it)',
   };
 }
 
@@ -36,12 +38,21 @@ async function fetchRoster() {
     return [];
   }
   try {
-    const slug = GUILD_SERVER.toLowerCase().replace(/\s+/g, '-');
-    const res = await axios.get(`${BASE_URL}/guilds/${GUILD_NAME}/${slug}/${GUILD_REGION}/members`, {
-      headers: headers(),
-      timeout: 15000,
-    });
-    return res.data?.members || [];
+    const slug = GUILD_SERVER.toLowerCase().replace(/\s+/g, '-').replace(/'/g, '');
+    const urls = [
+      `${BASE_URL}/guilds/${GUILD_NAME}/${slug}/${GUILD_REGION}/members`,
+      `${BASE_URL}/guild/${GUILD_NAME}/${slug}/${GUILD_REGION}/members`,
+    ];
+    for (const url of urls) {
+      try {
+        const res = await axios.get(url, { headers: headers(), timeout: 15000 });
+        return res.data?.members || res.data || [];
+      } catch (err) {
+        if (err.response?.status === 404) continue;
+        throw err;
+      }
+    }
+    return [];
   } catch (err) {
     logger.error(`GoW fetchRoster failed: ${err.message}`);
     return [];
@@ -58,12 +69,21 @@ async function fetchRecruitmentApplications() {
     return [];
   }
   try {
-    const slug = GUILD_SERVER.toLowerCase().replace(/\s+/g, '-');
-    const res = await axios.get(`${BASE_URL}/guilds/${GUILD_NAME}/${slug}/${GUILD_REGION}/applications`, {
-      headers: headers(),
-      timeout: 15000,
-    });
-    return res.data?.applications || [];
+    const slug = GUILD_SERVER.toLowerCase().replace(/\s+/g, '-').replace(/'/g, '');
+    const urls = [
+      `${BASE_URL}/guilds/${GUILD_NAME}/${slug}/${GUILD_REGION}/applications`,
+      `${BASE_URL}/guild/${GUILD_NAME}/${slug}/${GUILD_REGION}/applications`,
+    ];
+    for (const url of urls) {
+      try {
+        const res = await axios.get(url, { headers: headers(), timeout: 15000 });
+        return res.data?.applications || res.data || [];
+      } catch (err) {
+        if (err.response?.status === 404) continue;
+        throw err;
+      }
+    }
+    return [];
   } catch (err) {
     logger.error(`GoW fetchRecruitmentApplications failed: ${err.message}`);
     return [];
