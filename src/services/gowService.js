@@ -11,18 +11,35 @@ const GUILD_SERVER = "Pozzo dell'Eternità";
 const GUILD_REGION = 'EU';
 const GUILD_ID = '1010226759817515018';
 
-function getApiKey() {
+function getMgmtKey() {
   return process.env.GOW_API_KEY || null;
 }
 
-function isEnabled() {
-  return Boolean(getApiKey());
+function getPublicKey() {
+  return process.env.GOW_PUBLIC_KEY || null;
 }
 
-function headers() {
+function getSheetKey() {
+  return process.env.GOW_SHEET_KEY || null;
+}
+
+function isEnabled() {
+  return Boolean(getMgmtKey() || getPublicKey());
+}
+
+function mgmtHeaders() {
   return {
-    'X-API-Key': getApiKey(),
-    'Authorization': `Bearer ${getApiKey()}`,
+    'X-API-Key': getMgmtKey(),
+    'Authorization': `Bearer ${getMgmtKey()}`,
+    'Accept': 'application/json',
+    'User-Agent': 'BloodsHubBot/1.0 (https://bloodswow.it)',
+  };
+}
+
+function publicHeaders() {
+  return {
+    'X-API-Key': getPublicKey(),
+    'Authorization': `Bearer ${getPublicKey()}`,
     'Accept': 'application/json',
     'User-Agent': 'BloodsHubBot/1.0 (https://bloodswow.it)',
   };
@@ -45,7 +62,7 @@ async function fetchRoster() {
     ];
     for (const url of urls) {
       try {
-        const res = await axios.get(url, { headers: headers(), timeout: 15000 });
+        const res = await axios.get(url, { headers: mgmtHeaders(), timeout: 15000 });
         return res.data?.members || res.data || [];
       } catch (err) {
         if (err.response?.status === 404) continue;
@@ -76,7 +93,7 @@ async function fetchRecruitmentApplications() {
     ];
     for (const url of urls) {
       try {
-        const res = await axios.get(url, { headers: headers(), timeout: 15000 });
+        const res = await axios.get(url, { headers: mgmtHeaders(), timeout: 15000 });
         return res.data?.applications || res.data || [];
       } catch (err) {
         if (err.response?.status === 404) continue;
@@ -152,4 +169,7 @@ module.exports = {
   fetchRoster,
   fetchRecruitmentApplications,
   syncRosterToDb,
+  getMgmtKey,
+  getPublicKey,
+  getSheetKey,
 };
